@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".layout_home1"
+    android:orientation="vertical"
+    android:background="@drawable/hinhnen_home1">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="3">
+        <ImageView
+            android:id="@+id/asleft"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/anh_sang_left"
+            android:layout_weight="1"/>
+        <ImageView
+            android:id="@+id/namegame"
+            android:layout_width="wrap_content"
+            android:layout_height="100dp"
+            android:layout_marginTop="80dp"
+            android:layout_weight="1"
+            android:src="@drawable/tmp"/>
+        <ImageView
+            android:id="@+id/asright"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/anh_sang_right"
+            android:layout_weight="1"/>
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/startgame"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:background="@drawable/batdau"
+        tools:layout_editor_absoluteX="155dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="150dp"
+        android:visibility="gone"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="150dp"
+        android:orientation="horizontal"
+        android:weightSum="2"
+        android:id="@+id/line3"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/bxh"
+            android:layout_width="150dp"
+            android:layout_height="120dp"
+            android:layout_weight="0.4"
+            android:src="@drawable/btn_rank" />
+
+        <ImageView
+            android:id="@+id/lich"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_weight="2.5"
+            android:gravity="right"
+            android:src="@drawable/game_avata" />
+    </LinearLayout>
+
+
+</LinearLayout>
