@@ -117,4 +117,32 @@
         android:layout_marginLeft="20dp">
     </ImageView>
   </LinearLayout>
+  <TextView
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:textAlignment="center"
+      android:textSize="25dp"
+      android:textColor="@color/black"
+      android:textStyle="bold"
+      android:text="Thiết kế by Bình Vũ">
+  </TextView>
+  <TextView
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:textAlignment="center"
+      android:textSize="25dp"
+      android:textColor="@color/black"
+      android:textStyle="bold"
+      android:text="MSV:12521069">
+  </TextView>
+  <TextView
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:textAlignment="center"
+      android:textSize="25dp"
+      android:textColor="@color/black"
+      android:textStyle="bold"
+      android:text="Lớp: SEK 19.5"
+      >
+  </TextView>
   </LinearLayout>
