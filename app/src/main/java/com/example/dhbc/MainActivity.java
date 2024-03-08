@@ -12,6 +12,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import com.google.android.flexbox.FlexDirection;
+import com.google.android.flexbox.FlexboxLayoutManager;
+import com.google.android.flexbox.JustifyContent;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,15 +26,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ArrayList<String> arr = new ArrayList<String>() {{
-            add("A");
             add("B");
+            add("I");
+            add("N");
+            add("H");
             add(" ");
-            add("C");
-            add("D");
-            add("E");
-//            add(" ");
-//            add("D");
-//            add("E");
+            add("B");
+            add("O");
+            add("N");
+            add("K");
         }};
         ArrayList<String> arr2 = new ArrayList<String>() {{
             add("A");
@@ -47,9 +51,16 @@ public class MainActivity extends AppCompatActivity {
         dapan=findViewById(R.id.dapan);
         CauHoiAdapter adapter=new CauHoiAdapter(this,arr);
         DapAnAdapter adap=new DapAnAdapter(this,arr2);
-//        CustomLayoutManager layoutManager = new CustomLayoutManager(this);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        LinearLayoutManager layoutManager2 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+
+        FlexboxLayoutManager layoutManager = new FlexboxLayoutManager(getApplicationContext());
+        layoutManager.setFlexDirection(FlexDirection.ROW);
+        layoutManager.setJustifyContent(JustifyContent.FLEX_START);
+        FlexboxLayoutManager layoutManager2 = new FlexboxLayoutManager(getApplicationContext());
+        layoutManager.setFlexDirection(FlexDirection.ROW);
+        layoutManager.setJustifyContent(JustifyContent.FLEX_START);
+
+//        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+//        LinearLayoutManager layoutManager2 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
 
         listcauhoi.setLayoutManager(layoutManager);
         dapan.setLayoutManager(layoutManager2);
