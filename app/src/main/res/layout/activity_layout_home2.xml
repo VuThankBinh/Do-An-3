@@ -65,8 +65,25 @@
       android:textStyle="italic"
       android:textSize="30dp"
       android:layout_gravity="center"
-      android:layout_marginTop="250dp">
+      android:layout_marginTop="230dp">
   </CheckBox>
+
+
+  <ImageView
+      android:id="@+id/startgame"
+      android:layout_width="100dp"
+      android:layout_height="100dp"
+      android:background="@drawable/batdau"
+      android:layout_gravity="center"
+      android:layout_marginTop="20dp"/>
+  <Button
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center"
+      android:text="Chơi lại"
+      android:id="@+id/choilai"
+      android:textSize="28dp"
+      android:backgroundTint="#FFC107"/>
   <LinearLayout
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
@@ -97,21 +114,6 @@
         android:layout_marginLeft="-20dp"
         android:layout_marginTop="-10dp"/>
   </LinearLayout>
-
-  <ImageView
-      android:id="@+id/startgame"
-      android:layout_width="100dp"
-      android:layout_height="100dp"
-      android:background="@drawable/batdau"
-      android:layout_gravity="center"
-      android:layout_marginTop="20dp"/>
-  <Button
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_gravity="center"
-      android:text="Chơi lại"
-      android:textSize="28dp"
-      android:backgroundTint="#FFC107"/>
   <LinearLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"

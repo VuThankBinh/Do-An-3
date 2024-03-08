@@ -69,18 +69,18 @@
         android:id="@+id/layout_2"
         android:src="@drawable/xuanbac1">
     </ImageView>
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center">
-    <androidx.recyclerview.widget.RecyclerView
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        android:layout_margin="10dp"
-        android:id="@+id/listcauhoi">
+        android:layout_height="wrap_content">
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_centerInParent="true"
+            android:id="@+id/listcauhoi">
 
-    </androidx.recyclerview.widget.RecyclerView>
-    </LinearLayout>
+        </androidx.recyclerview.widget.RecyclerView>
+    </RelativeLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -91,18 +91,19 @@
         android:weightSum="2">
 
         <ImageView
-            android:layout_width="80dp"
-            android:layout_height="80dp"
             android:id="@+id/napvip"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:src="@drawable/shop">
+
         </ImageView>
 
         <ImageView
             android:id="@+id/help"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:gravity="end"
-            android:translationX="230dp"
+            android:translationX="270dp"
             android:src="@drawable/help">
         </ImageView>
 
@@ -125,25 +126,6 @@
 
 
     </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:orientation="vertical">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:id="@+id/layout_4"
-            android:orientation="horizontal">
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:id="@+id/layout_5"
-            android:orientation="horizontal">
-        </LinearLayout>
-    </LinearLayout>
+
 
 </TableLayout>
