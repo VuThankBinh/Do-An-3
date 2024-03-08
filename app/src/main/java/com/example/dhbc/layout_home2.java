@@ -2,11 +2,13 @@ package com.example.dhbc;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.drawable.AnimationDrawable;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -19,6 +21,7 @@ public class layout_home2 extends AppCompatActivity {
     ImageView back, start,bacnoi;
     TextView level,slgRuby,battat;
     CheckBox nhacnen;
+    Button choilai;
     LinearLayout lin1;
     static boolean nhacback=true;
     MediaPlayer mp;
@@ -35,12 +38,22 @@ public class layout_home2 extends AppCompatActivity {
         nhacnen=findViewById(R.id.nhacnen);
         lin1=findViewById(R.id.line1);
         battat=findViewById(R.id.battat);
+        choilai=findViewById(R.id.choilai);
+
         CSDL csdl=new CSDL(getApplicationContext());
         CauHoi ch=csdl.HienCSDL(getApplicationContext());
         level.setText("Level "+String.valueOf(ch.getId()));
         int slgRuby1= csdl.HienRuby(layout_home2.this);
         slgRuby.setText(String.valueOf(slgRuby1));
         nhacnen.setChecked(true);
+        choilai.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                csdl.ChoiLai(layout_home2.this);
+//                view.invalidate();
+                recreate();
+            }
+        });
         back.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -51,6 +64,7 @@ public class layout_home2 extends AppCompatActivity {
         start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                startActivity(new Intent(layout_home2.this,MainActivity.class));
             }
         });
         nhacnen.setOnClickListener(new View.OnClickListener() {

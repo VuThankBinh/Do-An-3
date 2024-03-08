@@ -6,10 +6,15 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.google.android.flexbox.FlexDirection;
@@ -21,10 +26,25 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     RecyclerView listcauhoi,dapan;
+    ImageView help,shop;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        help=findViewById(R.id.help);
+        shop=findViewById(R.id.napvip);
+        help.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showDialogHelp();
+            }
+        });
+        shop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showDialogShop();
+            }
+        });
         ArrayList<String> arr = new ArrayList<String>() {{
             add("B");
             add("I");
@@ -43,6 +63,12 @@ public class MainActivity extends AppCompatActivity {
             add("C");
             add("D");
             add("E");
+            add("R");
+            add("D");
+            add("E");
+            add("X");
+            add("Y");
+            add("Z");
             add("R");
             add("D");
             add("E");
@@ -66,6 +92,40 @@ public class MainActivity extends AppCompatActivity {
         dapan.setLayoutManager(layoutManager2);
         listcauhoi.setAdapter(adapter);
         dapan.setAdapter(adap);
+
+    }
+
+    private void showDialogHelp() {
+        Dialog dialog = new Dialog(MainActivity.this, android.R.style.Theme_DeviceDefault_Dialog_NoActionBar);
+        dialog.setContentView(R.layout.dialog_help);
+        ImageView close=dialog.findViewById(R.id.closehelp);
+        close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+//        Window window = dialog.getWindow();
+//        window.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
+//        window.setGravity(Gravity.CENTER);
+        dialog.show();
+
+    }
+    private void showDialogShop() {
+        Dialog dialog = new Dialog(MainActivity.this,android.R.style.Theme_DeviceDefault_Dialog_NoActionBar );
+
+        dialog.setContentView(R.layout.dialog_shop);
+        ImageView close=dialog.findViewById(R.id.closebuy);
+        close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+//        Window window = dialog.getWindow();
+//        window.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
+//        window.setGravity(Gravity.CENTER);
+        dialog.show();
 
     }
 }

@@ -16,6 +16,7 @@ public class CSDL {
     public void ChoiLai(Context context){
         db.QueryData("DROP TABLE IF EXISTS CauHoi" );
         TaoCSDL(context);
+        Toast.makeText(context, "Bạn đã chọn chơi lại từ đầu", Toast.LENGTH_SHORT).show();
     }
     public void TaoCSDL(Context context) {
 //        db.QueryData("DROP TABLE IF EXISTS Ruby" );
@@ -72,7 +73,7 @@ public class CSDL {
             String dapAn = dataCV.getString(2);
             int tinhTrang = dataCV.getInt(3);
             cauHoi= new CauHoi(id, hinhAnh, dapAn, tinhTrang);
-            Toast.makeText(context, "id: " + dataCV.getInt(0) + "dapan: " + dataCV.getString(2), Toast.LENGTH_SHORT).show();
+//            Toast.makeText(context, "id: " + dataCV.getInt(0) + "dapan: " + dataCV.getString(2), Toast.LENGTH_SHORT).show();
         }
         return cauHoi;
     }
@@ -81,7 +82,7 @@ public class CSDL {
         int soluong=0;
         if (dataCV != null && dataCV.moveToFirst()) {
              soluong = dataCV.getInt(1);
-            Toast.makeText(context, "id: " + dataCV.getInt(1) , Toast.LENGTH_SHORT).show();
+//            Toast.makeText(context, "id: " + dataCV.getInt(1) , Toast.LENGTH_SHORT).show();
 
         }
         return soluong;
