@@ -8,7 +8,6 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -36,12 +35,21 @@ public class layout_home2 extends AppCompatActivity {
         nhacnen=findViewById(R.id.nhacnen);
         lin1=findViewById(R.id.line1);
         battat=findViewById(R.id.battat);
+        CSDL csdl=new CSDL(getApplicationContext());
+        CauHoi ch=csdl.HienCSDL(getApplicationContext());
+        level.setText("Level "+String.valueOf(ch.getId()));
+
         nhacnen.setChecked(true);
         back.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
                 layout_home2.this.finish();
+            }
+        });
+        start.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
             }
         });
         nhacnen.setOnClickListener(new View.OnClickListener() {

@@ -3,6 +3,7 @@ package com.example.dhbc;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
@@ -12,7 +13,8 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-
+import com.example.dhbc.DatabaseHelper;
+import com.example.dhbc.DatabaseManager;
 import java.io.IOException;
 
 public class layout_home1 extends AppCompatActivity {
@@ -31,6 +33,10 @@ public class layout_home1 extends AppCompatActivity {
         name=findViewById(R.id.namegame);
         lin3=findViewById(R.id.line3);
         play1=findViewById(R.id.startgame);
+        CSDL csdl=new CSDL(getApplicationContext());
+//        csdl.db = new DataBase(getApplicationContext(), "DHBC.sql", null, 1);
+        csdl.TaoCSDL(getApplicationContext());
+
         Animation laclu1 = AnimationUtils.loadAnimation(this, R.anim.laclu);
 
         Animation laclu2 = AnimationUtils.loadAnimation(this, R.anim.laclubtn);
