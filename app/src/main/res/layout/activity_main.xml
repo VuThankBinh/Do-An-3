@@ -3,48 +3,111 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@drawable/game_play_background">
-    <RelativeLayout
+    android:background="@color/white">
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:padding="20dp">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        android:weightSum="3">
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/avatar_icon"
-            android:id="@+id/image_avatar"
-            />
+            android:id="@+id/back1"
+            android:src="@drawable/back1">
+        </ImageView>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/heart"
-            android:id="@+id/txt_avatar"
-            android:text="5"
-            android:textSize="25sp"
-            android:textColor="#000"
-            android:gravity="center"
-            android:layout_marginTop="10dp"
-            android:layout_alignEnd="@id/image_avatar" />
-        <TextView
+            android:id="@+id/level"
+            android:text="Level 6"
+            android:textSize="32dp"
+            android:textColor="@color/black"
+            android:textStyle="italic"
+            android:layout_weight="3"
+            android:layout_gravity="center"
+            android:textAlignment="center">
+        </TextView>
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/coin_icon"
-            android:layout_alignParentRight="true"
-            android:text="0"
-            android:textSize="20sp"
-            android:gravity="center"
-            android:textColor="#fff"
-            android:id="@+id/txt_coin" />
-    </RelativeLayout>
-    <LinearLayout
+            android:layout_weight="1"
+            android:weightSum="2"
+            android:layout_gravity="center"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="22"
+                android:textSize="32dp"
+                android:layout_weight="1"
+                android:id="@+id/ruby"
+                android:textAlignment="viewEnd"
+                android:textColor="@color/black">
+            </TextView>
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ruby">
+            </ImageView>
+        </LinearLayout>
+    </LinearLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Đây là gì?"
+        android:layout_margin="20dp"
+        android:textSize="32dp"
+        android:textColor="@color/black">
+    </TextView>
+    <ImageView
         android:layout_width="match_parent"
+        android:layout_margin="10dp"
         android:layout_height="0dp"
-        android:layout_weight="2"
+        android:layout_weight="1.5"
         android:gravity="center"
         android:id="@+id/layout_2"
-        android:orientation="horizontal">
+        android:src="@drawable/xuanbac1">
+    </ImageView>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center">
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_margin="10dp"
+        android:id="@+id/listcauhoi">
+
+    </androidx.recyclerview.widget.RecyclerView>
     </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:weightSum="2">
+
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:id="@+id/napvip"
+            android:src="@drawable/shop">
+        </ImageView>
+
+        <ImageView
+            android:id="@+id/help"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:gravity="end"
+            android:translationX="230dp"
+            android:src="@drawable/help">
+        </ImageView>
+
+    </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -52,28 +115,14 @@
         android:gravity="center"
         android:padding="25dp"
         android:orientation="vertical">
-        <LinearLayout
+        <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:id="@+id/layout_buton"
-            android:orientation="horizontal"
-            android:visibility="invisible">
-        </LinearLayout>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text=""
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:textColor="#fff"
-            android:id="@+id/txt_ketQua"/>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/layout_3"
-            android:gravity="center"
-            android:orientation="horizontal"></LinearLayout>
+            android:id="@+id/dapan">
+        </androidx.recyclerview.widget.RecyclerView>
+
+
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
@@ -85,13 +134,15 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:id="@+id/layout_4"
-            android:orientation="horizontal"></LinearLayout>
+            android:orientation="horizontal">
+        </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:id="@+id/layout_5"
-            android:orientation="horizontal"></LinearLayout>
+            android:orientation="horizontal">
+        </LinearLayout>
     </LinearLayout>
 
 </TableLayout>

@@ -38,7 +38,8 @@ public class layout_home2 extends AppCompatActivity {
         CSDL csdl=new CSDL(getApplicationContext());
         CauHoi ch=csdl.HienCSDL(getApplicationContext());
         level.setText("Level "+String.valueOf(ch.getId()));
-
+        int slgRuby1= csdl.HienRuby(layout_home2.this);
+        slgRuby.setText(String.valueOf(slgRuby1));
         nhacnen.setChecked(true);
         back.setOnClickListener(new View.OnClickListener() {
 

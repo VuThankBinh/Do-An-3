@@ -18,14 +18,19 @@ public class CSDL {
         TaoCSDL(context);
     }
     public void TaoCSDL(Context context) {
+//        db.QueryData("DROP TABLE IF EXISTS Ruby" );
+        Cursor cursor1 = db.GetData("SELECT name FROM sqlite_master WHERE type='table' AND name='Ruby'");
+        if (cursor1 != null && cursor1.getCount() > 0) {
+        } else {
+            db.QueryData("CREATE TABLE IF NOT EXISTS Ruby (id INTEGER PRIMARY KEY AUTOINCREMENT,SoLuong Integer default 24)");
+            db.QueryData("INSERT INTO Ruby  VALUES (null,24)");
+        }
+
 
         Cursor cursor = db.GetData("SELECT name FROM sqlite_master WHERE type='table' AND name='CauHoi'");
         if (cursor != null && cursor.getCount() > 0) {
-            // Nếu bảng CauHoi đã tồn tại, bạn có thể không cần thực hiện câu lệnh INSERT ở đây
         } else {
-            // Nếu bảng CauHoi chưa tồn tại, bạn có thể thực hiện câu lệnh INSERT
             db.QueryData("CREATE TABLE IF NOT EXISTS CauHoi (id INTEGER PRIMARY KEY AUTOINCREMENT, HinhAnh TEXT, DapAn NVARCHAR(100), TinhTrang INTEGER DEFAULT 0)");
-//            db.QueryData("INSERT INTO CauHoi (HinhAnh, DapAn, TinhTrang) VALUES ('avatar_icon', 'unicode_string', 1)");
             db.QueryData("INSERT INTO CauHoi  VALUES (null,'baocao', 'báo cáo', 0)");
             db.QueryData("INSERT INTO CauHoi  VALUES (null,'aomua', 'áo mưa', 0)");
             db.QueryData("INSERT INTO CauHoi  VALUES (null,'canthiep', 'can thiệp', 0)");
@@ -57,12 +62,6 @@ public class CSDL {
             db.QueryData("INSERT INTO CauHoi  VALUES (null,'xaphong', 'xà phòng', 0)");
             db.QueryData("INSERT INTO CauHoi  VALUES (null,'xedapdien', 'xe đạp điện', 0)");
         }
-        // Tạo bảng CauHoi
-//        db.QueryData("CREATE TABLE IF NOT EXISTS CauHoi (id INTEGER PRIMARY KEY , HinhAnh nvarchar(200), DapAn NVARCHAR(100), TinhTrang INTEGER DEFAULT 0)");
-//        db.QueryData("insert into CauHoi values (null, 'avatar_icon',N'abc',1)");
-//        db.QueryData("insert into CauHoi values (null, 'avatar_icon2',N'bcd',0");
-
-
     }
     public CauHoi HienCSDL(Context context){
         Cursor dataCV=db.GetData("SELECT * FROM CauHoi WHERE TinhTrang = 0 LIMIT 1");
@@ -73,14 +72,26 @@ public class CSDL {
             String dapAn = dataCV.getString(2);
             int tinhTrang = dataCV.getInt(3);
             cauHoi= new CauHoi(id, hinhAnh, dapAn, tinhTrang);
-            Toast.makeText(context, "id: " + dataCV.getInt(0) + "ha: " + dataCV.getString(1), Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "id: " + dataCV.getInt(0) + "dapan: " + dataCV.getString(2), Toast.LENGTH_SHORT).show();
         }
         return cauHoi;
+    }
+    public int HienRuby(Context context){
+        Cursor dataCV=db.GetData("SELECT * FROM Ruby  LIMIT 1");
+        int soluong=0;
+        if (dataCV != null && dataCV.moveToFirst()) {
+             soluong = dataCV.getInt(1);
+            Toast.makeText(context, "id: " + dataCV.getInt(1) , Toast.LENGTH_SHORT).show();
+
+        }
+        return soluong;
     }
     public void Update(Context context, int id){
         db.QueryData("update CauHoi set TinhTrang=1 where id="+id);
     }
-
+    public void UpdateRuby(Context context, int slg){
+        db.QueryData("update Ruby set SoLuong= SoLuong+"+slg);
+    }
 
 }
 class DataBase extends SQLiteOpenHelper {
