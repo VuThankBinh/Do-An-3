@@ -34,7 +34,7 @@ public class CauHoiAdapter extends  RecyclerView.Adapter<CauHoiAdapter.ViewHolde
     public void onBindViewHolder(@NonNull CauHoiAdapter.ViewHolder holder, int i) {
 
 
-            if(list.get(i).toUpperCase()==" "){
+            if(list.get(i).toUpperCase()!=" "){
                 holder.txt.setBackgroundColor(Color.WHITE);
                 holder.txt.setText ("");
 //                holder.txt.setVisibility(View.GONE);

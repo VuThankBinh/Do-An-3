@@ -21,16 +21,14 @@ public class CSDL {
     public void TaoCSDL(Context context) {
 //        db.QueryData("DROP TABLE IF EXISTS Ruby" );
         Cursor cursor1 = db.GetData("SELECT name FROM sqlite_master WHERE type='table' AND name='Ruby'");
-        if (cursor1 != null && cursor1.getCount() > 0) {
-        } else {
+        if (cursor1 == null || cursor1.getCount() <= 0) {
             db.QueryData("CREATE TABLE IF NOT EXISTS Ruby (id INTEGER PRIMARY KEY AUTOINCREMENT,SoLuong Integer default 24)");
             db.QueryData("INSERT INTO Ruby  VALUES (null,24)");
         }
 
 
         Cursor cursor = db.GetData("SELECT name FROM sqlite_master WHERE type='table' AND name='CauHoi'");
-        if (cursor != null && cursor.getCount() > 0) {
-        } else {
+        if (cursor == null || cursor.getCount() <= 0) {
             db.QueryData("CREATE TABLE IF NOT EXISTS CauHoi (id INTEGER PRIMARY KEY AUTOINCREMENT, HinhAnh TEXT, DapAn NVARCHAR(100), TinhTrang INTEGER DEFAULT 0)");
             db.QueryData("INSERT INTO CauHoi  VALUES (null,'baocao', 'báo cáo', 0)");
             db.QueryData("INSERT INTO CauHoi  VALUES (null,'aomua', 'áo mưa', 0)");

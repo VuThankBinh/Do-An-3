@@ -16,17 +16,21 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.google.android.flexbox.FlexDirection;
 import com.google.android.flexbox.FlexboxLayoutManager;
 import com.google.android.flexbox.JustifyContent;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
     RecyclerView listcauhoi,dapan;
-    ImageView help,shop;
+    ImageView help,shop,layout_2,back;
+    TextView level,slgRuby;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,8 +43,26 @@ public class MainActivity extends AppCompatActivity {
         int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
         decorView.setSystemUiVisibility(uiOptions);
         setContentView(R.layout.activity_main);
-        help=findViewById(R.id.help);
-        shop=findViewById(R.id.napvip);
+        help = findViewById(R.id.help);
+        shop = findViewById(R.id.napvip);
+        layout_2 = findViewById(R.id.layout_2);
+        level=findViewById(R.id.level);
+        slgRuby=findViewById(R.id.ruby);
+        back=findViewById(R.id.back1);
+        CSDL csdl = new CSDL(getApplicationContext());
+        CauHoi ch = csdl.HienCSDL(getApplicationContext());
+        int slgRuby1= csdl.HienRuby(MainActivity.this);
+        slgRuby.setText(String.valueOf(slgRuby1));
+        level.setText("Level "+String.valueOf(ch.getId()));
+        String fileName = ch.getHinhAnh().toString(); // Lấy tên tệp ảnh từ đối tượng baiHat
+        int resId = getResources().getIdentifier(fileName, "drawable", getPackageName()); // Tìm ID tài nguyên dựa trên tên tệp ảnh
+        if (resId != 0) {
+            layout_2.setImageResource(resId); // Thiết lập hình ảnh cho ImageView
+        } else {
+            // Xử lý trường hợp không tìm thấy tệp ảnh
+        }
+        String dapAn = ch.getDapAn();
+        String dapAn2 = ch.getHinhAnh();
         help.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -53,53 +75,59 @@ public class MainActivity extends AppCompatActivity {
                 showDialogShop();
             }
         });
-        ArrayList<String> arr = new ArrayList<String>() {{
-            add("B");
-            add("I");
-            add("N");
-            add("H");
-            add(" ");
-            add("B");
-            add("O");
-            add("N");
-            add("K");
-        }};
-        ArrayList<String> arr2 = new ArrayList<String>() {{
-            add("A");
-            add("B");
-            add("X");
-            add("C");
-            add("D");
-            add("E");
-            add("R");
-            add("D");
-            add("E");
-            add("X");
-            add("Y");
-            add("Z");
-            add("R");
-            add("D");
-            add("E");
-        }};
-        listcauhoi=findViewById(R.id.listcauhoi);
-        dapan=findViewById(R.id.dapan);
-        CauHoiAdapter adapter=new CauHoiAdapter(this,arr);
-        DapAnAdapter adap=new DapAnAdapter(this,arr2);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                MainActivity.this.finish();
+            }
+        });
+        ArrayList<String> arr2 = new ArrayList<>();
 
-        FlexboxLayoutManager layoutManager = new FlexboxLayoutManager(getApplicationContext());
-        layoutManager.setFlexDirection(FlexDirection.ROW);
-        layoutManager.setJustifyContent(JustifyContent.FLEX_START);
-        FlexboxLayoutManager layoutManager2 = new FlexboxLayoutManager(getApplicationContext());
-        layoutManager.setFlexDirection(FlexDirection.ROW);
-        layoutManager.setJustifyContent(JustifyContent.FLEX_START);
+        for (int i = 0; i < dapAn2.length(); i++) {
+            // Convert each character to a string and add it to the ArrayList
+
+                arr2.add(String.valueOf(dapAn2.charAt(i)));
+
+        }
+        Random random = new Random();
+        for (int i = 0; i < random.nextInt(2) + 6; i++) {
+            // Generate a random character between 'a' and 'z'
+            char randomChar = (char) (random.nextInt(26) + 'a');
+            arr2.add(String.valueOf(randomChar));
+        }
+        Collections.shuffle(arr2);
+
+        ArrayList<String> arr = new ArrayList<String>();
+            for (int i = 0; i < dapAn.length(); i++) {
+                // Convert each character to a string and add it to the ArrayList
+                if(dapAn.charAt(i)==' ') {
+                    arr.add(String.valueOf(1));
+                }
+                else {
+                    arr.add(String.valueOf(" "));
+                }
+            }
+            level.setText("Level "+String.valueOf(ch.getId()));
+            listcauhoi = findViewById(R.id.listcauhoi);
+            dapan = findViewById(R.id.dapan);
+            CauHoiAdapter adapter = new CauHoiAdapter(this, arr);
+            DapAnAdapter adap = new DapAnAdapter(this, arr2);
+
+            FlexboxLayoutManager layoutManager = new FlexboxLayoutManager(getApplicationContext());
+            layoutManager.setFlexDirection(FlexDirection.ROW);
+            layoutManager.setJustifyContent(JustifyContent.FLEX_START);
+            FlexboxLayoutManager layoutManager2 = new FlexboxLayoutManager(getApplicationContext());
+            layoutManager.setFlexDirection(FlexDirection.ROW);
+            layoutManager.setJustifyContent(JustifyContent.FLEX_START);
 
 //        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
 //        LinearLayoutManager layoutManager2 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
 
-        listcauhoi.setLayoutManager(layoutManager);
-        dapan.setLayoutManager(layoutManager2);
-        listcauhoi.setAdapter(adapter);
-        dapan.setAdapter(adap);
+            listcauhoi.setLayoutManager(layoutManager);
+            dapan.setLayoutManager(layoutManager2);
+            listcauhoi.setAdapter(adapter);
+            dapan.setAdapter(adap);
+
 
     }
 
