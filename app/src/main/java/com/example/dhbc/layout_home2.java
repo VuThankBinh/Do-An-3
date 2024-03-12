@@ -1,7 +1,9 @@
 package com.example.dhbc;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.drawable.AnimationDrawable;
@@ -27,6 +29,7 @@ public class layout_home2 extends AppCompatActivity {
     LinearLayout lin1;
     static boolean nhacback=true;
     MediaPlayer mp;
+    CSDL csdl;
     AnimationDrawable animationDrawable;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +53,7 @@ public class layout_home2 extends AppCompatActivity {
         battat=findViewById(R.id.battat);
         choilai=findViewById(R.id.choilai);
 
-        CSDL csdl=new CSDL(getApplicationContext());
+        csdl=new CSDL(getApplicationContext());
         CauHoi ch=csdl.HienCSDL(getApplicationContext());
         level.setText("Level "+String.valueOf(ch.getId()));
         int slgRuby1= csdl.HienRuby(layout_home2.this);
@@ -59,9 +62,9 @@ public class layout_home2 extends AppCompatActivity {
         choilai.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                csdl.ChoiLai(layout_home2.this);
+
 //                view.invalidate();
-                recreate();
+                showConfirmationDialog();
             }
         });
         back.setOnClickListener(new View.OnClickListener() {
@@ -75,6 +78,8 @@ public class layout_home2 extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(layout_home2.this,MainActivity.class));
+                layout_home2.this.finish();
+
             }
         });
         nhacnen.setOnClickListener(new View.OnClickListener() {
@@ -123,6 +128,34 @@ public class layout_home2 extends AppCompatActivity {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+    private void showConfirmationDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Xác nhận");
+        builder.setMessage("Bạn có chắc chắn muốn thực hiện hành động này không?");
+
+        // Nút xác nhận
+        builder.setPositiveButton("Xác nhận", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // Xử lý khi người dùng nhấn nút xác nhận
+                // Thêm code xử lý ở đây
+                csdl.ChoiLai(layout_home2.this);
+                recreate();
+            }
+        });
+
+        // Nút hủy
+        builder.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // Xử lý khi người dùng nhấn nút hủy
+                dialog.dismiss(); // Đóng dialog
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
     @Override
     protected void onDestroy() {

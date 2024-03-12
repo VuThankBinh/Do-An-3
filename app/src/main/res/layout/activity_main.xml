@@ -98,7 +98,15 @@
             android:src="@drawable/shop">
 
         </ImageView>
+        <Button
+            android:id="@+id/demonext"
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
+            android:text="Next"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/shop">
 
+        </Button>
         <ImageView
             android:id="@+id/help"
             android:layout_width="60dp"

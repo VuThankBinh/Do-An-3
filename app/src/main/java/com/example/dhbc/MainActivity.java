@@ -1,5 +1,6 @@
 package com.example.dhbc;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -8,12 +9,16 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -22,6 +27,7 @@ import com.google.android.flexbox.FlexDirection;
 import com.google.android.flexbox.FlexboxLayoutManager;
 import com.google.android.flexbox.JustifyContent;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -31,6 +37,8 @@ public class MainActivity extends AppCompatActivity {
     RecyclerView listcauhoi,dapan;
     ImageView help,shop,layout_2,back;
     TextView level,slgRuby;
+    MediaPlayer mp, mp1;
+    Button nextdemo;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,8 +69,33 @@ public class MainActivity extends AppCompatActivity {
         } else {
             // Xử lý trường hợp không tìm thấy tệp ảnh
         }
+        nextdemo=findViewById(R.id.demonext);
+        nextdemo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                csdl.Update(MainActivity.this,ch.getId());
+                recreate();
+            }
+        });
         String dapAn = ch.getDapAn();
         String dapAn2 = ch.getHinhAnh();
+        mp = new MediaPlayer();
+        mp1 = new MediaPlayer();
+        try {
+            mp.setDataSource(getResources().openRawResourceFd(R.raw.nhac0));
+            mp.prepare();
+            mp.start();
+
+            mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mp) {
+                    mp.start();
+                }
+            });
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         help.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -79,6 +112,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 MainActivity.this.finish();
+                Intent intent = new Intent(MainActivity.this, layout_home2.class);
+                startActivity(intent);
             }
         });
         ArrayList<String> arr2 = new ArrayList<>();
@@ -164,7 +199,9 @@ public class MainActivity extends AppCompatActivity {
         dialog.show();
 
     }
+
 }
+
 class CenterLayoutManager extends LinearLayoutManager {
 
     public CenterLayoutManager(Context context) {
