@@ -7,6 +7,7 @@
         android:layout_height="45dp"
         android:background="@drawable/bt_item"
         android:id="@+id/ktu"
+        android:textColor="@color/black"
         android:text="A"
         android:textSize="30dp"
         android:textAlignment="center">

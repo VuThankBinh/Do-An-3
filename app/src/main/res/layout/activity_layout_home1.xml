@@ -43,12 +43,11 @@
         android:layout_marginTop="150dp"
         android:visibility="gone"/>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="150dp"
         android:orientation="horizontal"
-        android:weightSum="2"
         android:id="@+id/line3"
         android:visibility="gone">
 
@@ -56,17 +55,18 @@
             android:id="@+id/bxh"
             android:layout_width="150dp"
             android:layout_height="120dp"
-            android:layout_weight="0.4"
+            android:layout_marginLeft="20dp"
+            android:layout_alignParentLeft="true"
             android:src="@drawable/btn_rank" />
 
         <ImageView
             android:id="@+id/lich"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:layout_weight="2.5"
-            android:gravity="right"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="20dp"
             android:src="@drawable/game_avata" />
-    </LinearLayout>
+    </RelativeLayout>
 
 
 </LinearLayout>

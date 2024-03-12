@@ -8,11 +8,15 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+
 import com.example.dhbc.DatabaseHelper;
 import com.example.dhbc.DatabaseManager;
 import java.io.IOException;
@@ -20,11 +24,20 @@ import java.io.IOException;
 public class layout_home1 extends AppCompatActivity {
 
     ImageView as1,as2,bxh,avt,name,play1;
-    LinearLayout lin3;
+    RelativeLayout lin3;
     MediaPlayer mp;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        // Đặt cờ cho cửa sổ
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        // Ẩn thanh công cụ (navigation bar)
+        View decorView = getWindow().getDecorView();
+        int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+        decorView.setSystemUiVisibility(uiOptions);
+
         setContentView(R.layout.activity_layout_home1);
         as1=findViewById(R.id.asleft);
         as2=findViewById(R.id.asright);
