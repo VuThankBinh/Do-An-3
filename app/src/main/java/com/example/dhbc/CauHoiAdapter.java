@@ -16,9 +16,11 @@ import java.util.ArrayList;
 
 public class CauHoiAdapter extends  RecyclerView.Adapter<CauHoiAdapter.ViewHolder> {
     private Context context;
-    public CauHoiAdapter(Context context, ArrayList<String> list) {
+    private ItemClick_cauhoi mclick;
+    public CauHoiAdapter(Context context, ArrayList<String> list,ItemClick_cauhoi mclick) {
         this.context = context;
         this.list = list;
+        this.mclick=mclick;
     }
     ArrayList<String> list;
 
@@ -34,17 +36,40 @@ public class CauHoiAdapter extends  RecyclerView.Adapter<CauHoiAdapter.ViewHolde
     public void onBindViewHolder(@NonNull CauHoiAdapter.ViewHolder holder, int i) {
 
 
-            if(list.get(i).toUpperCase()!=" "){
-                holder.txt.setBackgroundColor(Color.WHITE);
-                holder.txt.setText ("");
-//                holder.txt.setVisibility(View.GONE);
-            }
-            else {
-                holder.txt.setText(list.get(i).toUpperCase());
-            }
-            //bắt sự kiện xóa, sửa
 
+//        if(list.get(i).toUpperCase()=="1"){
+//            holder.txt.setText(list.get(i).toUpperCase());
+//            holder.txt.setBackgroundResource(R.drawable.bt_item_result);
+//
+//        }
+//        if(list.get(i).toUpperCase()==""){
+//            holder.txt.setBackgroundColor(Color.WHITE);
+//            holder.txt.setText ("");
+//        }
+//        else{
+//            holder.txt.setBackgroundResource(R.drawable.bt_item);
+//            holder.txt.setText (list.get(i));
+//        }
+        if ("1".equals(list.get(i).toUpperCase())) {
+            holder.txt.setText(list.get(i).toUpperCase());
+            holder.txt.setBackgroundResource(R.drawable.bt_item_result);
+            holder.txt.setText("");
+        } else if (list.get(i).isEmpty()) {
+            holder.txt.setBackgroundColor(Color.WHITE);
+            holder.txt.setText("");
+        } else {
+            holder.txt.setBackgroundResource(R.drawable.bt_item);
+            holder.txt.setText(list.get(i));
+        }
 
+        holder.txt.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mclick.onItemCauHoiClick(i);
+                }
+            });
+
+//
     }
 
     @Override

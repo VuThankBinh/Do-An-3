@@ -16,9 +16,11 @@ import java.util.ArrayList;
 
 public class DapAnAdapter extends  RecyclerView.Adapter<DapAnAdapter.ViewHolder> {
     private Context context;
-    public DapAnAdapter(Context context, ArrayList<String> list) {
+    private ItemClick_dapan mclick;
+    public DapAnAdapter(Context context, ArrayList<String> list,ItemClick_dapan dd) {
         this.context = context;
         this.list = list;
+        this.mclick=dd;
     }
     ArrayList<String> list;
 
@@ -42,6 +44,12 @@ public class DapAnAdapter extends  RecyclerView.Adapter<DapAnAdapter.ViewHolder>
         else {
             holder.txt.setText(list.get(i).toUpperCase());
         }
+        holder.txt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mclick.onItemClick(i);
+            }
+        });
         //bắt sự kiện xóa, sửa
 
 

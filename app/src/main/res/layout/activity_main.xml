@@ -67,6 +67,7 @@
         android:layout_weight="1.5"
         android:gravity="center"
         android:id="@+id/layout_2"
+        android:background="@color/white"
         android:src="@drawable/xuanbac1">
     </ImageView>
     <RelativeLayout
