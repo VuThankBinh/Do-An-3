@@ -35,15 +35,15 @@ public class DapAnAdapter extends  RecyclerView.Adapter<DapAnAdapter.ViewHolder>
     @Override
     public void onBindViewHolder(@NonNull DapAnAdapter.ViewHolder holder, int i) {
 
-
-        if(list.get(i).toUpperCase()==" "){
-            holder.txt.setBackgroundColor(Color.WHITE);
-            holder.txt.setText ("");
-//                holder.txt.setVisibility(View.GONE);
-        }
-        else {
-            holder.txt.setText(list.get(i).toUpperCase());
-        }
+        holder.txt.setText(list.get(i).toUpperCase());
+//        if(list.get(i).toUpperCase()==" "){
+//            holder.txt.setBackgroundColor(Color.WHITE);
+//            holder.txt.setText ("");
+////                holder.txt.setVisibility(View.GONE);
+//        }
+//        else {
+//
+//        }
         holder.txt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

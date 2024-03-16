@@ -241,45 +241,40 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
 
 //        Toast.makeText(this, "vị trí: "+position, Toast.LENGTH_SHORT).show();
         String s=arr2.get(position).toString().toUpperCase();
-//        Toast.makeText(this, s, Toast.LENGTH_SHORT).show();
-        if(s.length()>0 && index<arr.size()){
+
+        if(s.trim().length()>0 &&s!=""&&s!=null&&index<arr.size()){
+            arr2.set(position," ");
             boolean foundNegativeIndex = false; // Biến đánh dấu để chỉ thực hiện cập nhật arr một lần
             for (int j = 0; j < vitrioDapAn.size(); j++) {
                 if (!foundNegativeIndex && vitrioDapAn.get(j) < 0) {
                     // Nếu chưa tìm thấy phần tử âm và vitrioDapAn[j] nhỏ hơn 0, cập nhật arr và đánh dấu đã tìm thấy
-                    vitrioDapAn.set(j, position);
-                    foundNegativeIndex = true;
-                }
-                // Sau đó, kiểm tra xem chỉ số j có trùng với một phần tử trong vi_tri_dau_cach không
-                for (int i = 0; i < vi_tri_dau_cach.size(); i++) {
-                    if (j == vi_tri_dau_cach.get(i)) {
-                        // Nếu trùng, đặt giá trị của vitrioDapAn[j] thành 2 và thoát khỏi vòng lặp
-                        vitrioDapAn.set(j, 2);
-                        break;
+                    if (vitrioDapAn.get(j) == -1) {
+                        vitrioDapAn.set(j, position);
+                        foundNegativeIndex = true;
+                        cautraloi.set(j, s);
+
+                    } else {
+                        cautraloi.set(j, "");
+                        cautraloi.set(j + 1, s);
+
+
                     }
+
                 }
             }
 
 
-            arr2.set(position,"");
+
 
             //lỗi ở khu vực này
-            for(int i=0;i<vi_tri_dau_cach.size();i++){
-                if(index==vi_tri_dau_cach.get(i)){
-                    cautraloi.set(index,"");
-                    cautraloi.set(index+1,s);
-                    index+=2;
-                }
-                else {
-                    cautraloi.set(index,s);
-                    index++;
-                }
-            }
+            // lỗi ở index
 
 
             adap.notifyDataSetChanged();
+//            adap.notifyDataSetChanged();
 //            listcauhoi.setLayoutManager(layoutManager);
             listcauhoi.setAdapter( new CauHoiAdapter(this,cautraloi,this));
+            dapan.setAdapter( new DapAnAdapter(this,arr2,this));
         }
     }
 
@@ -288,7 +283,7 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
     public void onItemCauHoiClick(int position) {
 //        Toast.makeText(this, "vị trí: "+position, Toast.LENGTH_SHORT).show();
         String s=cautraloi.get(position).toString().toUpperCase();
-        if(s.length()>0 ||s==""||s==null){
+        if(s.length()>0 &&s!=""&&s!=null){
             cautraloi.set(position,"");
 
             for(int i=0;i<vi_tri_dau_cach.size();i++){
