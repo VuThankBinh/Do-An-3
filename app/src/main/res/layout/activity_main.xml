@@ -2,6 +2,7 @@
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:background="@color/white">
     <LinearLayout
@@ -60,25 +61,38 @@
         android:textSize="32dp"
         android:textColor="@color/black">
     </TextView>
-    <ImageView
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_margin="10dp"
         android:layout_height="0dp"
-        android:layout_weight="1.5"
+        app:cardCornerRadius="50dp"
+        android:layout_margin="10dp"
         android:gravity="center"
-        android:id="@+id/layout_2"
-        android:background="@color/white"
-        android:src="@drawable/xuanbac1">
-    </ImageView>
+        android:layout_weight="1.5"
+        app:cardBackgroundColor="@android:color/black"
+        >
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scaleType="center"
+            android:id="@+id/layout_2"
+            android:background="@color/white"
+            android:src="@drawable/xuanbac1">
+        </ImageView>
+    </androidx.cardview.widget.CardView>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <androidx.recyclerview.widget.RecyclerView
-            android:layout_height="wrap_content"
+            android:id="@+id/listcauhoi"
             android:layout_width="wrap_content"
-            android:layout_margin="10dp"
+            android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:id="@+id/listcauhoi">
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp">
 
         </androidx.recyclerview.widget.RecyclerView>
     </RelativeLayout>

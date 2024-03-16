@@ -54,7 +54,7 @@ public class CauHoiAdapter extends  RecyclerView.Adapter<CauHoiAdapter.ViewHolde
             holder.txt.setText(list.get(i).toUpperCase());
             holder.txt.setBackgroundResource(R.drawable.bt_item_result);
             holder.txt.setText("");
-        } else if (list.get(i).isEmpty()) {
+        } else if (list.get(i).trim().isEmpty()) {
             holder.txt.setBackgroundColor(Color.WHITE);
             holder.txt.setText("");
         } else {

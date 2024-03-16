@@ -34,6 +34,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+import java.text.Normalizer;
+import java.util.regex.Pattern;
 public class MainActivity extends AppCompatActivity implements ItemClick_dapan, ItemClick_cauhoi {
     RecyclerView listcauhoi,dapan;
     ImageView help,shop,layout_2,back;
@@ -141,6 +143,7 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
         dialog.show();
 
     }
+    String dapAn,dapAn2;
     private void showDialogShop() {
         Dialog dialog = new Dialog(MainActivity.this,android.R.style.Theme_DeviceDefault_Dialog_NoActionBar );
 
@@ -173,8 +176,8 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
         } else {
             // Xử lý trường hợp không tìm thấy tệp ảnh
         }
-        String dapAn = ch.getDapAn();
-        String dapAn2 = ch.getHinhAnh();
+        dapAn = ch.getDapAn();
+        dapAn2 = ch.getHinhAnh();
         arr2= new ArrayList<>();
 
         for (int i = 0; i < dapAn2.length(); i++) {
@@ -242,27 +245,60 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
 //        Toast.makeText(this, "vị trí: "+position, Toast.LENGTH_SHORT).show();
         String s=arr2.get(position).toString().toUpperCase();
 
-        if(s.trim().length()>0 &&s!=""&&s!=null&&index<arr.size()){
+        if(s.trim().length()>0 &&s!=""&&s!=null){
             arr2.set(position," ");
-            boolean foundNegativeIndex = false; // Biến đánh dấu để chỉ thực hiện cập nhật arr một lần
+            boolean foundNegativeIndex = false;
+            int vitri=-1;// Biến đánh dấu để chỉ thực hiện cập nhật arr một lần
             for (int j = 0; j < vitrioDapAn.size(); j++) {
                 if (!foundNegativeIndex && vitrioDapAn.get(j) < 0) {
                     // Nếu chưa tìm thấy phần tử âm và vitrioDapAn[j] nhỏ hơn 0, cập nhật arr và đánh dấu đã tìm thấy
-                    if (vitrioDapAn.get(j) == -1) {
-                        vitrioDapAn.set(j, position);
-                        foundNegativeIndex = true;
-                        cautraloi.set(j, s);
+                    if (vitrioDapAn.get(j) == -1 ) {
 
-                    } else {
-                        cautraloi.set(j, "");
+
+                            vitrioDapAn.set(j, position);
+                            foundNegativeIndex = true;
+                            cautraloi.set(j, s);
+
+
+                    } else if(vitrioDapAn.get(j) == -2 && vitrioDapAn.get(j+1)==-1) {
+
+                        cautraloi.set(j, " ");
                         cautraloi.set(j + 1, s);
 
+                        vitrioDapAn.set(j+1,position);
+                        break;
 
                     }
 
                 }
-            }
 
+
+            }
+            if(vitrioDapAn.get(vitrioDapAn.size()-1)>0){
+//                    Toast.makeText(this, "nam ngu", Toast.LENGTH_SHORT).show();
+                String dapan1 = dapAn.toUpperCase();
+                StringBuilder result = new StringBuilder();
+                for (String item : cautraloi) {
+                    result.append(item);
+                }
+                String dapan2 = result.toString();
+
+                String dapan1KhongDau = removeDiacritics(dapan1);
+                String dapan2KhongDau = removeDiacritics(dapan2);
+
+                System.out.println(dapan1KhongDau);
+                System.out.println(dapan2KhongDau);
+
+                if(dapan1KhongDau.equals(dapan2KhongDau)){
+                    Toast.makeText(this, "mày giỏi đúng r đó con chóa", Toast.LENGTH_SHORT).show();
+                    csdl.Update(MainActivity.this,ch.getId());
+                    loadTrang();
+                }
+                else {
+                    Toast.makeText(this, "lew lew gà", Toast.LENGTH_SHORT).show();
+                }
+
+            }
 
 
 
@@ -277,29 +313,26 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
             dapan.setAdapter( new DapAnAdapter(this,arr2,this));
         }
     }
+    public static String removeDiacritics(String str) {
+        str = Normalizer.normalize(str, Normalizer.Form.NFD);
+        str = str.replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
+        return str;
+    }
 
     //click câu hỏi
     @Override
     public void onItemCauHoiClick(int position) {
-//        Toast.makeText(this, "vị trí: "+position, Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, "vị trí: "+vitrioDapAn.get(position), Toast.LENGTH_SHORT).show();
         String s=cautraloi.get(position).toString().toUpperCase();
-        if(s.length()>0 &&s!=""&&s!=null){
+        if(s.trim().length()>0 &&s!=""&&s!=null){
             cautraloi.set(position,"");
 
-            for(int i=0;i<vi_tri_dau_cach.size();i++){
-                if(position==vi_tri_dau_cach.get(i)){
-
-//                    cautraloi.set(index+1,s);
-//                    index+=2;
-                }
-                else {
-
-                    cautraloi.set(position," ");
+                    cautraloi.set(position,"1");
                     arr2.set(vitrioDapAn.get(position),s);
 
                     vitrioDapAn.set(position,-1);
-                }
-            }
+
+
 
 //            vitrioDapAn.add(position);
             listcauhoi.setAdapter( new CauHoiAdapter(this,cautraloi,this));
