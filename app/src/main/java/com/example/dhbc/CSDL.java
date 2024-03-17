@@ -80,6 +80,13 @@ public class CSDL {
             cauHoi= new CauHoi(id, hinhAnh, dapAn, tinhTrang);
 //            Toast.makeText(context, "id: " + dataCV.getInt(0) + "dapan: " + dataCV.getString(2), Toast.LENGTH_SHORT).show();
         }
+        else {
+            int id = -1;
+            String hinhAnh = "hinh123";
+            String dapAn = "dapan";
+            int tinhTrang = 0;
+            cauHoi= new CauHoi(id, hinhAnh, dapAn, tinhTrang);
+        }
         return cauHoi;
     }
     public int HienRuby(Context context){

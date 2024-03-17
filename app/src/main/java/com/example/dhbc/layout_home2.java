@@ -17,6 +17,7 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.IOException;
 
@@ -54,15 +55,48 @@ public class layout_home2 extends AppCompatActivity {
         choilai=findViewById(R.id.choilai);
 
         csdl=new CSDL(getApplicationContext());
+
         CauHoi ch=csdl.HienCSDL(getApplicationContext());
-        level.setText("Level "+String.valueOf(ch.getId()));
+        if(ch.getId()==-1){
+            level.setText("Xuan Bac");
+            start.setVisibility(View.GONE);
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Xác nhận");
+            builder.setMessage("Bạn đã chơi hết các level, bạn có muốn chơi lại không?");
+            builder.setCancelable(false);
+            // Nút xác nhận
+            builder.setPositiveButton("Xác nhận", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    // Xử lý khi người dùng nhấn nút xác nhận
+                    // Thêm code xử lý ở đây
+                    csdl.ChoiLai(layout_home2.this);
+                    recreate();
+                }
+            });
+
+            // Nút hủy
+            builder.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    // Xử lý khi người dùng nhấn nút hủy
+                    dialog.dismiss(); // Đóng dialog
+                }
+            });
+
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        }
+        else {
+            level.setText("Level "+String.valueOf(ch.getId()));
+        }
+
         int slgRuby1= csdl.HienRuby(layout_home2.this);
         slgRuby.setText(String.valueOf(slgRuby1));
         nhacnen.setChecked(true);
         choilai.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
 //                view.invalidate();
                 showConfirmationDialog();
             }
@@ -79,7 +113,6 @@ public class layout_home2 extends AppCompatActivity {
             public void onClick(View view) {
                 startActivity(new Intent(layout_home2.this,MainActivity.class));
                 layout_home2.this.finish();
-
             }
         });
         nhacnen.setOnClickListener(new View.OnClickListener() {

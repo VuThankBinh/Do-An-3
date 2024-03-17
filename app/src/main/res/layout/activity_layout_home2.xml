@@ -65,7 +65,7 @@
       android:textStyle="italic"
       android:textSize="30dp"
       android:layout_gravity="center"
-      android:layout_marginTop="230dp">
+      android:layout_marginTop="180dp">
   </CheckBox>
 
 
@@ -126,32 +126,44 @@
         android:layout_marginLeft="20dp">
     </ImageView>
   </LinearLayout>
-  <TextView
+  <RelativeLayout
       android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:textAlignment="center"
-      android:textSize="25dp"
-      android:textColor="@color/black"
-      android:textStyle="bold"
-      android:text="Thiết kế by Bình Vũ">
-  </TextView>
-  <TextView
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:textAlignment="center"
-      android:textSize="25dp"
-      android:textColor="@color/black"
-      android:textStyle="bold"
-      android:text="MSV:12521069">
-  </TextView>
-  <TextView
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:textAlignment="center"
-      android:textSize="25dp"
-      android:textColor="@color/black"
-      android:textStyle="bold"
-      android:text="Lớp: SEK 19.5"
+      android:layout_height="match_parent"
       >
-  </TextView>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="25dp"
+        android:textAlignment="center"
+        android:id="@+id/t1"
+        android:layout_above="@+id/t2"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:text="Thiết kế by Bình Vũ">
+    </TextView>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="25dp"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:layout_above="@+id/t3"
+        android:id="@+id/t2"
+        android:textStyle="bold"
+        android:text="MSV:12521069">
+    </TextView>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:id="@+id/t3"
+        android:layout_alignParentBottom="true"
+        android:textSize="25dp"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:text="Lớp: SEK 19.5"
+        >
+    </TextView>
+  </RelativeLayout>
+
   </LinearLayout>
