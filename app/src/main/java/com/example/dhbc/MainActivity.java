@@ -7,6 +7,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,6 +21,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
@@ -68,6 +71,7 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
     CSDL csdl;
     CauHoi ch;
     List<Integer> vi_tri_dau_cach;
+    List<Integer> trogiup;
     ArrayList<String> cautraloi;
     ArrayList<Integer> vitrioDapAn;
     ArrayList<String> arr2,arr;
@@ -110,7 +114,11 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
         nextdemo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                String trogiupp="";
+                for (int i: trogiup) {
+                    trogiupp+= i+", ";
+                }
+                Toast.makeText(MainActivity.this, trogiupp, Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -169,18 +177,29 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
             public void onClick(View view) {
                 dialog.dismiss();
                 Bitmap b=takescreenshotOfRootView(tb);
-                layout_2.setImageBitmap(b);
+//                layout_2.setImageBitmap(b);
 
                 File savedFile = saveBitmapToFile(b);
                 if (savedFile != null) {
                     Toast.makeText(MainActivity.this, "Đã chụp màn hình để chia sẻ", Toast.LENGTH_SHORT).show();
+                    try {
+//                        File file =new File(getApplicationContext().getExternalCacheDir(),File.separator+"fix.png");
+//                        FileOutputStream fileOutputStream=new FileOutputStream(file);
+//                        b.compress(Bitmap.CompressFormat.PNG,100,fileOutputStream);
+//                        fileOutputStream.flush();
+//                        fileOutputStream.close();
+                        savedFile.setReadable(true,false);
+                        final Intent intent=new Intent(Intent.ACTION_SEND);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        Uri uri= FileProvider.getUriForFile(getApplicationContext(),getApplication().getPackageName()+".provider",savedFile);
+                        intent.putExtra(Intent.EXTRA_STREAM,uri);
+                        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                        intent.setType("image/*");
 
-//                    LayoutInflater inflater = getLayoutInflater();
-//                    View layout = inflater.inflate(R.layout.toast_share, findViewById(R.id.toast_layout_root));
-//                    Toast toast = new Toast(getApplicationContext());
-//                    toast.setDuration(Toast.LENGTH_SHORT);
-//                    toast.setView(layout);
-//                    toast.show();
+                        startActivity(Intent.createChooser(intent,"Share to..."));
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
 
                 } else {
                     Toast.makeText(MainActivity.this, "Failed to save screenshot", Toast.LENGTH_SHORT).show();
@@ -239,6 +258,7 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
     FlexboxLayoutManager layoutManager,layoutManager2;
     public void loadTrang(){
         vi_tri_dau_cach=new ArrayList<>();
+        trogiup=new ArrayList<>();
         vitrioDapAn=new ArrayList<>();
         ch= csdl.HienCSDL(getApplicationContext());
         int slgRuby1= csdl.HienRuby(MainActivity.this);
@@ -310,14 +330,15 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
                 if(dapAn.charAt(i)==' ') {
                     arr.add(String.valueOf(""));
                     vi_tri_dau_cach.add(i);
+                    trogiup.add(2);
                     cautraloi.add("");
-
                     vitrioDapAn.add(-2);
                 }
                 else {
                     arr.add(String.valueOf("1"));
                     cautraloi.add("1");
                     vitrioDapAn.add(-1);
+                    trogiup.add(0);
                 }
 
             }
@@ -487,7 +508,7 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
     public void onItemCauHoiClick(int position) {
 //        Toast.makeText(this, "vị trí: "+vitrioDapAn.get(position), Toast.LENGTH_SHORT).show();
         String s=cautraloi.get(position).toString().toUpperCase();
-        if(s.trim().length()>0 &&s!=""&&s!=null){
+            if(s.trim().length()>0 &&s!=""&&s!=null && s!="1"){
             cautraloi.set(position,"");
 
                     cautraloi.set(position,"1");
