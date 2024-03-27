@@ -28,19 +28,16 @@ import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.dhbc.Api.CreateOrder;
 import com.google.android.flexbox.FlexDirection;
 import com.google.android.flexbox.FlexboxLayoutManager;
 import com.google.android.flexbox.JustifyContent;
 
-import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -51,10 +48,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import java.util.regex.Pattern;
-
-import vn.zalopay.sdk.ZaloPayError;
-import vn.zalopay.sdk.ZaloPaySDK;
-import vn.zalopay.sdk.listeners.PayOrderListener;
 
 public class MainActivity extends AppCompatActivity implements ItemClick_dapan, ItemClick_cauhoi {
     RecyclerView listcauhoi,dapan;
@@ -94,10 +87,6 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
         back=findViewById(R.id.back1);
         csdl= new CSDL(getApplicationContext());
         tb=findViewById(R.id.deme);
-        StrictMode.ThreadPolicy policy = new
-                StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
-        ZaloPaySDK.init(553, vn.zalopay.sdk.Environment.SANDBOX);
 
 //        verifyStoragePemission(MainActivity.this);
         mp = new MediaPlayer();
@@ -179,69 +168,6 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
         dialog.show();
 
     }
-    private void zalopay(String token,Dialog d){
-        boolean[] ktra = {false};
-        ZaloPaySDK.getInstance().payOrder(MainActivity.this, token, "demozpdk://app", new PayOrderListener() {
-            @Override
-            public void onPaymentSucceeded( String transactionId,  String transToken,  String appTransID) {
-                ktra[0] =true;
-                Toast.makeText(MainActivity.this, "Thanh toán thành công!", Toast.LENGTH_SHORT).show();
-                Log.e("TAG", "onPaymentSucceeded: "+ transactionId );
-                runOnUiThread(new Runnable() {
-
-                    @Override
-                    public void run() {
-//                        Toast.makeText(d.getContext(), "Thanh toán thành công!", Toast.LENGTH_SHORT).show();
-
-                        // Ghi log thông tin về giao dịch thành công
-//                        Log.d("Payment", "Thanh toán thành công - TransactionId: " + transactionId + ", TransToken: " + transToken);
-
-                        new AlertDialog.Builder(d.getContext())
-                                .setTitle("Payment Success")
-                                .setMessage(String.format("TransactionId: %s - TransToken: %s", transactionId, transToken))
-                                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-
-                                    }
-                                })
-                                .setNegativeButton("Cancel", null).show();
-
-                    }
-
-                });
-//                        IsLoading();
-                Toast.makeText(MainActivity.this, ktra.toString(), Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onPaymentCanceled(String zpTransToken, String appTransID) {
-                new AlertDialog.Builder(MainActivity.this)
-                        .setTitle("User Cancel Payment")
-                        .setMessage(String.format("zpTransToken: %s \n", zpTransToken))
-                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-
-                            }
-                        })
-                        .setNegativeButton("Cancel", null).show();
-            }
-
-            @Override
-            public void onPaymentError(ZaloPayError zaloPayError, String zpTransToken, String appTransID) {
-                new AlertDialog.Builder(MainActivity.this)
-                        .setTitle("Payment Fail")
-                        .setMessage(String.format("ZaloPayErrorCode: %s \nTransToken: %s", zaloPayError.toString(), zpTransToken))
-                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                            }
-                        })
-                        .setNegativeButton("Cancel", null).show();
-            }
-        });
-    }
 
     String dapAn,dapAn2;
     private void showDialogShop() {
@@ -255,98 +181,24 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
         LinearLayout mua3=dialog.findViewById(R.id.mua3);
         String[] lblZpTransToken = {""};
         mua1.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.O)
-            @SuppressLint("SetTextI18n")
+
             @Override
             public void onClick(View v) {
-                CreateOrder orderApi = new CreateOrder();
 
-                try {
-                    JSONObject data = orderApi.createOrder("99000");
-                    Log.d("Amount","99000");
-//                    lblZpTransToken.setVisibility(View.VISIBLE);
-                    String code = data.getString("return_code");
-//                    Toast.makeText(getApplicationContext(), "return_code: " + code, Toast.LENGTH_LONG).show();
-
-                    if (code.equals("1")) {
-
-                        lblZpTransToken[0] =data.getString("zp_trans_token");
-//                        Toast.makeText(MainActivity.this,lblZpTransToken[0]  , Toast.LENGTH_SHORT).show();
-
-                        zalopay(lblZpTransToken[0],dialog);
-                    }
-                    else {
-                        Toast.makeText(MainActivity.this, "Thanh toán thất bại", Toast.LENGTH_SHORT).show();
-                    }
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
 
             }
         });
         mua2.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.O)
-            @SuppressLint("SetTextI18n")
             @Override
             public void onClick(View v) {
-                CreateOrder orderApi = new CreateOrder();
 
-                try {
-                    JSONObject data = orderApi.createOrder("50000");
-                    Log.d("Amount","50000");
-//                    lblZpTransToken.setVisibility(View.VISIBLE);
-                    String code = data.getString("return_code");
-//                    Toast.makeText(getApplicationContext(), "return_code: " + code, Toast.LENGTH_LONG).show();
-
-                    if (code.equals("1")) {
-
-                        lblZpTransToken[0] =data.getString("zp_trans_token");
-//                        Toast.makeText(MainActivity.this,lblZpTransToken[0]  , Toast.LENGTH_SHORT).show();
-                        zalopay(lblZpTransToken[0],dialog);
-                    }
-                    else {
-                        Toast.makeText(MainActivity.this, "Thanh toán thất bại", Toast.LENGTH_SHORT).show();
-                    }
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
 
             }
         });
         mua3.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.O)
-            @SuppressLint("SetTextI18n")
             @Override
             public void onClick(View v) {
-                CreateOrder orderApi = new CreateOrder();
 
-                try {
-                    JSONObject data = orderApi.createOrder("20000");
-                    Log.d("Amount","20000");
-//                    lblZpTransToken.setVisibility(View.VISIBLE);
-                    String code = data.getString("return_code");
-
-
-
-
-                       
-//                    Toast.makeText(getApplicationContext(), "return_code: " + code, Toast.LENGTH_LONG).show();
-
-                    if (code.equals("1")) {
-
-                        lblZpTransToken[0] =data.getString("zp_trans_token");
-//                        Toast.makeText(MainActivity.this,lblZpTransToken[0]  , Toast.LENGTH_SHORT).show();
-                        zalopay(lblZpTransToken[0],dialog);
-                    }
-                    else {
-                        Toast.makeText(MainActivity.this, "Thanh toán thất bại", Toast.LENGTH_SHORT).show();
-                    }
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
 
             }
         });

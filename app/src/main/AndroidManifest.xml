@@ -8,42 +8,29 @@
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@drawable/dau_bac"
-        android:label="duoi hinh"
+        android:label="Đuổi hình bắt chữ"
         android:roundIcon="@drawable/dau_bac"
         android:supportsRtl="true"
         android:theme="@style/Theme.DHBC"
         tools:targetApi="31" >
         <activity
-            android:name=".layout_home1"
+            android:name=".MainActivity"
             android:exported="false" />
         <activity
             android:name=".layout_home2"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".layout_home1"
             android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-                <data android:scheme="demozpdk"
-                    android:host="app" />
-            </intent-filter>
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-        <provider
-            android:authorities="com.example.dhbc.provider"
-            android:name="androidx.core.content.FileProvider"
-            android:exported="false"
-            android:grantUriPermissions="true">
 
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/paths"
-                />
-        </provider>
+            </intent-filter>
+
+        </activity>
+
     </application>
 
 </manifest>
