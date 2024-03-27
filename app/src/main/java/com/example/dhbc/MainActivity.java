@@ -3,56 +3,59 @@ package com.example.dhbc;
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
+import android.annotation.SuppressLint;
+import android.app.Dialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.media.MediaPlayer;
+import android.net.Uri;
+import android.os.Build;
+import android.os.Bundle;
+import android.os.Environment;
+import android.os.StrictMode;
+import android.provider.MediaStore;
+import android.util.Log;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TableLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.Dialog;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.media.MediaPlayer;
-import android.net.Uri;
-import android.os.Bundle;
-import android.os.Environment;
-import android.os.StrictMode;
-import android.provider.MediaStore;
-import android.text.format.DateFormat;
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.TableLayout;
-import android.widget.TextView;
-import android.widget.Toast;
-
+import com.example.dhbc.Api.CreateOrder;
 import com.google.android.flexbox.FlexDirection;
 import com.google.android.flexbox.FlexboxLayoutManager;
 import com.google.android.flexbox.JustifyContent;
 
+import org.json.JSONObject;
+
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.Normalizer;
 import java.util.ArrayList;
-import java.util.BitSet;
-import java.util.Calendar;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.Random;
-
-import java.text.Normalizer;
 import java.util.regex.Pattern;
+
+import vn.zalopay.sdk.ZaloPayError;
+import vn.zalopay.sdk.ZaloPaySDK;
+import vn.zalopay.sdk.listeners.PayOrderListener;
+
 public class MainActivity extends AppCompatActivity implements ItemClick_dapan, ItemClick_cauhoi {
     RecyclerView listcauhoi,dapan;
     ImageView help,shop,layout_2,back;
@@ -91,6 +94,11 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
         back=findViewById(R.id.back1);
         csdl= new CSDL(getApplicationContext());
         tb=findViewById(R.id.deme);
+        StrictMode.ThreadPolicy policy = new
+                StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+        ZaloPaySDK.init(553, vn.zalopay.sdk.Environment.SANDBOX);
+
 //        verifyStoragePemission(MainActivity.this);
         mp = new MediaPlayer();
         mp1 = new MediaPlayer();
@@ -103,13 +111,9 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
         File dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
 
         nextdemo.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View view) {
-                String trogiupp="";
-                for (int i: trogiup) {
-                    trogiupp+= i+", ";
-                }
-                Toast.makeText(MainActivity.this, trogiupp, Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -156,60 +160,7 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
 
     }
 
-    private void showDialogHelp() {
-        Dialog dialog = new Dialog(MainActivity.this, android.R.style.Theme_DeviceDefault_Dialog_NoActionBar);
-        dialog.setContentView(R.layout.dialog_help);
-        ImageView close=dialog.findViewById(R.id.closehelp);
-        LinearLayout ngthan=dialog.findViewById(R.id.nhongthan);
 
-
-        ngthan.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-                Bitmap b=takescreenshotOfRootView(tb);
-//                layout_2.setImageBitmap(b);
-
-                File savedFile = saveBitmapToFile(b);
-                if (savedFile != null) {
-                    Toast.makeText(MainActivity.this, "Đã chụp màn hình để chia sẻ", Toast.LENGTH_SHORT).show();
-                    try {
-//                        File file =new File(getApplicationContext().getExternalCacheDir(),File.separator+"fix.png");
-//                        FileOutputStream fileOutputStream=new FileOutputStream(file);
-//                        b.compress(Bitmap.CompressFormat.PNG,100,fileOutputStream);
-//                        fileOutputStream.flush();
-//                        fileOutputStream.close();
-                        savedFile.setReadable(true,false);
-                        final Intent intent=new Intent(Intent.ACTION_SEND);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        Uri uri= FileProvider.getUriForFile(getApplicationContext(),getApplication().getPackageName()+".provider",savedFile);
-                        intent.putExtra(Intent.EXTRA_STREAM,uri);
-                        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                        intent.setType("image/*");
-
-                        startActivity(Intent.createChooser(intent,"Share to..."));
-                    } catch (Exception e) {
-                        throw new RuntimeException(e);
-                    }
-
-                } else {
-                    Toast.makeText(MainActivity.this, "Failed to save screenshot", Toast.LENGTH_SHORT).show();
-                }
-
-            }
-        });
-        close.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-            }
-        });
-//        Window window = dialog.getWindow();
-//        window.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
-//        window.setGravity(Gravity.CENTER);
-        dialog.show();
-
-    }
     private void showDialogChucMung() {
         Dialog dialog = new Dialog(MainActivity.this, android.R.style.Theme_DeviceDefault_Dialog_NoActionBar);
         dialog.setContentView(R.layout.dialog_chucmung_dapan);
@@ -228,12 +179,177 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
         dialog.show();
 
     }
+    private void zalopay(String token,Dialog d){
+        boolean[] ktra = {false};
+        ZaloPaySDK.getInstance().payOrder(MainActivity.this, token, "demozpdk://app", new PayOrderListener() {
+            @Override
+            public void onPaymentSucceeded( String transactionId,  String transToken,  String appTransID) {
+                ktra[0] =true;
+                Toast.makeText(MainActivity.this, "Thanh toán thành công!", Toast.LENGTH_SHORT).show();
+                Log.e("TAG", "onPaymentSucceeded: "+ transactionId );
+                runOnUiThread(new Runnable() {
+
+                    @Override
+                    public void run() {
+//                        Toast.makeText(d.getContext(), "Thanh toán thành công!", Toast.LENGTH_SHORT).show();
+
+                        // Ghi log thông tin về giao dịch thành công
+//                        Log.d("Payment", "Thanh toán thành công - TransactionId: " + transactionId + ", TransToken: " + transToken);
+
+                        new AlertDialog.Builder(d.getContext())
+                                .setTitle("Payment Success")
+                                .setMessage(String.format("TransactionId: %s - TransToken: %s", transactionId, transToken))
+                                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+
+                                    }
+                                })
+                                .setNegativeButton("Cancel", null).show();
+
+                    }
+
+                });
+//                        IsLoading();
+                Toast.makeText(MainActivity.this, ktra.toString(), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onPaymentCanceled(String zpTransToken, String appTransID) {
+                new AlertDialog.Builder(MainActivity.this)
+                        .setTitle("User Cancel Payment")
+                        .setMessage(String.format("zpTransToken: %s \n", zpTransToken))
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        })
+                        .setNegativeButton("Cancel", null).show();
+            }
+
+            @Override
+            public void onPaymentError(ZaloPayError zaloPayError, String zpTransToken, String appTransID) {
+                new AlertDialog.Builder(MainActivity.this)
+                        .setTitle("Payment Fail")
+                        .setMessage(String.format("ZaloPayErrorCode: %s \nTransToken: %s", zaloPayError.toString(), zpTransToken))
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                            }
+                        })
+                        .setNegativeButton("Cancel", null).show();
+            }
+        });
+    }
+
     String dapAn,dapAn2;
     private void showDialogShop() {
         Dialog dialog = new Dialog(MainActivity.this,android.R.style.Theme_DeviceDefault_Dialog_NoActionBar );
 
         dialog.setContentView(R.layout.dialog_shop);
         ImageView close=dialog.findViewById(R.id.closebuy);
+        LinearLayout xemQC=dialog.findViewById(R.id.xemvideo);
+        LinearLayout mua1=dialog.findViewById(R.id.mua1);
+        LinearLayout mua2=dialog.findViewById(R.id.mua2);
+        LinearLayout mua3=dialog.findViewById(R.id.mua3);
+        String[] lblZpTransToken = {""};
+        mua1.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onClick(View v) {
+                CreateOrder orderApi = new CreateOrder();
+
+                try {
+                    JSONObject data = orderApi.createOrder("99000");
+                    Log.d("Amount","99000");
+//                    lblZpTransToken.setVisibility(View.VISIBLE);
+                    String code = data.getString("return_code");
+//                    Toast.makeText(getApplicationContext(), "return_code: " + code, Toast.LENGTH_LONG).show();
+
+                    if (code.equals("1")) {
+
+                        lblZpTransToken[0] =data.getString("zp_trans_token");
+//                        Toast.makeText(MainActivity.this,lblZpTransToken[0]  , Toast.LENGTH_SHORT).show();
+
+                        zalopay(lblZpTransToken[0],dialog);
+                    }
+                    else {
+                        Toast.makeText(MainActivity.this, "Thanh toán thất bại", Toast.LENGTH_SHORT).show();
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
+        mua2.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onClick(View v) {
+                CreateOrder orderApi = new CreateOrder();
+
+                try {
+                    JSONObject data = orderApi.createOrder("50000");
+                    Log.d("Amount","50000");
+//                    lblZpTransToken.setVisibility(View.VISIBLE);
+                    String code = data.getString("return_code");
+//                    Toast.makeText(getApplicationContext(), "return_code: " + code, Toast.LENGTH_LONG).show();
+
+                    if (code.equals("1")) {
+
+                        lblZpTransToken[0] =data.getString("zp_trans_token");
+//                        Toast.makeText(MainActivity.this,lblZpTransToken[0]  , Toast.LENGTH_SHORT).show();
+                        zalopay(lblZpTransToken[0],dialog);
+                    }
+                    else {
+                        Toast.makeText(MainActivity.this, "Thanh toán thất bại", Toast.LENGTH_SHORT).show();
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
+        mua3.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onClick(View v) {
+                CreateOrder orderApi = new CreateOrder();
+
+                try {
+                    JSONObject data = orderApi.createOrder("20000");
+                    Log.d("Amount","20000");
+//                    lblZpTransToken.setVisibility(View.VISIBLE);
+                    String code = data.getString("return_code");
+
+
+
+
+                       
+//                    Toast.makeText(getApplicationContext(), "return_code: " + code, Toast.LENGTH_LONG).show();
+
+                    if (code.equals("1")) {
+
+                        lblZpTransToken[0] =data.getString("zp_trans_token");
+//                        Toast.makeText(MainActivity.this,lblZpTransToken[0]  , Toast.LENGTH_SHORT).show();
+                        zalopay(lblZpTransToken[0],dialog);
+                    }
+                    else {
+                        Toast.makeText(MainActivity.this, "Thanh toán thất bại", Toast.LENGTH_SHORT).show();
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
         close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -246,14 +362,16 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
         dialog.show();
 
     }
+    int slgRuby1=0;
     FlexboxLayoutManager layoutManager,layoutManager2;
     public void loadTrang(){
         vi_tri_dau_cach=new ArrayList<>();
         trogiup=new ArrayList<>();
         vitrioDapAn=new ArrayList<>();
         ch= csdl.HienCSDL(getApplicationContext());
-        int slgRuby1= csdl.HienRuby(MainActivity.this);
+        slgRuby1= csdl.HienRuby(MainActivity.this);
         slgRuby.setText(String.valueOf(slgRuby1));
+        trogiup12[0]=false;
         if(ch.getId()==-1){
 
             tb.setVisibility(View.GONE);
@@ -291,7 +409,8 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
             String fileName = ch.getHinhAnh().toString(); // Lấy tên tệp ảnh từ đối tượng baiHat
             int resId = getResources().getIdentifier(fileName, "drawable", getPackageName()); // Tìm ID tài nguyên dựa trên tên tệp ảnh
             if (resId != 0) {
-                layout_2.setImageResource(resId); // Thiết lập hình ảnh cho ImageView
+                layout_2.setImageResource(resId);
+                layout_2.setBackgroundColor(Color.WHITE);// Thiết lập hình ảnh cho ImageView
             } else {
                 // Xử lý trường hợp không tìm thấy tệp ảnh
             }
@@ -357,6 +476,8 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
             dapan.setAdapter(adap);
             mp.reset();
             try {
+                mp1.reset();
+
                 mp1.setDataSource(getResources().openRawResourceFd(R.raw.daylagi0));
                 mp1.prepare();
                 mp1.start();
@@ -422,62 +543,7 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
 
 
             }
-            if(vitrioDapAn.get(vitrioDapAn.size()-1)>=0){
-//                    Toast.makeText(this, "nam ngu", Toast.LENGTH_SHORT).show();
-                String dapan1 = dapAn.toUpperCase();
-                StringBuilder result = new StringBuilder();
-                for (String item : cautraloi) {
-                    result.append(item);
-                }
-                String dapan2 = result.toString();
-
-                String dapan1KhongDau = removeDiacritics(dapan1);
-                String dapan2KhongDau = removeDiacritics(dapan2);
-
-                System.out.println(dapan1KhongDau);
-                System.out.println(dapan2KhongDau);
-
-                if(dapan1KhongDau.equals(dapan2KhongDau)){
-                    try {
-                        mp1.setDataSource(getResources().openRawResourceFd(R.raw.chinhxac1));
-                        mp1.prepare();
-                        mp1.start();
-
-                        mp1.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                            @Override
-                            public void onCompletion(MediaPlayer mp) {
-
-                                showDialogChucMung();
-                                mp.reset();
-                            }
-                        });
-
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-//                    Toast.makeText(this, "mày giỏi đúng r đó con chóa", Toast.LENGTH_SHORT).show();
-
-                }
-                else {
-                    try {
-                        mp1.setDataSource(getResources().openRawResourceFd(R.raw.chuachinhxac0));
-                        mp1.prepare();
-                        mp1.start();
-
-                        mp1.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                            @Override
-                            public void onCompletion(MediaPlayer mp) {
-                                mp.reset();
-                            }
-                        });
-
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                    Toast.makeText(this, "lew lew gà", Toast.LENGTH_SHORT).show();
-                }
-
-            }
+            KiemTraDapAn();
 
 
 
@@ -486,6 +552,64 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
 //            listcauhoi.setLayoutManager(layoutManager);
             listcauhoi.setAdapter( new CauHoiAdapter(this,cautraloi,this));
             dapan.setAdapter( new DapAnAdapter(this,arr2,this));
+        }
+    }
+    private void KiemTraDapAn(){
+        if(vitrioDapAn.get(vitrioDapAn.size()-1)>=0){
+//                    Toast.makeText(this, "nam ngu", Toast.LENGTH_SHORT).show();
+            String dapan1 = dapAn.toUpperCase();
+            StringBuilder result = new StringBuilder();
+            for (String item : cautraloi) {
+                result.append(item);
+            }
+            String dapan2 = result.toString();
+            String dapan1KhongDau = removeDiacritics(dapan1);
+            String dapan2KhongDau = removeDiacritics(dapan2);
+
+            System.out.println(dapan1KhongDau);
+            System.out.println(dapan2KhongDau);
+
+            if(dapan1KhongDau.equals(dapan2KhongDau)){
+                try {
+                    mp1.reset();
+                    mp1.setDataSource(getResources().openRawResourceFd(R.raw.chinhxac1));
+                    mp1.prepare();
+                    mp1.start();
+
+                    mp1.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                        @Override
+                        public void onCompletion(MediaPlayer mp) {
+
+                            showDialogChucMung();
+                            mp.reset();
+                        }
+                    });
+
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+//                    Toast.makeText(this, "mày giỏi đúng r đó con chóa", Toast.LENGTH_SHORT).show();
+
+            }
+            else {
+                try {
+                    mp1.setDataSource(getResources().openRawResourceFd(R.raw.chuachinhxac0));
+                    mp1.prepare();
+                    mp1.start();
+
+                    mp1.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                        @Override
+                        public void onCompletion(MediaPlayer mp) {
+                            mp.reset();
+                        }
+                    });
+
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                Toast.makeText(this, "lew lew gà", Toast.LENGTH_SHORT).show();
+            }
+
         }
     }
     public static String removeDiacritics(String str) {
@@ -514,6 +638,230 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
 //            listcauhoi.setLayoutManager(layoutManager);
             dapan.setAdapter( new DapAnAdapter(this,arr2,this));
         }
+    }
+    LinearLayout ngthan,mochu1,motu1,motoanbo;
+    boolean[] trogiup12 = {false};
+    private void showDialogHelp() {
+        Dialog dialog = new Dialog(MainActivity.this, android.R.style.Theme_DeviceDefault_Dialog_NoActionBar);
+        dialog.setContentView(R.layout.dialog_help);
+        ImageView close=dialog.findViewById(R.id.closehelp);
+        ngthan=dialog.findViewById(R.id.nhongthan);
+        mochu1=dialog.findViewById(R.id.mochu1);
+        motu1=dialog.findViewById(R.id.tu1);
+        motoanbo=dialog.findViewById(R.id.motoanbo);
+
+        mochu1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+                if(slgRuby1>=5){
+                    for(int i=0;i<dapAn.length();i++){
+                        if(removeDiacritics(String.valueOf(dapAn.charAt(i))).equalsIgnoreCase(String.valueOf(cautraloi.get(i)))
+                                && !String.valueOf(cautraloi.get(i)).trim().equals("")
+                        ) {
+                            trogiup.set(i, 1);
+                        }
+                        else if(vitrioDapAn.get(i)!=-2
+                                && vitrioDapAn.get(i)!=-1){
+//                Toast.makeText(this,"vitri:"+ vitrioDapAn.get(i)+"ký tự:"+ cautraloi.get(i), Toast.LENGTH_SHORT).show();
+
+                            arr2.set(vitrioDapAn.get(i),cautraloi.get(i));
+                            cautraloi.set(i,"1");
+                            vitrioDapAn.set(i,-1);
+                            listcauhoi.setAdapter( new CauHoiAdapter(MainActivity.this,cautraloi,MainActivity.this));
+                            dapan.setAdapter( new DapAnAdapter(MainActivity.this,arr2,MainActivity.this));
+                        }
+                        if(vitrioDapAn.get(i)==-2){
+                            cautraloi.set(i," ");
+                        }
+
+                    }
+                    HienTroGiup();
+                    csdl.UpdateRuby(MainActivity.this,-5);
+                    slgRuby1=csdl.HienRuby(MainActivity.this);
+                    slgRuby.setText(String.valueOf(slgRuby1));
+                }
+                else {
+                    Toast.makeText(MainActivity.this, "Số lượng ruby không đủ", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });
+
+        motu1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(trogiup12[0] ==true){
+                    Toast.makeText(MainActivity.this, "Trợ giúp chỉ được sử dụng 1 lần", Toast.LENGTH_SHORT).show();
+
+                }
+                else {
+                    dialog.dismiss();
+                    if(slgRuby1>=13){
+
+                        for(int i=0;i<dapAn.length();i++){
+                            if(removeDiacritics(String.valueOf(dapAn.charAt(i))).equalsIgnoreCase(String.valueOf(cautraloi.get(i)))
+                                    && !String.valueOf(cautraloi.get(i)).trim().equals("")
+                            ) {
+                                trogiup.set(i, 1);
+                            }
+                            else if(vitrioDapAn.get(i)!=-2
+                                    && vitrioDapAn.get(i)!=-1){
+//                Toast.makeText(this,"vitri:"+ vitrioDapAn.get(i)+"ký tự:"+ cautraloi.get(i), Toast.LENGTH_SHORT).show();
+
+                                arr2.set(vitrioDapAn.get(i),cautraloi.get(i));
+                                cautraloi.set(i,"1");
+                                vitrioDapAn.set(i,-1);
+                                listcauhoi.setAdapter( new CauHoiAdapter(MainActivity.this,cautraloi,MainActivity.this));
+                                dapan.setAdapter( new DapAnAdapter(MainActivity.this,arr2,MainActivity.this));
+                            }
+                            if(vitrioDapAn.get(i)==-2){
+                                cautraloi.set(i," ");
+                            }
+
+                        }
+                        for(int i=0;i<trogiup.size();i++){
+                            int vt=trogiup.size()-1;
+                            Log.e("TAG", "onClick: "+ trogiup.get(i));
+                            if(i>0) {
+                                if(trogiup.get(i)==0){
+                                    HienTroGiup();
+                                }
+                                if(trogiup.get(i)==2){
+                                    trogiup12[0] =true;
+                                    break;
+                                }
+                            }
+                            else {
+                                HienTroGiup();
+                            }
+
+
+                        }
+                        csdl.UpdateRuby(MainActivity.this,-13);
+                        slgRuby1=csdl.HienRuby(MainActivity.this);
+                        slgRuby.setText(String.valueOf(slgRuby1));
+
+                    }
+                    else {
+                        Toast.makeText(MainActivity.this, "Số lượng ruby không đủ", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+
+
+
+            }
+        });
+        motoanbo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+                if(slgRuby1>=20){
+                    loadTrang();
+                    for(int i=0;i<trogiup.size();i++){
+
+                        HienTroGiup();
+                    }
+                    csdl.UpdateRuby(MainActivity.this,-20);
+                    slgRuby1=csdl.HienRuby(MainActivity.this);
+                    slgRuby.setText(String.valueOf(slgRuby1));
+
+                }
+                else {
+                    Toast.makeText(MainActivity.this, "Số lượng ruby không đủ", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        ngthan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+                Bitmap b=takescreenshotOfRootView(tb);
+                File savedFile = saveBitmapToFile(b);
+                if (savedFile != null) {
+                    Toast.makeText(MainActivity.this, "Đã chụp màn hình để chia sẻ", Toast.LENGTH_SHORT).show();
+                    try {
+                        savedFile.setReadable(true,false);
+                        final Intent intent=new Intent(Intent.ACTION_SEND);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        Uri uri= FileProvider.getUriForFile(getApplicationContext(),getApplication().getPackageName()+".provider",savedFile);
+                        intent.putExtra(Intent.EXTRA_STREAM,uri);
+                        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                        intent.setType("image/*");
+
+                        startActivity(Intent.createChooser(intent,"Share to..."));
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+
+                } else {
+                    Toast.makeText(MainActivity.this, "Failed to save screenshot", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });
+        close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+
+    }
+    private void HienTroGiup(){
+
+        if (KiemTraViTri_trogiup()>-1){
+            String ktu= removeDiacritics(String.valueOf(dapAn.charAt( KiemTraViTri_trogiup()))).toUpperCase();
+
+
+            int vitrioda=KiemTraViTri_dapAn(ktu);
+
+                cautraloi.set(KiemTraViTri_trogiup(),ktu);
+                vitrioDapAn.set(KiemTraViTri_trogiup(),vitrioda);
+                trogiup.set(KiemTraViTri_trogiup(),1);
+                int vittriDA=KiemTraViTri_dapAn(ktu);
+//                    Toast.makeText(MainActivity.this, vittriDA+" ", Toast.LENGTH_SHORT).show();
+
+                if(KiemTraViTri_trogiup()>=1){
+                    if(vitrioDapAn.get(KiemTraViTri_trogiup()-1) == -2 && vitrioDapAn.get(KiemTraViTri_trogiup())==-1) {
+                        cautraloi.set(KiemTraViTri_trogiup()-1," ");
+                    }
+                }
+                arr2.set(vittriDA,"");
+                dapan.setAdapter( new DapAnAdapter(MainActivity.this,arr2,MainActivity.this));
+                listcauhoi.setAdapter( new CauHoiAdapter(MainActivity.this,cautraloi,MainActivity.this));
+
+                KiemTraDapAn();
+
+
+
+        }
+        else {
+            Toast.makeText(MainActivity.this, "Ô chữ đã được hoành thành", Toast.LENGTH_SHORT).show();
+        }
+    }
+    public int KiemTraViTri_dapAn(String ktu){
+        int position=-1;
+        for(int i=0;i<arr2.size();i++){
+            if (arr2.get(i).toUpperCase().equals(ktu.toUpperCase())){
+                position=i;
+                break;
+            }
+        }
+        return position;
+    }
+
+    public int KiemTraViTri_trogiup(){
+        int position=-1;
+        for(int i=0;i<trogiup.size();i++){
+            if (trogiup.get(i)==0){
+                position=i;
+                break;
+            }
+        }
+        return position;
     }
     @Override
     protected void onResume() {

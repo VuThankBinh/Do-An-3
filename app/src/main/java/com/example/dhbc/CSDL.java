@@ -23,7 +23,7 @@ public class CSDL {
         Cursor cursor1 = db.GetData("SELECT name FROM sqlite_master WHERE type='table' AND name='Ruby'");
         if (cursor1 == null || cursor1.getCount() <= 0) {
             db.QueryData("CREATE TABLE IF NOT EXISTS Ruby (id INTEGER PRIMARY KEY AUTOINCREMENT,SoLuong Integer default 24)");
-            db.QueryData("INSERT INTO Ruby  VALUES (null,24)");
+            db.QueryData("INSERT INTO Ruby  VALUES (null,9999)");
         }
 
 
