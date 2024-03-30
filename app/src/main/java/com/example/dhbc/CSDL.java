@@ -90,6 +90,54 @@ public class CSDL {
             db.QueryData("INSERT INTO CauHoi  VALUES (null,'trotrong', 'trò trống', 0)");
             db.QueryData("INSERT INTO CauHoi  VALUES (null,'xahoa', 'xa hoa', 0)");
             db.QueryData("INSERT INTO CauHoi  VALUES (null,'yeucau', 'yêu cầu', 0)");
+            db.QueryData("INSERT INTO CauHoi  VALUES (null,'nguao', 'ngựa ô', 0)");
+
+            db.QueryData("INSERT INTO CauHoi  VALUES (null,'aimo', 'ái mộ', 0)");
+            db.QueryData("INSERT INTO CauHoi  VALUES (null,'bactinh', 'bạc tình', 0)");
+            db.QueryData("INSERT INTO CauHoi  VALUES (null,'badong', 'ba động', 0)");
+            db.QueryData("INSERT INTO CauHoi  VALUES (null,'baophu', 'bao phủ', 0)");
+            db.QueryData("INSERT INTO CauHoi  VALUES (null,'baothuc', 'báo thức', 0)");
+            db.QueryData("INSERT INTO CauHoi  VALUES (null,'baotu', 'bao tử', 0)");
+            db.QueryData("INSERT INTO CauHoi  VALUES (null,'batron', 'ba trợn', 0)");
+            db.QueryData("INSERT INTO CauHoi  VALUES (null,'baxa', 'bà xã', 0)");
+            db.QueryData("INSERT INTO CauHoi  VALUES (null,'bongda', 'bóng đá', 0)");
+            db.QueryData("INSERT INTO CauHoi  VALUES (null,'bioi', 'bỉ ổi', 0)");
+            db.QueryData("INSERT INTO CauHoi  VALUES (null,'butsagachet', 'bút sa gà chết', 0)");
+            db.QueryData("INSERT INTO CauHoi  VALUES (null,'calonnuotcabe', 'cá lớn nuốt cá bé', 0)");
+            db.QueryData("INSERT INTO CauHoi  VALUES (null,'caulong', 'cầu lông', 0)");
+            db.QueryData("INSERT INTO CauHoi  VALUES (null,'caumay', 'cầu mây', 0)");
+            db.QueryData("INSERT INTO CauHoi  VALUES (null,'chidiem', 'chỉ điểm', 0)");
+            db.QueryData("INSERT INTO CauHoi  VALUES (null,'chuotquang', 'chuột quang', 0)");
+            db.QueryData("INSERT INTO CauHoi  VALUES (null,'cobap', 'cơ bắp', 0)");
+            db.QueryData("INSERT INTO CauHoi  VALUES (null,'daituong', 'đại tướng', 0)");
+            db.QueryData("INSERT INTO CauHoi  VALUES (null,'danco', 'đàn cò', 0)");
+            db.QueryData("INSERT INTO CauHoi  VALUES (null,'dautu', 'đầu tư', 0)");
+            db.QueryData("INSERT INTO CauHoi  VALUES (null,'dongcamcongkho', 'đồng cam cộng khổ', 0)");
+            db.QueryData("INSERT INTO CauHoi  VALUES (null,'eap', 'e ấp', 0)");
+            db.QueryData("INSERT INTO CauHoi  VALUES (null,'hailong', 'hài lòng', 0)");
+            db.QueryData("INSERT INTO CauHoi  VALUES (null,'hochanh', 'học hành', 0)");
+            db.QueryData("INSERT INTO CauHoi  VALUES (null,'hungthuu', 'hứng thú', 0)");
+            db.QueryData("INSERT INTO CauHoi  VALUES (null,'khotam', 'khổ tâm', 0)");
+            db.QueryData("INSERT INTO CauHoi  VALUES (null,'laban', 'la bàn', 0)");
+            db.QueryData("INSERT INTO CauHoi  VALUES (null,'langthang', 'lang thang', 0)");
+            db.QueryData("INSERT INTO CauHoi  VALUES (null,'luclac', 'lục lạc', 0)");
+            db.QueryData("INSERT INTO CauHoi  VALUES (null,'lyhon', 'ly hôn', 0)");
+            db.QueryData("INSERT INTO CauHoi  VALUES (null,'macarong', 'ma cà rồng', 0)");
+            db.QueryData("INSERT INTO CauHoi  VALUES (null,'myle', 'mỹ lệ', 0)");
+            db.QueryData("INSERT INTO CauHoi  VALUES (null,'nemdagiautay', 'ném đá giấu tay', 0)");
+            db.QueryData("INSERT INTO CauHoi  VALUES (null,'ngangu', 'ngã ngũ', 0)");
+            db.QueryData("INSERT INTO CauHoi  VALUES (null,'ngucoc', 'ngũ cốc', 0)");
+            db.QueryData("INSERT INTO CauHoi  VALUES (null,'nhaccu', 'nhạc cụ', 0)");
+            db.QueryData("INSERT INTO CauHoi  VALUES (null,'nhahat', 'nhà hát', 0)");
+            db.QueryData("INSERT INTO CauHoi  VALUES (null,'noigian', 'nội gián', 0)");
+            db.QueryData("INSERT INTO CauHoi  VALUES (null,'noithat', 'nội thất', 0)");
+            db.QueryData("INSERT INTO CauHoi  VALUES (null,'thoo', 'thờ ơ', 0)");
+            db.QueryData("INSERT INTO CauHoi  VALUES (null,'tamtoi', 'tăm tối', 0)");
+            db.QueryData("INSERT INTO CauHoi  VALUES (null,'tinhtruong', 'tình trường', 0)");
+            db.QueryData("INSERT INTO CauHoi  VALUES (null,'xehoa', 'xe hoa', 0)");
+            db.QueryData("INSERT INTO CauHoi  VALUES (null,'xemtuong', 'xem tướng', 0)");
+            db.QueryData("INSERT INTO CauHoi  VALUES (null,'xichlo', 'xích lô', 0)");
+            db.QueryData("INSERT INTO CauHoi  VALUES (null,'xuongrong', 'xương rồng', 0)");
         }
     }
     public CauHoi HienCSDL(Context context){
