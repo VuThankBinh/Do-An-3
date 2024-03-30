@@ -160,6 +160,15 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
             @Override
             public void onClick(View view) {
                 dialog.dismiss();
+//                csdl.Update(MainActivity.this,ch.getId());
+//                csdl.UpdateRuby(MainActivity.this,3);
+//                loadTrang();
+            }
+        });
+        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialogInterface) {
+                // Thực hiện cập nhật CSDL và tải lại trang
                 csdl.Update(MainActivity.this,ch.getId());
                 csdl.UpdateRuby(MainActivity.this,3);
                 loadTrang();
@@ -289,6 +298,8 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
             cautraloi=new ArrayList<>();
             for (int i = 0; i < dapAn.length(); i++) {
                 // Convert each character to a string and add it to the ArrayList
+
+                // nếu ký tự cách
                 if(dapAn.charAt(i)==' ') {
                     arr.add(String.valueOf(""));
                     vi_tri_dau_cach.add(i);
@@ -355,6 +366,7 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
     public void onItemClick(int position) {
 
         int dem=0;
+        // kiểm tra xem đã có bao nhiêu ký tự trong câu trả lời của người chơi
         for(int i=0;i<cautraloi.size();i++){
             if(cautraloi.get(i).toUpperCase()!="1" && !cautraloi.get(i).trim().isEmpty()){
                 dem++;
@@ -363,17 +375,22 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
 //        Toast.makeText(this, "vị trí: "+dem+vi_tri_dau_cach.size(), Toast.LENGTH_SHORT).show();
         System.out.println(dem+vi_tri_dau_cach.size());
         String s=arr2.get(position).toString().toUpperCase();
-
+        // nếu chọn ký tự trong listdapan !="" và biến dem < listcauhoi.size()
         if(s.trim().length()>0 &&s!=""&&s!=null && dem+vi_tri_dau_cach.size()<arr.size()){
+
+            //set vị trí đó trong arr2 => ""
             arr2.set(position," ");
+            // biến dùng để chỉ set myAnswer 1 lần
             boolean foundNegativeIndex = false;
-            int vitri=-1;// Biến đánh dấu để chỉ thực hiện cập nhật arr một lần
+            //lập vòng for vitriodapan
             for (int j = 0; j < vitrioDapAn.size(); j++) {
+
+                // nếu foundNegativeIndex=false và có ký tự "" trong cautraloi
                 if (!foundNegativeIndex && vitrioDapAn.get(j) < 0) {
                     // Nếu chưa tìm thấy phần tử âm và vitrioDapAn[j] nhỏ hơn 0, cập nhật arr và đánh dấu đã tìm thấy
+
+
                     if (vitrioDapAn.get(j) == -1 ) {
-
-
                             vitrioDapAn.set(j, position);
                             foundNegativeIndex = true;
                             cautraloi.set(j, s);
@@ -381,7 +398,7 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
 
 
                     } else if(vitrioDapAn.get(j) == -2 && vitrioDapAn.get(j+1)==-1) {
-
+                        // th: nếu vị trí là dấu cách
                         cautraloi.set(j, " ");
                         cautraloi.set(j + 1, s);
 
@@ -407,8 +424,10 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
         }
     }
     private void KiemTraDapAn(){
+
+        // nếu vị trí textview cuối cùng đã có ký tự
         if(vitrioDapAn.get(vitrioDapAn.size()-1)>=0){
-//                    Toast.makeText(this, "nam ngu", Toast.LENGTH_SHORT).show();
+
             String dapan1 = dapAn.toUpperCase();
             StringBuilder result = new StringBuilder();
             for (String item : cautraloi) {
@@ -459,12 +478,13 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
-                Toast.makeText(this, "lew lew gà", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(this, "lew lew gà", Toast.LENGTH_SHORT).show();
             }
 
         }
     }
     public static String removeDiacritics(String str) {
+        // chuyê unicode thành tiếng anh
         str = Normalizer.normalize(str, Normalizer.Form.NFD);
         Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
         return pattern.matcher(str).replaceAll("").replaceAll("đ", "d").replaceAll("Đ", "D");
@@ -473,19 +493,21 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
     //click câu hỏi
     @Override
     public void onItemCauHoiClick(int position) {
-//        Toast.makeText(this, "vị trí: "+vitrioDapAn.get(position), Toast.LENGTH_SHORT).show();
+        // lấy ra text của textview đã click
         String s=cautraloi.get(position).toString().toUpperCase();
+            // nếu s != ""
             if(s.trim().length()>0 &&s!=""&&s!=null && s!="1"){
-            cautraloi.set(position,"");
+                // set vị trí đó trở thành ""
+                cautraloi.set(position,"");
 
-                    cautraloi.set(position,"1");
-                    arr2.set(vitrioDapAn.get(position),s);
+                // set lại vị trí cữ của từ đó vào arr2
+                // vị trí cũ đã được lưu ở mảng vitriodapan
+                cautraloi.set(position,"1");
+                arr2.set(vitrioDapAn.get(position),s);
+                // vị trí đó ở mảng vitriodapan -> =1 (-1: chưa có ký tự; >-1: đã có ký tự)
+                vitrioDapAn.set(position,-1);
 
-                    vitrioDapAn.set(position,-1);
-
-
-
-//            vitrioDapAn.add(position);
+                //set lại adapter
             listcauhoi.setAdapter( new CauHoiAdapter(this,cautraloi,this));
 //            listcauhoi.setLayoutManager(layoutManager);
             dapan.setAdapter( new DapAnAdapter(this,arr2,this));
@@ -628,17 +650,24 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
         ngthan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                dialog.dismiss();
                 Bitmap b=takescreenshotOfRootView(tb);
                 File savedFile = saveBitmapToFile(b);
                 if (savedFile != null) {
                     Toast.makeText(MainActivity.this, "Đã chụp màn hình để chia sẻ", Toast.LENGTH_SHORT).show();
                     try {
                         savedFile.setReadable(true,false);
+
+                        //Đây là hành động của Intent được sử dụng để chia sẻ nội dung.
+                        // Trong trường hợp này, nó được sử dụng để chia sẻ một file ảnh.
                         final Intent intent=new Intent(Intent.ACTION_SEND);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                        //Đây là cách để nhận một Uri cho một file từ một FileProvider.
+                        // Điều này cần thiết khi chia sẻ file với ứng dụng khác trên Android Nougat (API level 24) trở lên.
                         Uri uri= FileProvider.getUriForFile(getApplicationContext(),getApplication().getPackageName()+".provider",savedFile);
                         intent.putExtra(Intent.EXTRA_STREAM,uri);
+
+                        //ây là cờ được sử dụng để cho phép ứng dụng mà Intent được gửi tới đọc dữ liệu từ Uri đã được cung cấp.
                         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                         intent.setType("image/*");
 
@@ -650,7 +679,6 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
                 } else {
                     Toast.makeText(MainActivity.this, "Failed to save screenshot", Toast.LENGTH_SHORT).show();
                 }
-
             }
         });
         close.setOnClickListener(new View.OnClickListener() {
@@ -664,24 +692,33 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
     }
     private void HienTroGiup(){
 
+        // kiểm tra vị trí trợ giúp
+        //nếu KiemTraViTri_trogiup()>-1 (còn phần tử cần trợ giúp)
         if (KiemTraViTri_trogiup()>-1){
+            // ktu là từ cần hiện khi nhấn trợ giúp
             String ktu= removeDiacritics(String.valueOf(dapAn.charAt( KiemTraViTri_trogiup()))).toUpperCase();
 
-
+            // tìm vị trí của kyu ở trong arr2
             int vitrioda=KiemTraViTri_dapAn(ktu);
 
+            // set ktu đó vào đáp án của người chơi
                 cautraloi.set(KiemTraViTri_trogiup(),ktu);
-                vitrioDapAn.set(KiemTraViTri_trogiup(),vitrioda);
-                trogiup.set(KiemTraViTri_trogiup(),1);
-                int vittriDA=KiemTraViTri_dapAn(ktu);
-//                    Toast.makeText(MainActivity.this, vittriDA+" ", Toast.LENGTH_SHORT).show();
 
+            // set vị trí của ktu đó vào mảng vitrdapan
+                vitrioDapAn.set(KiemTraViTri_trogiup(),vitrioda);
+
+            // set vị trí vừa trợ giúp trong mảng trợ giúp thành 1 (0- chưa trợ giúp; 1- đã trợ giúp)
+                trogiup.set(KiemTraViTri_trogiup(),1);
+
+                // nếu là dấu cách thì set " "
                 if(KiemTraViTri_trogiup()>=1){
                     if(vitrioDapAn.get(KiemTraViTri_trogiup()-1) == -2 && vitrioDapAn.get(KiemTraViTri_trogiup())==-1) {
                         cautraloi.set(KiemTraViTri_trogiup()-1," ");
                     }
                 }
-                arr2.set(vittriDA,"");
+                //set vị trí ở trong arr2 ="" (các từ ô dưới)
+                arr2.set(vitrioda,"");
+                //set lại adapter
                 dapan.setAdapter( new DapAnAdapter(MainActivity.this,arr2,MainActivity.this));
                 listcauhoi.setAdapter( new CauHoiAdapter(MainActivity.this,cautraloi,MainActivity.this));
 
@@ -694,21 +731,25 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
             Toast.makeText(MainActivity.this, "Ô chữ đã được hoành thành", Toast.LENGTH_SHORT).show();
         }
     }
-    public int KiemTraViTri_dapAn(String ktu){
+
+    public int KiemTraViTri_trogiup(){
         int position=-1;
-        for(int i=0;i<arr2.size();i++){
-            if (arr2.get(i).toUpperCase().equals(ktu.toUpperCase())){
+        //lập vòng for trong mảng trợ giúp
+        //nếu tìm thấy phần tử có giá trị =0 thì break và return ra vị trí của phần tử ấy
+        for(int i=0;i<trogiup.size();i++){
+            if (trogiup.get(i)==0){
                 position=i;
                 break;
             }
         }
         return position;
     }
-
-    public int KiemTraViTri_trogiup(){
+    public int KiemTraViTri_dapAn(String ktu){
         int position=-1;
-        for(int i=0;i<trogiup.size();i++){
-            if (trogiup.get(i)==0){
+        // lập vòng for trong lisdapan
+        // nếu tìm thấy phần tử có giá trị = ký tự thì break và return vị trí phần tử ấy
+        for(int i=0;i<arr2.size();i++){
+            if (arr2.get(i).equalsIgnoreCase(ktu)){
                 position=i;
                 break;
             }
@@ -742,18 +783,32 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
         }
     }
     public static  Bitmap takescreenshot(View v){
+        //Bật bộ đệm vẽ của View.
+        // Khi được bật, View sẽ giữ một bản sao bitmap của nội dung hiện tại của nó trong bộ đệm vẽ.
         v.setDrawingCacheEnabled(true);
+
+        //Xây dựng bộ đệm vẽ của View.
+        // Điều này đảm bảo rằng bitmap được tạo ra sau đó sẽ là một bản sao của nội dung hiện tại của View.
         v.buildDrawingCache(true);
+
+        // Tạo một bản sao của bitmap trong bộ đệm vẽ của View.
         Bitmap b=Bitmap.createBitmap(v.getDrawingCache());
+
+        //Tắt bộ đệm vẽ của View, giải phóng bộ nhớ.
         v.setDrawingCacheEnabled(false);
         return b;
     }
     private static Bitmap takescreenshotOfRootView(View v){
+        //Phương thức này nhận một View làm đối số và chụp ảnh của nó.
         return takescreenshot(v.getRootView());
     }
     public File saveBitmapToFile(Bitmap bitmap) {
+        //khởi tạo biến để lưu đường dẫn ảnh
         String savedImagePath = null;
+        //Tạo tên file ảnh mới dựa trên thời gian hiện tại, để đảm bảo tính duy nhất của tên file.
         String imageFileName = "IMG_" + System.currentTimeMillis() + ".jpg";
+
+        //Xác định thư mục lưu trữ bên ngoài để lưu file ảnh
         File storageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
                 "/YourAppName");
 
@@ -768,11 +823,17 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
 
         try {
             // Save the image to storage
+            //Mở một luồng ghi vào file ảnh
             FileOutputStream fos = new FileOutputStream(imageFile);
+
+            //Nén bitmap và ghi dữ liệu nén vào luồng ghi.
+            // Trong trường hợp này, định dạng JPEG được sử dụng với chất lượng 100 (tốt nhất).
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+
+            //Đóng luồng ghi sau khi hoàn thành.
             fos.close();
 
-            // Update MediaStore to display the image in the Gallery
+            //Cập nhật cơ sở dữ liệu MediaStore để hiển thị ảnh mới trong Gallery của thiết bị.
             MediaStore.Images.Media.insertImage(getContentResolver(), imageFile.getAbsolutePath(), imageFile.getName(), imageFile.getName());
         } catch (IOException e) {
             e.printStackTrace();
@@ -780,6 +841,7 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
         }
         return imageFile;
     }
+
 
 
 }

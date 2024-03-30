@@ -62,6 +62,8 @@ public class CauHoiAdapter extends  RecyclerView.Adapter<CauHoiAdapter.ViewHolde
             holder.txt.setText(list.get(i));
         }
 
+        
+
         holder.txt.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
