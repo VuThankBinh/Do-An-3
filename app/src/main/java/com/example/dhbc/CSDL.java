@@ -67,6 +67,29 @@ public class CSDL {
             db.QueryData("INSERT INTO CauHoi  VALUES (null,'hungthu', 'hung thủ', 0)");
             db.QueryData("INSERT INTO CauHoi  VALUES (null,'kinhdo', 'kinh độ', 0)");
             db.QueryData("INSERT INTO CauHoi  VALUES (null,'matuy', 'ma túy', 0)");
+
+
+            db.QueryData("INSERT INTO CauHoi  VALUES (null,'anboobui', 'ăn bờ ở bụi', 0)");
+            db.QueryData("INSERT INTO CauHoi  VALUES (null,'ando', 'ấn độ', 0)");
+            db.QueryData("INSERT INTO CauHoi  VALUES (null,'bachhoa', 'bách hóa', 0)");
+            db.QueryData("INSERT INTO CauHoi  VALUES (null,'benhbinh', 'bệnh binh', 0)");
+            db.QueryData("INSERT INTO CauHoi  VALUES (null,'bodaonha', 'bồ đào nha', 0)");
+            db.QueryData("INSERT INTO CauHoi  VALUES (null,'caucanh', 'cầu cạnh', 0)");
+            db.QueryData("INSERT INTO CauHoi  VALUES (null,'cauchi', 'cầu chì', 0)");
+            db.QueryData("INSERT INTO CauHoi  VALUES (null,'chunho', 'chữ nho', 0)");
+            db.QueryData("INSERT INTO CauHoi  VALUES (null,'daoaothaca', 'đào ao thả cá', 0)");
+            db.QueryData("INSERT INTO CauHoi  VALUES (null,'giatang', 'gia tăng', 0)");
+            db.QueryData("INSERT INTO CauHoi  VALUES (null,'hama', 'hà mã', 0)");
+            db.QueryData("INSERT INTO CauHoi  VALUES (null,'kyvong', 'kỳ vọng', 0)");
+            db.QueryData("INSERT INTO CauHoi  VALUES (null,'nghean', 'nghệ an', 0)");
+            db.QueryData("INSERT INTO CauHoi  VALUES (null,'nhatban', 'nhật bản', 0)");
+            db.QueryData("INSERT INTO CauHoi  VALUES (null,'quantrong', 'quan trọng', 0)");
+            db.QueryData("INSERT INTO CauHoi  VALUES (null,'thachthuc', 'thách thức', 0)");
+            db.QueryData("INSERT INTO CauHoi  VALUES (null,'tinhnghich', 'tinh nghịch', 0)");
+            db.QueryData("INSERT INTO CauHoi  VALUES (null,'trongvang', 'trống vắng', 0)");
+            db.QueryData("INSERT INTO CauHoi  VALUES (null,'trotrong', 'trò trống', 0)");
+            db.QueryData("INSERT INTO CauHoi  VALUES (null,'xahoa', 'xa hoa', 0)");
+            db.QueryData("INSERT INTO CauHoi  VALUES (null,'yeucau', 'yêu cầu', 0)");
         }
     }
     public CauHoi HienCSDL(Context context){
