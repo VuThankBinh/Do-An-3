@@ -3,14 +3,10 @@
 <rotate
     android:pivotX="50%"
     android:pivotY="50%"
-    android:toDegrees="-5"
-    android:fromDegrees="5"
-    android:duration="3000"/>
-    <rotate
-        android:pivotX="50%"
-        android:pivotY="50%"
-        android:startOffset="3000"
-        android:toDegrees="5"
-        android:fromDegrees="-5"
-        android:duration="3000"/>
+    android:toDegrees="0"
+    android:fromDegrees="3600"
+    android:duration="100000"
+    android:repeatMode="reverse"
+    android:repeatCount="infinite"/>
+
 </set>

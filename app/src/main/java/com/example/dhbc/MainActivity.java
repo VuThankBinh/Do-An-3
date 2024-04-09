@@ -21,6 +21,9 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -30,6 +33,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.RecyclerView;
@@ -66,6 +70,7 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
     CauHoiAdapter adapter;
     DapAnAdapter adap;
     TableLayout tb;
+    boolean nhacback=true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,7 +112,7 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
             }
         });
 
-        if(layout_home2.nhacback==true){
+        if(nhacback){
             try {
                 mp.setDataSource(getResources().openRawResourceFd(R.raw.nhac1));
                 mp.prepare();
@@ -140,9 +145,21 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MainActivity.this.finish();
-                Intent intent = new Intent(MainActivity.this, layout_home2.class);
-                startActivity(intent);
+//                MainActivity.this.finish();
+//                Intent intent = new Intent(MainActivity.this, layout_home2.class);
+//                startActivity(intent);
+                if(nhacback){
+                    back.setImageResource(R.drawable.mute2);
+                    nhacback=false;
+                    mp.pause();
+                }
+                else {
+
+                    back.setImageResource(R.drawable.loa);
+                    nhacback=true;
+                    mp.start();
+                }
+
             }
         });
 
@@ -153,27 +170,33 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
     private void showDialogChucMung() {
         Dialog dialog = new Dialog(MainActivity.this, android.R.style.Theme_DeviceDefault_Dialog_NoActionBar);
         dialog.setContentView(R.layout.dialog_chucmung_dapan);
-        ImageView close=dialog.findViewById(R.id.closehelp);
+        AppCompatButton close=dialog.findViewById(R.id.tieptuc);
         TextView tv=dialog.findViewById(R.id.dapan);
-        tv.setText("Đáp án: "+ dapAn.toUpperCase());
+        ImageView img=dialog.findViewById(R.id.asdang);
+        tv.setText(dapAn.toUpperCase());
+        Animation xoayxoay= AnimationUtils.loadAnimation(this, R.anim.laclubtn);
+        Animation blink= AnimationUtils.loadAnimation(this, R.anim.blink);
+        AnimationSet animSet = new AnimationSet(true);
+
+        animSet.addAnimation(xoayxoay);
+        animSet.addAnimation(blink);
+        img.setAnimation(animSet);
         close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 dialog.dismiss();
-//                csdl.Update(MainActivity.this,ch.getId());
-//                csdl.UpdateRuby(MainActivity.this,3);
-//                loadTrang();
             }
         });
         dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialogInterface) {
                 // Thực hiện cập nhật CSDL và tải lại trang
-                csdl.Update(MainActivity.this,ch.getId());
-                csdl.UpdateRuby(MainActivity.this,3);
+
                 loadTrang();
             }
         });
+        csdl.Update(MainActivity.this,ch.getId());
+        csdl.UpdateRuby(MainActivity.this,3);
         dialog.show();
 
     }
@@ -265,7 +288,7 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
             dialog.show();
         }
         else {
-            level.setText("Level "+String.valueOf(ch.getId()));
+            level.setText(String.valueOf(ch.getId()));
 
             String fileName = ch.getHinhAnh().toString(); // Lấy tên tệp ảnh từ đối tượng baiHat
             int resId = getResources().getIdentifier(fileName, "drawable", getPackageName()); // Tìm ID tài nguyên dựa trên tên tệp ảnh
@@ -316,7 +339,7 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
 
             }
 
-            level.setText("Level "+String.valueOf(ch.getId()));
+            level.setText(String.valueOf(ch.getId()));
             listcauhoi = findViewById(R.id.listcauhoi);
             dapan = findViewById(R.id.dapan);
             adapter = new CauHoiAdapter(this, arr,this);
@@ -337,7 +360,7 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
             dapan.setLayoutManager(layoutManager2);
             listcauhoi.setAdapter(adapter);
             dapan.setAdapter(adap);
-            mp.reset();
+
             try {
                 mp1.reset();
 
@@ -425,8 +448,16 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
     }
     private void KiemTraDapAn(){
 
+        int dem=0;
+        // kiểm tra xem đã có bao nhiêu ký tự trong câu trả lời của người chơi
+        for(int i=0;i<cautraloi.size();i++){
+            if(cautraloi.get(i).toUpperCase()!="1" && !cautraloi.get(i).trim().isEmpty()){
+                dem++;
+            }
+        }
+
         // nếu vị trí textview cuối cùng đã có ký tự
-        if(vitrioDapAn.get(vitrioDapAn.size()-1)>=0){
+        if(dem+vi_tri_dau_cach.size()>=arr.size()){
 
             String dapan1 = dapAn.toUpperCase();
             StringBuilder result = new StringBuilder();

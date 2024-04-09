@@ -23,12 +23,12 @@ import java.io.IOException;
 
 public class layout_home2 extends AppCompatActivity {
 
-    ImageView back, start,bacnoi;
+    ImageView back,bacnoi;
     TextView level,slgRuby,battat;
-    CheckBox nhacnen;
-    Button choilai;
+
+    Button choilai, start;
     LinearLayout lin1;
-    static boolean nhacback=true;
+
     MediaPlayer mp;
     CSDL csdl;
     AnimationDrawable animationDrawable;
@@ -45,11 +45,10 @@ public class layout_home2 extends AppCompatActivity {
         decorView.setSystemUiVisibility(uiOptions);
         setContentView(R.layout.activity_layout_home2);
         back=findViewById(R.id.back1);
-        start=findViewById(R.id.startgame);
+        start=findViewById(R.id.choitiep);
         bacnoi=findViewById(R.id.bacnoi);
         level=findViewById(R.id.level);
         slgRuby=findViewById(R.id.ruby);
-        nhacnen=findViewById(R.id.nhacnen);
         lin1=findViewById(R.id.line1);
         battat=findViewById(R.id.battat);
         choilai=findViewById(R.id.choilai);
@@ -88,12 +87,12 @@ public class layout_home2 extends AppCompatActivity {
             dialog.show();
         }
         else {
-            level.setText("Level "+String.valueOf(ch.getId()));
+            level.setText(String.valueOf(ch.getId()));
         }
 
         int slgRuby1= csdl.HienRuby(layout_home2.this);
         slgRuby.setText(String.valueOf(slgRuby1));
-        nhacnen.setChecked(true);
+
         choilai.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -115,22 +114,7 @@ public class layout_home2 extends AppCompatActivity {
                 layout_home2.this.finish();
             }
         });
-        nhacnen.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                CheckBox checkBox = (CheckBox) v;
-                if (checkBox.isChecked()) {
-                   nhacback= !nhacback;
-                   battat.setText("Nhạc nền đã bật");
 
-                } else {
-                    nhacback= !nhacback;
-
-                    battat.setText("Nhạc nền đã tắt");
-                }
-                lin1.setVisibility(View.VISIBLE);
-            }
-        });
 
 
         Resources res = getResources();

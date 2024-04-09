@@ -7,83 +7,114 @@
     android:layout_height="match_parent"
     tools:context=".layout_home2"
     android:orientation="vertical"
-    android:background="@drawable/hinhnen_home2">
-    <LinearLayout
-        android:layout_width="match_parent"
+    android:background="@drawable/backchoi">
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="80dp"
+      android:orientation="horizontal"
+      android:weightSum="3"
+      android:background="@drawable/titlelv">
+    <ImageView
+        android:layout_width="50dp"
+        android:layout_height="66dp"
+        android:id="@+id/back1"
+        android:layout_weight="1"
+        android:layout_gravity="center"
+        android:src="@drawable/back1">
+    </ImageView>
+    <TextView
+        android:layout_width="50dp"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="10dp"
-        android:weightSum="3">
-      <ImageView
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:id="@+id/back1"
-          android:src="@drawable/back1">
-      </ImageView>
+        android:id="@+id/level"
+        android:text="6"
+        android:layout_gravity="center"
+        android:background="@drawable/level"
+        android:textSize="42dp"
+        android:textColor="@color/black"
+        android:textStyle="italic"
+        android:layout_weight="1.6"
+        android:layout_marginLeft="15dp"
+        android:gravity="center"
+        android:textAlignment="center">
+    </TextView>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.2"
+
+        android:weightSum="2"
+        android:layout_gravity="center"
+        android:orientation="horizontal">
       <TextView
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:id="@+id/level"
-          android:text="Level 6"
-          android:textSize="32dp"
-          android:textColor="@color/white"
+          android:text="22"
           android:textStyle="italic"
-          android:layout_weight="3"
-          android:layout_gravity="center"
-          android:textAlignment="center">
-      </TextView>
-      <LinearLayout
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
+          android:textSize="32dp"
           android:layout_weight="1"
-          android:weightSum="2"
-          android:layout_gravity="center"
-          android:orientation="horizontal">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="22"
-            android:textSize="32dp"
-            android:layout_weight="1"
-            android:id="@+id/ruby"
-            android:textAlignment="viewEnd"
-            android:textColor="@color/white">
-        </TextView>
-        <ImageView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@drawable/ruby">
-        </ImageView>
-      </LinearLayout>
+          android:id="@+id/ruby"
+          android:textAlignment="viewEnd"
+          android:textColor="@color/black">
+      </TextView>
+      <ImageView
+          android:layout_width="40dp"
+          android:layout_height="40dp"
+          android:src="@drawable/ruby">
+      </ImageView>
     </LinearLayout>
-  <CheckBox
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:id="@+id/nhacnen"
-      android:textColor="@color/black"
-      android:text="Nhạc nền"
-      android:textStyle="italic"
-      android:textSize="30dp"
-      android:layout_gravity="center"
-      android:layout_marginTop="180dp">
-  </CheckBox>
-
+  </LinearLayout>
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="400dp">
 
   <ImageView
-      android:id="@+id/startgame"
-      android:layout_width="100dp"
-      android:layout_height="100dp"
-      android:background="@drawable/batdau"
-      android:layout_gravity="center"
-      android:layout_marginTop="20dp"/>
-  <Button
-      android:layout_width="wrap_content"
+      android:id="@+id/layout_2"
+      android:layout_width="match_parent"
+      android:layout_height="240dp"
+      android:layout_centerInParent="true"
+      android:background="@drawable/whatisthis">
+  </ImageView>
+
+  <LinearLayout
+      android:layout_below="@+id/layout_2"
+      android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_gravity="center"
-      android:text="Chơi lại"
-      android:id="@+id/choilai"
-      android:textSize="28dp"
-      android:backgroundTint="#FFC107"/>
+      android:orientation="horizontal"
+      android:layout_marginLeft="5dp"
+      android:layout_marginRight="5dp"
+      android:layout_marginTop="10dp"
+      android:weightSum="2">
+    <Button
+        android:id="@+id/choitiep"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:padding="5dp"
+        android:textColor="@color/white"
+        android:text="Chơi tiếp"
+        android:textStyle="italic"
+        android:textSize="20dp"
+        android:backgroundTint="#F44336">
+
+    </Button>
+    <Button
+        android:id="@+id/choilai"
+        android:padding="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:textColor="@color/white"
+        android:text="Chơi lại"
+        android:textStyle="italic"
+        android:textSize="20dp"
+        android:backgroundTint="#FF9800">
+
+    </Button>
+  </LinearLayout>
+</RelativeLayout>
+
+
   <LinearLayout
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
@@ -114,22 +145,31 @@
         android:layout_marginLeft="-20dp"
         android:layout_marginTop="-10dp"/>
   </LinearLayout>
-  <LinearLayout
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:weightSum="3">
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/bacnoi"
-        android:src="@drawable/xuanbac0"
-        android:layout_marginLeft="20dp">
-    </ImageView>
-  </LinearLayout>
+
   <RelativeLayout
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       >
+
+      <ImageView
+          android:layout_width="140dp"
+          android:layout_height="300dp"
+          android:id="@+id/bacnoi"
+          android:src="@drawable/xuanbac0"
+          android:layout_alignParentLeft="true"
+          android:layout_above="@+id/t1">
+      </ImageView>
+
+      <ImageView
+          android:id="@+id/bxh"
+          android:layout_width="150dp"
+          android:layout_height="150dp"
+          android:layout_marginLeft="50dp"
+          android:background="@drawable/bxh"
+          android:layout_alignParentRight="true"
+          android:layout_toRightOf="@+id/bacnoi"
+          android:layout_above="@+id/t1">
+      </ImageView>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -137,7 +177,7 @@
         android:textAlignment="center"
         android:id="@+id/t1"
         android:layout_above="@+id/t2"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         android:textStyle="bold"
         android:text="Thiết kế by Bình Vũ">
     </TextView>
@@ -146,7 +186,7 @@
         android:layout_height="wrap_content"
         android:textSize="25dp"
         android:textAlignment="center"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         android:layout_above="@+id/t3"
         android:id="@+id/t2"
         android:textStyle="bold"
@@ -159,7 +199,7 @@
         android:id="@+id/t3"
         android:layout_alignParentBottom="true"
         android:textSize="25dp"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         android:textStyle="bold"
         android:text="Lớp: SEK 19.5"
         >
