@@ -168,14 +168,14 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
 
 
     private void showDialogChucMung() {
-        Dialog dialog = new Dialog(MainActivity.this, android.R.style.Theme_DeviceDefault_Dialog_NoActionBar);
+        Dialog dialog = new Dialog(MainActivity.this, android.R.style.Theme_Dialog);
         dialog.setContentView(R.layout.dialog_chucmung_dapan);
         AppCompatButton close=dialog.findViewById(R.id.tieptuc);
         TextView tv=dialog.findViewById(R.id.dapan);
         ImageView img=dialog.findViewById(R.id.asdang);
         tv.setText(dapAn.toUpperCase());
         Animation xoayxoay= AnimationUtils.loadAnimation(this, R.anim.laclubtn);
-        Animation blink= AnimationUtils.loadAnimation(this, R.anim.blink);
+        Animation blink= AnimationUtils.loadAnimation(this, R.anim.blink2);
         AnimationSet animSet = new AnimationSet(true);
 
         animSet.addAnimation(xoayxoay);
@@ -197,20 +197,24 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
         });
         csdl.Update(MainActivity.this,ch.getId());
         csdl.UpdateRuby(MainActivity.this,3);
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        dialog.getWindow().getDecorView().setSystemUiVisibility( View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
         dialog.show();
 
     }
 
     String dapAn,dapAn2;
     private void showDialogShop() {
-        Dialog dialog = new Dialog(MainActivity.this,android.R.style.Theme_DeviceDefault_Dialog_NoActionBar );
+        Dialog dialog = new Dialog(MainActivity.this,android.R.style.Theme_Dialog );
 
         dialog.setContentView(R.layout.dialog_shop);
-        ImageView close=dialog.findViewById(R.id.closebuy);
-        LinearLayout xemQC=dialog.findViewById(R.id.xemvideo);
-        LinearLayout mua1=dialog.findViewById(R.id.mua1);
-        LinearLayout mua2=dialog.findViewById(R.id.mua2);
-        LinearLayout mua3=dialog.findViewById(R.id.mua3);
+        ImageView xemQC=dialog.findViewById(R.id.xemvid);
+        ImageView mua1=dialog.findViewById(R.id.h200k);
+        ImageView mua2=dialog.findViewById(R.id.h100k);
+        ImageView mua3=dialog.findViewById(R.id.h20k);
+        TextView cham=dialog.findViewById(R.id.cham);
+        Animation blinkk=AnimationUtils.loadAnimation(this,R.anim.blink2);
+        cham.setAnimation(blinkk);
         String[] lblZpTransToken = {""};
         mua1.setOnClickListener(new View.OnClickListener() {
 
@@ -234,15 +238,14 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
 
             }
         });
-        close.setOnClickListener(new View.OnClickListener() {
+        cham.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 dialog.dismiss();
             }
         });
-//        Window window = dialog.getWindow();
-//        window.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
-//        window.setGravity(Gravity.CENTER);
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        dialog.getWindow().getDecorView().setSystemUiVisibility( View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
         dialog.show();
 
     }
@@ -483,7 +486,7 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
                         public void onCompletion(MediaPlayer mp) {
 
                             showDialogChucMung();
-                            mp.reset();
+                            mp1.reset();
                         }
                     });
 
@@ -544,16 +547,16 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
             dapan.setAdapter( new DapAnAdapter(this,arr2,this));
         }
     }
-    LinearLayout ngthan,mochu1,motu1,motoanbo;
+    ImageView ngthan,mochu1,motu1,motoanbo;
     boolean[] trogiup12 = {false};
     private void showDialogHelp() {
-        Dialog dialog = new Dialog(MainActivity.this, android.R.style.Theme_DeviceDefault_Dialog_NoActionBar);
+        Dialog dialog = new Dialog(MainActivity.this, android.R.style.Theme_Dialog);
         dialog.setContentView(R.layout.dialog_help);
-        ImageView close=dialog.findViewById(R.id.closehelp);
-        ngthan=dialog.findViewById(R.id.nhongthan);
-        mochu1=dialog.findViewById(R.id.mochu1);
-        motu1=dialog.findViewById(R.id.tu1);
-        motoanbo=dialog.findViewById(R.id.motoanbo);
+        TextView close=dialog.findViewById(R.id.cham);
+        ngthan=dialog.findViewById(R.id.hshare);
+        mochu1=dialog.findViewById(R.id.h1ktu);
+        motu1=dialog.findViewById(R.id.h1tu);
+        motoanbo=dialog.findViewById(R.id.htoanbo);
 
         mochu1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -602,7 +605,7 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
                 }
                 else {
                     dialog.dismiss();
-                    if(slgRuby1>=13){
+                    if(slgRuby1>=15){
 
                         for(int i=0;i<dapAn.length();i++){
                             if(removeDiacritics(String.valueOf(dapAn.charAt(i))).equalsIgnoreCase(String.valueOf(cautraloi.get(i)))
@@ -643,7 +646,7 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
 
 
                         }
-                        csdl.UpdateRuby(MainActivity.this,-13);
+                        csdl.UpdateRuby(MainActivity.this,-15);
                         slgRuby1=csdl.HienRuby(MainActivity.this);
                         slgRuby.setText(String.valueOf(slgRuby1));
 
@@ -662,13 +665,13 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
             @Override
             public void onClick(View view) {
                 dialog.dismiss();
-                if(slgRuby1>=20){
+                if(slgRuby1>=30){
                     loadTrang();
                     for(int i=0;i<trogiup.size();i++){
 
                         HienTroGiup();
                     }
-                    csdl.UpdateRuby(MainActivity.this,-20);
+                    csdl.UpdateRuby(MainActivity.this,-30);
                     slgRuby1=csdl.HienRuby(MainActivity.this);
                     slgRuby.setText(String.valueOf(slgRuby1));
 
@@ -712,12 +715,16 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
                 }
             }
         });
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        Animation blinkk=AnimationUtils.loadAnimation(this,R.anim.blink2);
+        close.setAnimation(blinkk);
         close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 dialog.dismiss();
             }
         });
+        dialog.getWindow().getDecorView().setSystemUiVisibility( View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
         dialog.show();
 
     }

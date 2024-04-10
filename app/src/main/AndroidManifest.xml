@@ -14,13 +14,13 @@
         android:theme="@style/Theme.DHBC"
         tools:targetApi="31" >
         <activity
-            android:name=".MainActivity"
+            android:name=".layout_home1"
             android:exported="false" />
         <activity
             android:name=".layout_home2"
             android:exported="false" />
         <activity
-            android:name=".layout_home1"
+            android:name=".MainActivity"
             android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

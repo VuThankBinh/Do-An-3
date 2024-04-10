@@ -1,218 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:background="@drawable/botron"
-
+    android:layout_height="550dp"
+    android:background="#00FFFFFF"
     >
-
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="10dp">
-        <ImageView
-            android:layout_width="150dp"
-            android:layout_height="60dp"
-            android:src="@drawable/cuahang1"
+        android:layout_height="400dp"
+        android:layout_marginTop="80dp"
+        android:id="@+id/shopp"
+        android:background="@drawable/shop12">
 
-            android:scaleType="fitCenter"
-            android:layout_gravity="center"
-            android:layout_marginBottom="-10dp"
-            android:layout_marginTop="10dp"/>
-        <LinearLayout
-            android:background="@drawable/botron2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_gravity="center"
-            android:id="@+id/line1"
-            android:layout_weight="3">
-
-            <LinearLayout
-
-                android:orientation="vertical"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="10dp"
-                android:backgroundTint="#FFEB3B">
-                <LinearLayout
-                    android:id="@+id/mua1"                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:padding="5dp"
-                    android:layout_margin="10dp"
-                    android:weightSum="3"
-                    android:background="@drawable/botron3">
-                    <ImageView
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
-                        android:layout_gravity="center"
-                        android:src="@drawable/box_rupy1">
-                    </ImageView>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="1200 Ruby"
-                        android:textStyle="bold"
-                        android:layout_gravity="center"
-                        android:textSize="20dp"
-                        android:layout_weight="2"
-                        android:layout_marginLeft="25dp"
-                        android:textColor="@color/black">
-                    </TextView>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="99K"
-                        android:backgroundTint="#FA92B6"
-                        android:layout_gravity="center"
-                        android:textSize="20dp"
-                        android:layout_weight="2"
-                        android:background="@drawable/mess1"
-                        android:textAlignment="center"
-                        android:gravity="center"
-                        android:layout_marginLeft="25dp"
-                        android:textColor="@color/black">
-                    </TextView>
-
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:padding="5dp"
-                    android:layout_margin="10dp"
-                    android:weightSum="3"
-                    android:id="@+id/mua2"
-                    android:background="@drawable/botron3">
-                    <ImageView
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
-                        android:layout_gravity="center"
-                        android:src="@drawable/pots_rupy">
-                    </ImageView>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="500 Ruby"
-                        android:textStyle="bold"
-                        android:layout_gravity="center"
-                        android:textSize="20dp"
-                        android:layout_weight="2"
-                        android:layout_marginLeft="25dp"
-                        android:textColor="@color/black">
-                    </TextView>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="50K"
-                        android:backgroundTint="#FA92B6"
-                        android:layout_gravity="center"
-                        android:textSize="20dp"
-                        android:layout_weight="2"
-                        android:background="@drawable/mess1"
-                        android:textAlignment="center"
-                        android:gravity="center"
-                        android:layout_marginLeft="35dp"
-                        android:textColor="@color/black">
-                    </TextView>
-
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:padding="5dp"
-                    android:id="@+id/mua3"
-                    android:layout_margin="10dp"
-                    android:weightSum="3"
-                    android:background="@drawable/botron3">
-                    <ImageView
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
-                        android:layout_gravity="center"
-                        android:src="@drawable/rupys">
-                    </ImageView>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="200 Ruby"
-                        android:textStyle="bold"
-                        android:layout_gravity="center"
-                        android:textSize="20dp"
-                        android:layout_weight="2"
-                        android:layout_marginLeft="25dp"
-                        android:textColor="@color/black">
-                    </TextView>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="20K"
-                        android:backgroundTint="#FA92B6"
-                        android:layout_gravity="center"
-                        android:textSize="20dp"
-                        android:layout_weight="2"
-                        android:background="@drawable/mess1"
-                        android:textAlignment="center"
-                        android:gravity="center"
-                        android:layout_marginLeft="35dp"
-                        android:textColor="@color/black">
-                    </TextView>
-
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:padding="5dp"
-                    android:id="@+id/xemvideo"
-                    android:layout_margin="10dp"
-                    android:weightSum="3"
-                    android:background="@drawable/botron3">
-                    <ImageView
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:layout_gravity="center"
-                        android:src="@drawable/ruby">
-                    </ImageView>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="13 Ruby"
-                        android:textStyle="bold"
-                        android:layout_gravity="center"
-                        android:textSize="20dp"
-                        android:layout_weight="2"
-                        android:layout_marginLeft="30dp"
-                        android:textColor="@color/black">
-                    </TextView>
-                    <TextView
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:layout_gravity="center"
-                        android:textSize="20dp"
-                        android:layout_weight="2"
-                        android:background="@drawable/batdau"
-                        android:textAlignment="center"
-                        android:gravity="center"
-                        android:layout_marginLeft="75dp"
-                        android:textColor="@color/black">
-                    </TextView>
-
-                </LinearLayout>
-            </LinearLayout>
-        </LinearLayout>
-    </LinearLayout>
+    </RelativeLayout>
     <ImageView
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:id="@+id/closebuy"
-        android:layout_gravity="start"
-        android:layout_marginLeft="-20dp"
-        android:layout_marginTop="10dp"
+        android:layout_width="260dp"
+        android:layout_height="160dp"
+        android:src="@drawable/cuahang"
+        android:id="@+id/title"
         android:scaleType="fitCenter"
-        android:src="@drawable/wrongtick" />
-</LinearLayout>
+        android:layout_gravity="center"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"/>
+    <ImageView
+        android:layout_width="270dp"
+        android:layout_height="60dp"
+        android:src="@drawable/h200k"
+        android:layout_below="@+id/title"
+        android:id="@+id/h200k"
+        android:layout_centerHorizontal="true"/>
+    <ImageView
+        android:layout_marginTop="7dp"
+        android:layout_width="270dp"
+        android:layout_height="60dp"
+        android:src="@drawable/h100k"
+        android:layout_below="@+id/h200k"
+        android:id="@+id/h100k"
+        android:layout_centerHorizontal="true"/>
+    <ImageView
+        android:layout_marginTop="7dp"
+        android:layout_width="270dp"
+        android:layout_height="60dp"
+        android:src="@drawable/h20k"
+        android:layout_below="@+id/h100k"
+        android:id="@+id/h20k"
+        android:layout_centerHorizontal="true"/>
+    <ImageView
+        android:layout_marginTop="7dp"
+        android:layout_width="270dp"
+        android:layout_height="60dp"
+        android:src="@drawable/xemvid"
+        android:layout_below="@+id/h20k"
+        android:id="@+id/xemvid"
+        android:layout_centerHorizontal="true">
+    </ImageView>
+<TextView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:textAlignment="center"
+    android:text="Chạm để thoát"
+    android:id="@+id/cham"
+    android:textColor="@color/white"
+    android:textStyle="italic"
+    android:textSize="20dp"
+    android:gravity="center"
+    android:layout_alignParentBottom="true"
+    android:layout_below="@+id/shopp">
+
+</TextView>
+</RelativeLayout>
