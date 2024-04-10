@@ -35,21 +35,6 @@ public class CauHoiAdapter extends  RecyclerView.Adapter<CauHoiAdapter.ViewHolde
     @Override
     public void onBindViewHolder(@NonNull CauHoiAdapter.ViewHolder holder, int i) {
 
-
-
-//        if(list.get(i).toUpperCase()=="1"){
-//            holder.txt.setText(list.get(i).toUpperCase());
-//            holder.txt.setBackgroundResource(R.drawable.bt_item_result);
-//
-//        }
-//        if(list.get(i).toUpperCase()==""){
-//            holder.txt.setBackgroundColor(Color.WHITE);
-//            holder.txt.setText ("");
-//        }
-//        else{
-//            holder.txt.setBackgroundResource(R.drawable.bt_item);
-//            holder.txt.setText (list.get(i));
-//        }
         if ("1".equals(list.get(i).toUpperCase())) {
             holder.txt.setText(list.get(i).toUpperCase());
             holder.txt.setBackgroundResource(R.drawable.bt_item_result);

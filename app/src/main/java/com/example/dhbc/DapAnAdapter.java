@@ -2,6 +2,7 @@ package com.example.dhbc;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.media.MediaPlayer;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class DapAnAdapter extends  RecyclerView.Adapter<DapAnAdapter.ViewHolder> {
@@ -34,27 +36,19 @@ public class DapAnAdapter extends  RecyclerView.Adapter<DapAnAdapter.ViewHolder>
 
     @Override
     public void onBindViewHolder(@NonNull DapAnAdapter.ViewHolder holder, int i) {
-
         holder.txt.setText(list.get(i).toUpperCase());
-//        if(list.get(i).toUpperCase()==" "){
-//            holder.txt.setBackgroundColor(Color.WHITE);
-//            holder.txt.setText ("");
-////                holder.txt.setVisibility(View.GONE);
-//        }
-//        else {
-//
-//        }
+
         holder.txt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 mclick.onItemClick(i);
+
             }
         });
         //bắt sự kiện xóa, sửa
 
 
     }
-
     @Override
     public int getItemCount() {
         return list.size();

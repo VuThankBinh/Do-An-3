@@ -19,6 +19,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.os.Message;
 import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -36,6 +37,7 @@ import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
@@ -160,14 +162,21 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
             back.setImageResource(R.drawable.loa);
             try {
                 mp.reset();
-                mp.setDataSource(getResources().openRawResourceFd(R.raw.nhac1));
+                mp.setDataSource(getResources().openRawResourceFd(R.raw.nhac0));
                 mp.setVolume(volumn1,volumn1);
                 mp.prepare();
-                mp.start();
-
+//                mp.start();
+//                mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+//                    @Override
+//                    public void onCompletion(MediaPlayer mediaPlayer) {
+//                        mp.start();
+//                    }
+//                });
+                mp.seekTo(3000);
                 mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                     @Override
                     public void onCompletion(MediaPlayer mp) {
+                        mp.seekTo(3500);
                         mp.start();
                     }
                 });
@@ -184,6 +193,8 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
     private void showDialogSettings() {
         Dialog dialog = new Dialog(MainActivity.this, android.R.style.Theme_Dialog);
         dialog.setContentView(R.layout.dialog_settings);
+        dialog.getWindow().getDecorView().setSystemUiVisibility( View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         TextView cham=dialog.findViewById(R.id.cham);
         Button tatnhacBack=dialog.findViewById(R.id.tatnhacBack);
         Button tatnhacXB=dialog.findViewById(R.id.tattiengxb);
@@ -328,6 +339,38 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
         csdl.UpdateRuby(MainActivity.this,3);
         dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         dialog.getWindow().getDecorView().setSystemUiVisibility( View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if(nhacXB){
+                    try {
+                        mp1.reset();
+                        mp1.setDataSource(getResources().openRawResourceFd(R.raw.xinchucmung));
+                        mp1.setVolume(volumn2,volumn2);
+                        mp1.prepare();
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                mp1.start();
+                            }
+                        }, 2000);
+
+
+                        mp1.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                            @Override
+                            public void onCompletion(MediaPlayer mp) {
+
+                                mp1.reset();
+                                mp1.setVolume(volumn2, volumn2);
+                            }
+                        });
+
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+        }, 1000);
         dialog.show();
 
     }
@@ -498,7 +541,13 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
                     mp1.setDataSource(getResources().openRawResourceFd(R.raw.daylagi0));
                     mp1.setVolume(volumn2,volumn2);
                     mp1.prepare();
-                    mp1.start();
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            mp1.start();
+                        }
+                    }, 2000);
+
 
                     mp1.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                         @Override
@@ -522,7 +571,19 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
     //click đáp án
     @Override
     public void onItemClick(int position) {
+        mp3=new MediaPlayer();
+        try {
+            mp3.reset();
+            mp3.setDataSource(getResources().openRawResourceFd(R.raw.chamnuoc));
+            mp3.setVolume(volumn1,volumn1);
+            mp3.prepare();
+            mp3.start();
 
+
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         int dem=0;
         // kiểm tra xem đã có bao nhiêu ký tự trong câu trả lời của người chơi
         for(int i=0;i<cautraloi.size();i++){
@@ -686,11 +747,24 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
         Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
         return pattern.matcher(str).replaceAll("").replaceAll("đ", "d").replaceAll("Đ", "D");
     }
-
+    MediaPlayer mp3;
     //click câu hỏi
     @Override
     public void onItemCauHoiClick(int position) {
         // lấy ra text của textview đã click
+        mp3=new MediaPlayer();
+        try {
+            mp3.reset();
+            mp3.setDataSource(getResources().openRawResourceFd(R.raw.chamnuoc));
+            mp3.setVolume(volumn1,volumn1);
+            mp3.prepare();
+            mp3.start();
+
+
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         String s=cautraloi.get(position).toString().toUpperCase();
             // nếu s != ""
             if(s.trim().length()>0 &&s!=""&&s!=null && s!="1"){
