@@ -26,7 +26,7 @@ import java.io.IOException;
 
 public class layout_home1 extends AppCompatActivity {
 
-    ImageView as1,as2,bacnoi,play1;
+    ImageView as1,as2,bacnoi,play1,chua,acong;
     RelativeLayout lin3;
     MediaPlayer mp;
     @Override
@@ -46,6 +46,13 @@ public class layout_home1 extends AppCompatActivity {
         as1=findViewById(R.id.asleft);
         as2=findViewById(R.id.asright);
         lin3=findViewById(R.id.line3);
+        chua=findViewById(R.id.chua);
+        Animation chay1=AnimationUtils.loadAnimation(this,R.anim.chuchay1);
+
+        chua.setAnimation(chay1);
+        acong=findViewById(R.id.acong);
+        Animation chay2=AnimationUtils.loadAnimation(this,R.anim.chuchay1);
+        acong.setAnimation(chay2);
         play1=findViewById(R.id.startgame);
         LinearLayout lin = findViewById(R.id.xoay);
         ImageView img=findViewById(R.id.name);
@@ -75,31 +82,41 @@ public class layout_home1 extends AppCompatActivity {
 
         Animation laclu2 = AnimationUtils.loadAnimation(this, R.anim.laclubtn);
         Animation laclu3 = AnimationUtils.loadAnimation(this, R.anim.laclu3);
+
         as1.startAnimation(laclu1);
         as2.startAnimation(laclu3);
-        mp = new MediaPlayer();
-        try {
-            mp.setDataSource(getResources().openRawResourceFd(R.raw.chaomung0));
-            mp.prepare();
-            mp.start();
-            mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                @Override
-                public void onCompletion(MediaPlayer mediaPlayer) {
-                    // Hiển thị nút sau khi audio kết thúc
-                    play1.setVisibility(View.VISIBLE);
-                    lin3.setVisibility(View.VISIBLE);
-                }
-            });
+        boolean nhacXB = MainActivity.prefs.getBoolean("isXB", false);
+        float volumn1=MainActivity.prefs.getFloat("volumnXB",1);
+        if(nhacXB){
+            try {
 
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+                mp.setDataSource(getResources().openRawResourceFd(R.raw.chaomung0));
+                mp.setVolume(volumn1,volumn1);
+                mp.prepare();
+                mp.start();
+                mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                    @Override
+                    public void onCompletion(MediaPlayer mediaPlayer) {
+                        // Hiển thị nút sau khi audio kết thúc
+                        play1.setVisibility(View.VISIBLE);
+                        lin3.setVisibility(View.VISIBLE);
+                    }
+                });
+
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
+        mp = new MediaPlayer();
+
+
         play1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 try {
                     mp.reset();
+                    mp.setVolume(volumn1,volumn1);
                     mp.setDataSource(getResources().openRawResourceFd(R.raw.huonglen1));
                     mp.prepare();
 

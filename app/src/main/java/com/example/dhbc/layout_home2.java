@@ -123,10 +123,14 @@ public class layout_home2 extends AppCompatActivity {
         mp = new MediaPlayer();
         // Bắt đầu animation
         animationDrawable.start();
-        try {
-            mp.setDataSource(getResources().openRawResourceFd(R.raw.rule0));
-            mp.prepare();
-            mp.start();
+        boolean nhacXB = MainActivity.prefs.getBoolean("isXB", false);
+        float volumn1=MainActivity.prefs.getFloat("volumnXB",1);
+        if(nhacXB){
+            try {
+                mp.setDataSource(getResources().openRawResourceFd(R.raw.rule0));
+                mp.setVolume(volumn1,volumn1);
+                mp.prepare();
+                mp.start();
 //            mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
 //                @Override
 //                public void onCompletion(MediaPlayer mediaPlayer) {
@@ -135,16 +139,18 @@ public class layout_home2 extends AppCompatActivity {
 //                    lin3.setVisibility(View.VISIBLE);
 //                }
 //            });
-            mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                @Override
-                public void onCompletion(MediaPlayer mp) {
-                    animationDrawable.stop();
-                }
-            });
+                mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                    @Override
+                    public void onCompletion(MediaPlayer mp) {
+                        animationDrawable.stop();
+                    }
+                });
 
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
+
     }
     private void showConfirmationDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);

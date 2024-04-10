@@ -5,16 +5,20 @@ import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -27,6 +31,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.SeekBar;
 import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -71,7 +76,9 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
     DapAnAdapter adap;
     TableLayout tb;
     boolean nhacback=true;
-
+    boolean nhacXB=true;
+    static SharedPreferences prefs;
+    float volumn1,volumn2;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,34 +94,74 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
         help = findViewById(R.id.help);
         shop = findViewById(R.id.napvip);
         layout_2 = findViewById(R.id.layout_2);
-        level=findViewById(R.id.level);
-        slgRuby=findViewById(R.id.ruby);
-        back=findViewById(R.id.back1);
-        csdl= new CSDL(getApplicationContext());
-        tb=findViewById(R.id.deme);
+        level = findViewById(R.id.level);
+        slgRuby = findViewById(R.id.ruby);
+        back = findViewById(R.id.back1);
+        csdl = new CSDL(getApplicationContext());
+        tb = findViewById(R.id.deme);
 
 //        verifyStoragePemission(MainActivity.this);
         mp = new MediaPlayer();
         mp1 = new MediaPlayer();
-        loadTrang();
-        nextdemo=findViewById(R.id.demonext);
-        ActivityCompat.requestPermissions(this,new String[]{WRITE_EXTERNAL_STORAGE, READ_EXTERNAL_STORAGE}, PackageManager.PERMISSION_GRANTED);
+        ActivityCompat.requestPermissions(this, new String[]{WRITE_EXTERNAL_STORAGE, READ_EXTERNAL_STORAGE}, PackageManager.PERMISSION_GRANTED);
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
 
         File dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
 
-        nextdemo.setOnClickListener(new View.OnClickListener() {
 
+
+        help.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                showDialogHelp();
+            }
+        });
+        shop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showDialogShop();
+            }
+        });
+        prefs= getSharedPreferences("game", MODE_PRIVATE);
+        nhacback = prefs.getBoolean("isMute", false);
+        nhacXB = prefs.getBoolean("isXB", false);
+        volumn1=prefs.getFloat("volumnBack",40);
+        volumn2=prefs.getFloat("volumnXB",40);
+        ktraAmthanh();
+        loadTrang();
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                showDialogSettings();
+//                if(nhacback){
+//                    back.setImageResource(R.drawable.mute2);
+//                    nhacback=false;
+//                    mp.pause();
+//                }
+//                else {
+//
+//                    back.setImageResource(R.drawable.loa);
+//                    nhacback=true;
+//                    mp.start();
+//                }
+//                SharedPreferences.Editor editor = prefs.edit();
+//                editor.putBoolean("isMute", nhacback);
+//                editor.apply();
 
             }
         });
 
-        if(nhacback){
+
+    }
+    private void ktraAmthanh() {
+        if (nhacback) {
+            back.setImageResource(R.drawable.loa);
             try {
+                mp.reset();
                 mp.setDataSource(getResources().openRawResourceFd(R.raw.nhac1));
+                mp.setVolume(volumn1,volumn1);
                 mp.prepare();
                 mp.start();
 
@@ -129,47 +176,129 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
                 throw new RuntimeException(e);
             }
         }
+//        else
+//            back.setImageResource(R.drawable.mute2);
 
-        help.setOnClickListener(new View.OnClickListener() {
+    }
+    private SeekBar volumeSeekBar1,volumeSeekBar2;
+    private void showDialogSettings() {
+        Dialog dialog = new Dialog(MainActivity.this, android.R.style.Theme_Dialog);
+        dialog.setContentView(R.layout.dialog_settings);
+        TextView cham=dialog.findViewById(R.id.cham);
+        Button tatnhacBack=dialog.findViewById(R.id.tatnhacBack);
+        Button tatnhacXB=dialog.findViewById(R.id.tattiengxb);
+        if(nhacXB){
+            mp1.start();
+            tatnhacXB.setText("Tắt tiếng");
+        }
+        else {
+            mp1.pause();
+            tatnhacXB.setText("Bật tiếng");
+        }
+        if(nhacback){
+            mp.start();
+            tatnhacBack.setText("Tắt nhạc");
+        }
+        else {
+            mp.pause();
+            tatnhacBack.setText("Bật nhạc");
+        }
+        tatnhacXB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showDialogHelp();
-            }
-        });
-        shop.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showDialogShop();
-            }
-        });
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-//                MainActivity.this.finish();
-//                Intent intent = new Intent(MainActivity.this, layout_home2.class);
-//                startActivity(intent);
-                if(nhacback){
-                    back.setImageResource(R.drawable.mute2);
-                    nhacback=false;
-                    mp.pause();
+                nhacXB=!nhacXB;
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putBoolean("isXB", nhacXB);
+                editor.apply();
+                if(nhacXB){
+                    mp1.start();
+                    tatnhacXB.setText("Tắt tiếng");
                 }
                 else {
-
-                    back.setImageResource(R.drawable.loa);
-                    nhacback=true;
-                    mp.start();
+                    mp1.pause();
+                    tatnhacXB.setText("Bật tiếng");
                 }
-
             }
         });
+        tatnhacBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                nhacback=!nhacback;
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putBoolean("isMute", nhacback);
+                editor.apply();
+                if(nhacback){
+                    mp.start();
+                    tatnhacBack.setText("Tắt nhạc");
+                }
+                else {
+                    mp.pause();
+                    tatnhacBack.setText("Bật nhạc");
+                }
+                ktraAmthanh();
+            }
+        });
+        Animation blinkk=AnimationUtils.loadAnimation(this,R.anim.blink2);
+        cham.setAnimation(blinkk);
+        cham.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+        volumeSeekBar1 = dialog.findViewById(R.id.seek1);
+        volumeSeekBar2 = dialog.findViewById(R.id.seek2);
+        volumeSeekBar1.setMax(100);
+        int progress1 = (int) (100 - Math.pow(10, (1 - volumn1) * Math.log10(100)));
+        volumeSeekBar1.setProgress(progress1); // Thiết lập mức âm lượng mặc định
+        volumeSeekBar2.setMax(100);
+        int progress2 = (int) (100 - Math.pow(10, (1 - volumn2) * Math.log10(100)));
 
+        volumeSeekBar2.setProgress(progress2);
+        // nhạc nền
+        volumeSeekBar1.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                 volumn1 = (float) (1 - (Math.log(100 - progress) / Math.log(100)));
+                mp.setVolume(volumn1, volumn1); // Thiết lập âm lượng của MediaPlayer
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putFloat("volumnBack", volumn1);
+                editor.apply();
+            }
 
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {}
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {}
+        });
+        //tiếng xuân bắc
+        volumeSeekBar2.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                volumn2 = (float) (1 - (Math.log(100 - progress) / Math.log(100)));
+                mp1.setVolume(volumn2, volumn2);
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putFloat("volumnXB", volumn2);
+                editor.apply();
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {}
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {}
+        });
+
+        dialog.show();
     }
 
 
     private void showDialogChucMung() {
         Dialog dialog = new Dialog(MainActivity.this, android.R.style.Theme_Dialog);
         dialog.setContentView(R.layout.dialog_chucmung_dapan);
+        dialog.getWindow().getDecorView().setSystemUiVisibility( View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+
         AppCompatButton close=dialog.findViewById(R.id.tieptuc);
         TextView tv=dialog.findViewById(R.id.dapan);
         ImageView img=dialog.findViewById(R.id.asdang);
@@ -363,25 +492,28 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
             dapan.setLayoutManager(layoutManager2);
             listcauhoi.setAdapter(adapter);
             dapan.setAdapter(adap);
+            if(nhacXB){
+                try {
+                    mp1.reset();
+                    mp1.setDataSource(getResources().openRawResourceFd(R.raw.daylagi0));
+                    mp1.setVolume(volumn2,volumn2);
+                    mp1.prepare();
+                    mp1.start();
 
-            try {
-                mp1.reset();
+                    mp1.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                        @Override
+                        public void onCompletion(MediaPlayer mp) {
 
-                mp1.setDataSource(getResources().openRawResourceFd(R.raw.daylagi0));
-                mp1.prepare();
-                mp1.start();
+                            mp1.reset();
+                            mp1.setVolume(volumn2, volumn2);
+                        }
+                    });
 
-                mp1.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                    @Override
-                    public void onCompletion(MediaPlayer mp) {
-
-                        mp1.reset();
-                    }
-                });
-
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             }
+
         }
 
 
@@ -475,43 +607,74 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
             System.out.println(dapan2KhongDau);
 
             if(dapan1KhongDau.equals(dapan2KhongDau)){
-                try {
-                    mp1.reset();
-                    mp1.setDataSource(getResources().openRawResourceFd(R.raw.chinhxac1));
-                    mp1.prepare();
-                    mp1.start();
+                nhacXB = prefs.getBoolean("isXB", false);
+                if(nhacXB){
+                    try {
+                        mp1.reset();
+                        mp1.setVolume(volumn2, volumn2);
+                        mp1.setDataSource(getResources().openRawResourceFd(R.raw.chinhxac1));
+                        mp1.prepare();
+                        mp1.start();
 
-                    mp1.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                        @Override
-                        public void onCompletion(MediaPlayer mp) {
+                        mp1.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                            @Override
+                            public void onCompletion(MediaPlayer mp) {
 
-                            showDialogChucMung();
-                            mp1.reset();
-                        }
-                    });
+                                showDialogChucMung();
+                                mp1.reset();
+                                mp1.setVolume(volumn2, volumn2);
+                            }
+                        });
 
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
 //                    Toast.makeText(this, "mày giỏi đúng r đó con chóa", Toast.LENGTH_SHORT).show();
+
+                }
+                else {
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(MainActivity.this, "Đáp án hoàn toàn chính xác", Toast.LENGTH_SHORT).show();
+
+                        }
+                    }, 1000);
+
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            showDialogChucMung();
+                        }
+                    }, 1500);
+                }
 
             }
             else {
-                try {
-                    mp1.setDataSource(getResources().openRawResourceFd(R.raw.chuachinhxac0));
-                    mp1.prepare();
-                    mp1.start();
+                nhacXB = prefs.getBoolean("isXB", false);
+                if(nhacXB){
+                    try {
+                        mp1.setDataSource(getResources().openRawResourceFd(R.raw.chuachinhxac0));
+                        mp1.setVolume(volumn2, volumn2);
+                        mp1.prepare();
+                        mp1.start();
 
-                    mp1.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                        @Override
-                        public void onCompletion(MediaPlayer mp) {
-                            mp.reset();
-                        }
-                    });
+                        mp1.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                            @Override
+                            public void onCompletion(MediaPlayer mp) {
+                                mp1.reset();
+                                mp1.setVolume(volumn2, volumn2);
+                            }
+                        });
 
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
+                else {
+                    Toast.makeText(this, "Đáp án chưa chính xac, tiếp tục", Toast.LENGTH_SHORT).show();
+                }
+
 //                Toast.makeText(this, "lew lew gà", Toast.LENGTH_SHORT).show();
             }
 
@@ -804,6 +967,9 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
         }
         if (mp1 != null && !mp1.isPlaying()) {
             mp1.start();
+
+
+
         }
     }
     @Override
