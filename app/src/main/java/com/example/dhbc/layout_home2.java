@@ -9,6 +9,7 @@ import android.content.res.Resources;
 import android.graphics.drawable.AnimationDrawable;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -29,7 +30,7 @@ public class layout_home2 extends AppCompatActivity {
     Button choilai, start;
     LinearLayout lin1;
 
-    MediaPlayer mp;
+    MediaPlayer mp,mp1;
     CSDL csdl;
     AnimationDrawable animationDrawable;
     @Override
@@ -52,9 +53,10 @@ public class layout_home2 extends AppCompatActivity {
         lin1=findViewById(R.id.line1);
         battat=findViewById(R.id.battat);
         choilai=findViewById(R.id.choilai);
-
+        mp1=new MediaPlayer();
         csdl=new CSDL(getApplicationContext());
-
+        boolean nhacXB = layout_home1.prefs.getBoolean("isXB", false);
+        float volumn1=layout_home1.prefs.getFloat("volumnXB",1);
         CauHoi ch=csdl.HienCSDL(getApplicationContext());
         if(ch.getId()==-1){
             level.setText("Xuan Bac");
@@ -96,8 +98,27 @@ public class layout_home2 extends AppCompatActivity {
         choilai.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                view.invalidate();
-                showConfirmationDialog();
+
+                try {
+                    mp1.setDataSource(getResources().openRawResourceFd(R.raw.huonglen1));
+                    mp1.setVolume(volumn1,volumn1);
+                    mp1.prepare();
+
+                    mp1.start();
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (mp1.isPlaying()) {
+                                mp1.stop();
+                                showConfirmationDialog();
+                            }
+                        }
+                    }, 1000);
+
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+
             }
         });
         back.setOnClickListener(new View.OnClickListener() {
@@ -110,8 +131,29 @@ public class layout_home2 extends AppCompatActivity {
         start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(layout_home2.this,MainActivity.class));
-                layout_home2.this.finish();
+                try {
+                    mp.stop();
+                    mp.reset();
+                    mp1.setDataSource(getResources().openRawResourceFd(R.raw.huonglen1));
+                    mp1.setVolume(volumn1,volumn1);
+                    mp1.prepare();
+
+                    mp1.start();
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (mp1.isPlaying()) {
+                                mp1.stop();
+                                startActivity(new Intent(layout_home2.this,MainActivity.class));
+                                layout_home2.this.finish();
+                            }
+                        }
+                    }, 1000);
+
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+
             }
         });
 
@@ -123,22 +165,14 @@ public class layout_home2 extends AppCompatActivity {
         mp = new MediaPlayer();
         // Bắt đầu animation
         animationDrawable.start();
-        boolean nhacXB = MainActivity.prefs.getBoolean("isXB", false);
-        float volumn1=MainActivity.prefs.getFloat("volumnXB",1);
+
         if(nhacXB){
             try {
                 mp.setDataSource(getResources().openRawResourceFd(R.raw.rule0));
                 mp.setVolume(volumn1,volumn1);
                 mp.prepare();
                 mp.start();
-//            mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-//                @Override
-//                public void onCompletion(MediaPlayer mediaPlayer) {
-//                    // Hiển thị nút sau khi audio kết thúc
-//                    play1.setVisibility(View.VISIBLE);
-//                    lin3.setVisibility(View.VISIBLE);
-//                }
-//            });
+
                 mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                     @Override
                     public void onCompletion(MediaPlayer mp) {

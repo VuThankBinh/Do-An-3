@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
     TableLayout tb;
     boolean nhacback=true;
     boolean nhacXB=true;
-    static SharedPreferences prefs;
+
     float volumn1,volumn2;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,11 +125,10 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
                 showDialogShop();
             }
         });
-        prefs= getSharedPreferences("game", MODE_PRIVATE);
-        nhacback = prefs.getBoolean("isMute", false);
-        nhacXB = prefs.getBoolean("isXB", false);
-        volumn1=prefs.getFloat("volumnBack",40);
-        volumn2=prefs.getFloat("volumnXB",40);
+        nhacback = layout_home1.prefs.getBoolean("isMute", false);
+        nhacXB = layout_home1.prefs.getBoolean("isXB", false);
+        volumn1=layout_home1.prefs.getFloat("volumnBack",40);
+        volumn2=layout_home1.prefs.getFloat("volumnXB",40);
         ktraAmthanh();
         loadTrang();
         back.setOnClickListener(new View.OnClickListener() {
@@ -218,7 +217,7 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
             @Override
             public void onClick(View view) {
                 nhacXB=!nhacXB;
-                SharedPreferences.Editor editor = prefs.edit();
+                SharedPreferences.Editor editor = layout_home1.prefs.edit();
                 editor.putBoolean("isXB", nhacXB);
                 editor.apply();
                 if(nhacXB){
@@ -235,7 +234,7 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
             @Override
             public void onClick(View view) {
                 nhacback=!nhacback;
-                SharedPreferences.Editor editor = prefs.edit();
+                SharedPreferences.Editor editor = layout_home1.prefs.edit();
                 editor.putBoolean("isMute", nhacback);
                 editor.apply();
                 if(nhacback){
@@ -272,7 +271,7 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                  volumn1 = (float) (1 - (Math.log(100 - progress) / Math.log(100)));
                 mp.setVolume(volumn1, volumn1); // Thiết lập âm lượng của MediaPlayer
-                SharedPreferences.Editor editor = prefs.edit();
+                SharedPreferences.Editor editor = layout_home1.prefs.edit();
                 editor.putFloat("volumnBack", volumn1);
                 editor.apply();
             }
@@ -289,7 +288,7 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 volumn2 = (float) (1 - (Math.log(100 - progress) / Math.log(100)));
                 mp1.setVolume(volumn2, volumn2);
-                SharedPreferences.Editor editor = prefs.edit();
+                SharedPreferences.Editor editor = layout_home1.prefs.edit();
                 editor.putFloat("volumnXB", volumn2);
                 editor.apply();
             }
@@ -668,7 +667,7 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
             System.out.println(dapan2KhongDau);
 
             if(dapan1KhongDau.equals(dapan2KhongDau)){
-                nhacXB = prefs.getBoolean("isXB", false);
+                nhacXB = layout_home1.prefs.getBoolean("isXB", false);
                 if(nhacXB){
                     try {
                         mp1.reset();
@@ -712,7 +711,7 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
 
             }
             else {
-                nhacXB = prefs.getBoolean("isXB", false);
+                nhacXB = layout_home1.prefs.getBoolean("isXB", false);
                 if(nhacXB){
                     try {
                         mp1.setDataSource(getResources().openRawResourceFd(R.raw.chuachinhxac0));
