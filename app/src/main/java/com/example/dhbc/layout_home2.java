@@ -1,5 +1,8 @@
 package com.example.dhbc;
 
+import static com.example.dhbc.layout_home1.nhacXB;
+import static com.example.dhbc.layout_home1.volumn1;
+
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -55,8 +58,6 @@ public class layout_home2 extends AppCompatActivity {
         choilai=findViewById(R.id.choilai);
         mp1=new MediaPlayer();
         csdl=new CSDL(getApplicationContext());
-        boolean nhacXB = layout_home1.prefs.getBoolean("isXB", false);
-        float volumn1=layout_home1.prefs.getFloat("volumnXB",1);
         CauHoi ch=csdl.HienCSDL(getApplicationContext());
         if(ch.getId()==-1){
             level.setText("Xuan Bac");

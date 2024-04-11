@@ -80,6 +80,7 @@ import java.util.regex.Pattern;
 
 public class MainActivity extends AppCompatActivity implements ItemClick_dapan, ItemClick_cauhoi, OnUserEarnedRewardListener {
     RecyclerView listcauhoi,dapan;
+    SharedPreferences prefs;
     ImageView help,shop,layout_2,back;
     TextView level,slgRuby;
     MediaPlayer mp, mp1;
@@ -95,8 +96,8 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
     CauHoiAdapter adapter;
     DapAnAdapter adap;
     TableLayout tb;
-    boolean nhacback=true;
-    boolean nhacXB=true;
+    private boolean nhacback;
+    private boolean nhacXB;
     float volumn1,volumn2;
     LinearLayout adContainerView;
     private RewardedInterstitialAd rewardedInterstitialAd;
@@ -140,6 +141,7 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
                         mInterstitialAd = null;
                     }
                 });
+
         help = findViewById(R.id.help);
         shop = findViewById(R.id.napvip);
         layout_2 = findViewById(R.id.layout_2);
@@ -174,10 +176,11 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
                 showDialogShop();
             }
         });
-        nhacback = layout_home1.prefs.getBoolean("isMute", false);
-        nhacXB = layout_home1.prefs.getBoolean("isXB", false);
-        volumn1=layout_home1.prefs.getFloat("volumnBack",40);
-        volumn2=layout_home1.prefs.getFloat("volumnXB",40);
+        prefs= getSharedPreferences("game", MODE_PRIVATE);
+        nhacback = prefs.getBoolean("isMute", true);
+        nhacXB = prefs.getBoolean("isXB", true);
+        volumn1=prefs.getFloat("volumnBack",1);
+        volumn2=prefs.getFloat("volumnXB",1);
         ktraAmthanh();
         loadTrang();
         back.setOnClickListener(new View.OnClickListener() {
@@ -185,365 +188,12 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
             public void onClick(View view) {
 
                 showDialogSettings();
-//                if(nhacback){
-//                    back.setImageResource(R.drawable.mute2);
-//                    nhacback=false;
-//                    mp.pause();
-//                }
-//                else {
-//
-//                    back.setImageResource(R.drawable.loa);
-//                    nhacback=true;
-//                    mp.start();
-//                }
-//                SharedPreferences.Editor editor = prefs.edit();
-//                editor.putBoolean("isMute", nhacback);
-//                editor.apply();
 
             }
         });
 
 
     }
-    @Override
-    public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
-        Toast.makeText(this, "Done", Toast.LENGTH_SHORT).show();
-    }
-    private void ktraAmthanh() {
-        if (nhacback) {
-            back.setImageResource(R.drawable.loa);
-            try {
-                mp.reset();
-                mp.setDataSource(getResources().openRawResourceFd(R.raw.nhac0));
-                mp.setVolume(volumn1,volumn1);
-                mp.prepare();
-//                mp.start();
-//                mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-//                    @Override
-//                    public void onCompletion(MediaPlayer mediaPlayer) {
-//                        mp.start();
-//                    }
-//                });
-                mp.seekTo(3000);
-                mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                    @Override
-                    public void onCompletion(MediaPlayer mp) {
-                        mp.seekTo(3500);
-                        mp.start();
-                    }
-                });
-
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-//        else
-//            back.setImageResource(R.drawable.mute2);
-
-    }
-    private AdSize getAdSize() {
-        // Determine the screen width (less decorations) to use for the ad width.
-        Display display = getWindowManager().getDefaultDisplay();
-        DisplayMetrics outMetrics = new DisplayMetrics();
-        display.getMetrics(outMetrics);
-
-        float density = outMetrics.density;
-
-        float adWidthPixels = adContainerView.getWidth();
-
-        // If the ad hasn't been laid out, default to the full screen width.
-        if (adWidthPixels == 0) {
-            adWidthPixels = outMetrics.widthPixels;
-        }
-
-        int adWidth = (int) (adWidthPixels / density);
-        return AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(this, adWidth);
-    }
-
-    private void loadBanner() {
-
-        // Create a new ad view.
-        AdView adView = new AdView(this);
-        adView.setAdSize(getAdSize());
-        adView.setAdUnitId("ca-app-pub-3940256099942544/9214589741");
-
-        // Replace ad container with new ad view.
-        adContainerView.removeAllViews();
-        adContainerView.addView(adView);
-
-        // Start loading the ad in the background.
-        AdRequest adRequest = new AdRequest.Builder().build();
-        adView.loadAd(adRequest);
-    }
-    public void loadAd() {
-        // Use the test ad unit ID to load an ad.
-        rewardedInterstitialAd.load(MainActivity.this, "ca-app-pub-3940256099942544/5354046379",
-                new AdRequest.Builder().build(),  new RewardedInterstitialAdLoadCallback() {
-                    @Override
-                    public void onAdLoaded(RewardedInterstitialAd ad) {
-                        Log.d(TAG, "Ad was loaded.");
-                        rewardedInterstitialAd = ad;
-                    }
-                    @Override
-                    public void onAdFailedToLoad(LoadAdError loadAdError) {
-                        Log.d(TAG, loadAdError.toString());
-                        rewardedInterstitialAd = null;
-                    }
-                });
-    }
-    private SeekBar volumeSeekBar1,volumeSeekBar2;
-    private void showDialogSettings() {
-        Dialog dialog = new Dialog(MainActivity.this, android.R.style.Theme_Dialog);
-        dialog.setContentView(R.layout.dialog_settings);
-        dialog.getWindow().getDecorView().setSystemUiVisibility( View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
-        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-        TextView cham=dialog.findViewById(R.id.cham);
-        Button tatnhacBack=dialog.findViewById(R.id.tatnhacBack);
-        Button tatnhacXB=dialog.findViewById(R.id.tattiengxb);
-        if(nhacXB){
-            mp1.start();
-            tatnhacXB.setText("Tắt tiếng");
-        }
-        else {
-            mp1.pause();
-            tatnhacXB.setText("Bật tiếng");
-        }
-        if(nhacback){
-            mp.start();
-            tatnhacBack.setText("Tắt nhạc");
-        }
-        else {
-            mp.pause();
-            tatnhacBack.setText("Bật nhạc");
-        }
-        tatnhacXB.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                nhacXB=!nhacXB;
-                SharedPreferences.Editor editor = layout_home1.prefs.edit();
-                editor.putBoolean("isXB", nhacXB);
-                editor.apply();
-                if(nhacXB){
-                    mp1.start();
-                    tatnhacXB.setText("Tắt tiếng");
-                }
-                else {
-                    mp1.pause();
-                    tatnhacXB.setText("Bật tiếng");
-                }
-            }
-        });
-        tatnhacBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                nhacback=!nhacback;
-                SharedPreferences.Editor editor = layout_home1.prefs.edit();
-                editor.putBoolean("isMute", nhacback);
-                editor.apply();
-                if(nhacback){
-                    mp.start();
-                    tatnhacBack.setText("Tắt nhạc");
-                }
-                else {
-                    mp.pause();
-                    tatnhacBack.setText("Bật nhạc");
-                }
-                ktraAmthanh();
-            }
-        });
-        Animation blinkk=AnimationUtils.loadAnimation(this,R.anim.blink2);
-        cham.setAnimation(blinkk);
-        cham.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-            }
-        });
-        volumeSeekBar1 = dialog.findViewById(R.id.seek1);
-        volumeSeekBar2 = dialog.findViewById(R.id.seek2);
-        volumeSeekBar1.setMax(100);
-        int progress1 = (int) (100 - Math.pow(10, (1 - volumn1) * Math.log10(100)));
-        volumeSeekBar1.setProgress(progress1); // Thiết lập mức âm lượng mặc định
-        volumeSeekBar2.setMax(100);
-        int progress2 = (int) (100 - Math.pow(10, (1 - volumn2) * Math.log10(100)));
-
-        volumeSeekBar2.setProgress(progress2);
-        // nhạc nền
-        volumeSeekBar1.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                 volumn1 = (float) (1 - (Math.log(100 - progress) / Math.log(100)));
-                mp.setVolume(volumn1, volumn1); // Thiết lập âm lượng của MediaPlayer
-                SharedPreferences.Editor editor = layout_home1.prefs.edit();
-                editor.putFloat("volumnBack", volumn1);
-                editor.apply();
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {}
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {}
-        });
-        //tiếng xuân bắc
-        volumeSeekBar2.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                volumn2 = (float) (1 - (Math.log(100 - progress) / Math.log(100)));
-                mp1.setVolume(volumn2, volumn2);
-                SharedPreferences.Editor editor = layout_home1.prefs.edit();
-                editor.putFloat("volumnXB", volumn2);
-                editor.apply();
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {}
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {}
-        });
-
-        dialog.show();
-    }
-
-
-    private void showDialogChucMung() {
-        if (mInterstitialAd != null) {
-            ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
-            service.scheduleAtFixedRate(() -> {
-                runOnUiThread(() -> {
-                    mInterstitialAd.show(MainActivity.this);
-                });
-            }, 30, 30, TimeUnit.SECONDS);
-        } else {
-            Log.d("TAG", "The interstitial ad wasn't ready yet.");
-        }
-
-        Dialog dialog = new Dialog(MainActivity.this, android.R.style.Theme_Dialog);
-        dialog.setContentView(R.layout.dialog_chucmung_dapan);
-        dialog.getWindow().getDecorView().setSystemUiVisibility( View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
-
-        AppCompatButton close=dialog.findViewById(R.id.tieptuc);
-        TextView tv=dialog.findViewById(R.id.dapan);
-        ImageView img=dialog.findViewById(R.id.asdang);
-        tv.setText(dapAn.toUpperCase());
-        Animation xoayxoay= AnimationUtils.loadAnimation(this, R.anim.laclubtn);
-        Animation blink= AnimationUtils.loadAnimation(this, R.anim.blink2);
-        AnimationSet animSet = new AnimationSet(true);
-
-        animSet.addAnimation(xoayxoay);
-        animSet.addAnimation(blink);
-        img.setAnimation(animSet);
-        close.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-            }
-        });
-        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialogInterface) {
-                // Thực hiện cập nhật CSDL và tải lại trang
-
-                loadTrang();
-            }
-        });
-        csdl.Update(MainActivity.this,ch.getId());
-        csdl.UpdateRuby(MainActivity.this,3);
-        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-        dialog.getWindow().getDecorView().setSystemUiVisibility( View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if(nhacXB){
-                    try {
-                        mp1.reset();
-                        mp1.setDataSource(getResources().openRawResourceFd(R.raw.xinchucmung));
-                        mp1.setVolume(volumn2,volumn2);
-                        mp1.prepare();
-                        new Handler().postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                mp1.start();
-                            }
-                        }, 2000);
-
-
-                        mp1.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                            @Override
-                            public void onCompletion(MediaPlayer mp) {
-
-                                mp1.reset();
-                                mp1.setVolume(volumn2, volumn2);
-                            }
-                        });
-
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-            }
-        }, 1000);
-        dialog.show();
-
-    }
-
-    String dapAn,dapAn2;
-    private void showDialogShop() {
-        Dialog dialog = new Dialog(MainActivity.this,android.R.style.Theme_Dialog );
-
-        dialog.setContentView(R.layout.dialog_shop);
-        ImageView xemQC=dialog.findViewById(R.id.xemvid);
-        ImageView mua1=dialog.findViewById(R.id.h200k);
-        ImageView mua2=dialog.findViewById(R.id.h100k);
-        ImageView mua3=dialog.findViewById(R.id.h20k);
-        TextView cham=dialog.findViewById(R.id.cham);
-        Animation blinkk=AnimationUtils.loadAnimation(this,R.anim.blink2);
-        cham.setAnimation(blinkk);
-        String[] lblZpTransToken = {""};
-        xemQC.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(rewardedInterstitialAd != null) {
-                    rewardedInterstitialAd.show(MainActivity.this, MainActivity.this);
-                }
-            }
-        });
-        mua1.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-
-
-            }
-        });
-        mua2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-
-            }
-        });
-        mua3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-
-            }
-        });
-        cham.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-            }
-        });
-        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-        dialog.getWindow().getDecorView().setSystemUiVisibility( View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
-        dialog.show();
-
-    }
-    int slgRuby1=0;
-    FlexboxLayoutManager layoutManager,layoutManager2;
     public void loadTrang(){
         vi_tri_dau_cach=new ArrayList<>();
         trogiup=new ArrayList<>();
@@ -689,6 +339,379 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
 
 
     }
+    @Override
+    public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
+        Toast.makeText(this, "Done", Toast.LENGTH_SHORT).show();
+    }
+
+    private AdSize getAdSize() {
+        // Determine the screen width (less decorations) to use for the ad width.
+        Display display = getWindowManager().getDefaultDisplay();
+        DisplayMetrics outMetrics = new DisplayMetrics();
+        display.getMetrics(outMetrics);
+
+        float density = outMetrics.density;
+
+        float adWidthPixels = adContainerView.getWidth();
+
+        // If the ad hasn't been laid out, default to the full screen width.
+        if (adWidthPixels == 0) {
+            adWidthPixels = outMetrics.widthPixels;
+        }
+
+        int adWidth = (int) (adWidthPixels / density);
+        return AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(this, adWidth);
+    }
+
+    private void loadBanner() {
+
+        // Create a new ad view.
+        AdView adView = new AdView(this);
+        adView.setAdSize(getAdSize());
+        adView.setAdUnitId("ca-app-pub-3940256099942544/9214589741");
+
+        // Replace ad container with new ad view.
+        adContainerView.removeAllViews();
+        adContainerView.addView(adView);
+
+        // Start loading the ad in the background.
+        AdRequest adRequest = new AdRequest.Builder().build();
+        adView.loadAd(adRequest);
+    }
+    public void loadAd() {
+        // Use the test ad unit ID to load an ad.
+        rewardedInterstitialAd.load(MainActivity.this, "ca-app-pub-3940256099942544/5354046379",
+                new AdRequest.Builder().build(),  new RewardedInterstitialAdLoadCallback() {
+                    @Override
+                    public void onAdLoaded(RewardedInterstitialAd ad) {
+                        Log.d(TAG, "Ad was loaded.");
+                        rewardedInterstitialAd = ad;
+                    }
+                    @Override
+                    public void onAdFailedToLoad(LoadAdError loadAdError) {
+                        Log.d(TAG, loadAdError.toString());
+                        rewardedInterstitialAd = null;
+                    }
+                });
+    }
+    private SeekBar volumeSeekBar1,volumeSeekBar2;
+    private void ktraAmthanh() {
+        if (nhacback) {
+            back.setImageResource(R.drawable.loa);
+            try {
+                mp.reset();
+                mp.setDataSource(getResources().openRawResourceFd(R.raw.nhac0));
+                mp.setVolume(volumn1,volumn1);
+                mp.prepare();
+//                mp.start();
+//                mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+//                    @Override
+//                    public void onCompletion(MediaPlayer mediaPlayer) {
+//                        mp.start();
+//                    }
+//                });
+                mp.seekTo(3000);
+                mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                    @Override
+                    public void onCompletion(MediaPlayer mp) {
+                        mp.seekTo(3500);
+                        mp.start();
+                    }
+                });
+
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+//        else
+//            back.setImageResource(R.drawable.mute2);
+
+    }
+    private void showDialogSettings() {
+        Dialog dialog = new Dialog(MainActivity.this, android.R.style.Theme_Dialog);
+        dialog.setContentView(R.layout.dialog_settings);
+        dialog.getWindow().getDecorView().setSystemUiVisibility( View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        TextView cham=dialog.findViewById(R.id.cham);
+        Button tatnhacBack=dialog.findViewById(R.id.tatnhacBack);
+        Button tatnhacXB=dialog.findViewById(R.id.tattiengxb);
+        ImageView nhacback12=dialog.findViewById(R.id.nhacback);
+        ImageView nhacXB12=dialog.findViewById(R.id.nhacxb);
+//        if(nhacXB==true){
+//            mp1.start();
+//            tatnhacXB.setText("Tắt tiếng");
+//        }
+//        else {
+//            mp1.pause();
+//            tatnhacXB.setText("Bật tiếng");
+//        }
+//        if(nhacback==true){
+//            mp.start();
+//            tatnhacBack.setText("Tắt nhạc");
+//        }
+//        else {
+//            mp.pause();
+//            tatnhacBack.setText("Bật nhạc");
+//        }
+        tatnhacXB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putBoolean("isXB", nhacXB);
+                editor.apply();
+                if(nhacXB){
+                    mp1.start();
+                    tatnhacXB.setText("Tắt tiếng");
+                    nhacXB=false;
+                }
+                else {
+                    mp1.pause();
+                    tatnhacXB.setText("Bật tiếng");
+                    nhacXB=true;
+                }
+            }
+        });
+        tatnhacBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putBoolean("isMute", nhacback);
+                editor.apply();
+                if(nhacback){
+                    mp.start();
+                    tatnhacBack.setText("Tắt nhạc");
+                    nhacback=false;
+                }
+                else {
+                    mp.pause();
+                    tatnhacBack.setText("Bật nhạc");
+                    nhacback=true;
+                }
+                ktraAmthanh();
+            }
+        });
+        Animation blinkk=AnimationUtils.loadAnimation(this,R.anim.blink2);
+        cham.setAnimation(blinkk);
+        cham.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+        volumeSeekBar1 = dialog.findViewById(R.id.seek1);
+        volumeSeekBar2 = dialog.findViewById(R.id.seek2);
+        volumeSeekBar1.setMax(100);
+        int progress1 = (int) (100 - Math.pow(10, (1 - volumn1) * Math.log10(100)));
+        volumeSeekBar1.setProgress(progress1); // Thiết lập mức âm lượng mặc định
+        volumeSeekBar2.setMax(100);
+        int progress2 = (int) (100 - Math.pow(10, (1 - volumn2) * Math.log10(100)));
+
+        volumeSeekBar2.setProgress(progress2);
+        // nhạc nền
+        volumeSeekBar1.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if(progress!=0){
+                    nhacback12.setImageResource(R.drawable.loa);
+                    nhacback=true;
+                }
+                else {
+                    nhacback12.setImageResource(R.drawable.mute2);
+                    nhacback=false;
+                }
+                 volumn1 = (float) (1 - (Math.log(100 - progress) / Math.log(100)));
+                mp.setVolume(volumn1, volumn1); // Thiết lập âm lượng của MediaPlayer
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putFloat("volumnBack", volumn1);
+                editor.putBoolean("isMute",nhacback);
+                editor.apply();
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {}
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {}
+        });
+        //tiếng xuân bắc
+        volumeSeekBar2.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if(progress!=0){
+                    nhacXB12.setImageResource(R.drawable.dau_bac);
+                    nhacXB=true;
+                }
+                else {
+                    nhacXB12.setImageResource(R.drawable.batdau);
+                    nhacXB=false;
+                }
+                volumn2 = (float) (1 - (Math.log(100 - progress) / Math.log(100)));
+                mp1.setVolume(volumn2, volumn2);
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putFloat("volumnXB", volumn2);
+                editor.putBoolean("isXB",nhacXB);
+                editor.apply();
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {}
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {}
+        });
+
+        dialog.show();
+    }
+
+
+    private void showDialogChucMung() {
+
+
+        Dialog dialog = new Dialog(MainActivity.this, android.R.style.Theme_Dialog);
+        dialog.setContentView(R.layout.dialog_chucmung_dapan);
+        dialog.getWindow().getDecorView().setSystemUiVisibility( View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+
+        AppCompatButton close=dialog.findViewById(R.id.tieptuc);
+        TextView tv=dialog.findViewById(R.id.dapan);
+        ImageView img=dialog.findViewById(R.id.asdang);
+        tv.setText(dapAn.toUpperCase());
+        Animation xoayxoay= AnimationUtils.loadAnimation(this, R.anim.laclubtn);
+        Animation blink= AnimationUtils.loadAnimation(this, R.anim.blink2);
+        AnimationSet animSet = new AnimationSet(true);
+
+        animSet.addAnimation(xoayxoay);
+        animSet.addAnimation(blink);
+        img.setAnimation(animSet);
+        close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialogInterface) {
+                // Thực hiện cập nhật CSDL và tải lại trang
+                csdl.Update(MainActivity.this,ch.getId());
+                csdl.UpdateRuby(MainActivity.this,3);
+                loadTrang();
+            }
+        });
+
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        dialog.getWindow().getDecorView().setSystemUiVisibility( View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if(nhacXB){
+                    try {
+                        mp1.reset();
+                        mp1.setDataSource(getResources().openRawResourceFd(R.raw.xinchucmung));
+                        mp1.setVolume(volumn2,volumn2);
+                        mp1.prepare();
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                mp1.start();
+                            }
+                        }, 2000);
+
+
+                        mp1.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                            @Override
+                            public void onCompletion(MediaPlayer mp) {
+
+                                mp1.reset();
+                                mp1.setVolume(volumn2, volumn2);
+                            }
+                        });
+
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+        }, 1000);
+        dialog.show();
+
+    }
+
+    String dapAn,dapAn2;
+    private void showDialogShop() {
+        Dialog dialog = new Dialog(MainActivity.this,android.R.style.Theme_Dialog );
+
+        dialog.setContentView(R.layout.dialog_shop);
+        ImageView xemQC=dialog.findViewById(R.id.xemvid);
+        ImageView mua1=dialog.findViewById(R.id.h200k);
+        ImageView mua2=dialog.findViewById(R.id.h100k);
+        ImageView mua3=dialog.findViewById(R.id.h20k);
+        TextView cham=dialog.findViewById(R.id.cham);
+        Animation blinkk=AnimationUtils.loadAnimation(this,R.anim.blink2);
+        cham.setAnimation(blinkk);
+        String[] lblZpTransToken = {""};
+        xemQC.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(rewardedInterstitialAd != null) {
+                    rewardedInterstitialAd.show(MainActivity.this, MainActivity.this);
+                }
+            }
+        });
+        mua1.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+
+            }
+        });
+        mua2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+            }
+        });
+        mua3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+            }
+        });
+        cham.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        dialog.getWindow().getDecorView().setSystemUiVisibility( View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+        dialog.show();
+
+    }
+    private void ShareLinkApp(){
+        final Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+        // Thay đổi thành URI của liên kết bạn muốn chia sẻ
+        Uri uri = Uri.parse("https://youtube.com");
+
+        // Đặt nội dung của Intent thành liên kết
+        intent.putExtra(Intent.EXTRA_TEXT, uri.toString());
+
+        // Thêm cờ cho phép ứng dụng đính kèm xử lý dữ liệu từ URI được cung cấp
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+        // Đặt loại dữ liệu của Intent thành "text/plain"
+        intent.setType("text/plain");
+        startActivity(Intent.createChooser(intent,"Share to..."));
+    }
+    int slgRuby1=0;
+    FlexboxLayoutManager layoutManager,layoutManager2;
+
     //click đáp án
     @Override
     public void onItemClick(int position) {
@@ -789,7 +812,6 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
             System.out.println(dapan2KhongDau);
 
             if(dapan1KhongDau.equals(dapan2KhongDau)){
-                nhacXB = layout_home1.prefs.getBoolean("isXB", false);
                 if(nhacXB){
                     try {
                         mp1.reset();
@@ -801,7 +823,16 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
                         mp1.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                             @Override
                             public void onCompletion(MediaPlayer mp) {
-
+                                if (mInterstitialAd != null) {
+                                    ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
+                                    service.scheduleAtFixedRate(() -> {
+                                        runOnUiThread(() -> {
+                                            mInterstitialAd.show(MainActivity.this);
+                                        });
+                                    }, 1, 1, TimeUnit.SECONDS);
+                                } else {
+                                    Log.d("TAG", "The interstitial ad wasn't ready yet.");
+                                }
                                 showDialogChucMung();
                                 mp1.reset();
                                 mp1.setVolume(volumn2, volumn2);
@@ -826,6 +857,16 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
+                            if (mInterstitialAd != null) {
+                                ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
+                                service.scheduleAtFixedRate(() -> {
+                                    runOnUiThread(() -> {
+                                        mInterstitialAd.show(MainActivity.this);
+                                    });
+                                }, 1, 1, TimeUnit.SECONDS);
+                            } else {
+                                Log.d("TAG", "The interstitial ad wasn't ready yet.");
+                            }
                             showDialogChucMung();
                         }
                     }, 1500);
@@ -833,7 +874,6 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
 
             }
             else {
-                nhacXB = layout_home1.prefs.getBoolean("isXB", false);
                 if(nhacXB){
                     try {
                         mp1.setDataSource(getResources().openRawResourceFd(R.raw.chuachinhxac0));
@@ -1157,10 +1197,10 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
         super.onResume();
 
         // Kiểm tra xem audio có được tạm dừng không và nếu có thì tiếp tục phát
-        if (mp != null && !mp.isPlaying()) {
+        if (mp != null && !mp.isPlaying() && nhacback) {
             mp.start();
         }
-        if (mp1 != null && !mp1.isPlaying()) {
+        if (mp1 != null && !mp1.isPlaying() && nhacXB) {
             mp1.start();
 
 
@@ -1172,11 +1212,11 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
         super.onPause();
 
         // Kiểm tra nếu audio đang phát
-        if (mp != null && mp.isPlaying()) {
+        if (mp != null && mp.isPlaying()&& nhacback) {
             // Tạm dừng audio
             mp.pause();
         }
-        if (mp1 != null && mp1.isPlaying()) {
+        if (mp1 != null && mp1.isPlaying() && nhacXB) {
             // Tạm dừng audio
             mp1.pause();
         }

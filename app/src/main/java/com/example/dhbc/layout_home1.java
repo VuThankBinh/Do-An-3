@@ -30,6 +30,8 @@ public class layout_home1 extends AppCompatActivity {
     RelativeLayout lin3;
     static SharedPreferences prefs;
     MediaPlayer mp,mp1;
+     static boolean nhacXB ;
+    static float volumn1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,8 +89,9 @@ public class layout_home1 extends AppCompatActivity {
 
         as1.startAnimation(laclu1);
         as2.startAnimation(laclu3);
-        boolean nhacXB = prefs.getBoolean("isXB", false);
-        float volumn1=prefs.getFloat("volumnXB",1);
+        nhacXB = prefs.getBoolean("isXB", true);
+        volumn1=prefs.getFloat("volumnXB",1);
+
         if(nhacXB){
             try {
                 mp.setDataSource(getResources().openRawResourceFd(R.raw.chaomung0));
