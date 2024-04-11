@@ -40,6 +40,6 @@ dependencies {
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
 
-    implementation ("com.google.android.gms:play-services-games-v2:+")
+    implementation ("com.google.android.gms:play-services-ads:23.0.0")
 
 }

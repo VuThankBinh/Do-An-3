@@ -22,7 +22,9 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.StrictMode;
 import android.provider.MediaStore;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -48,6 +50,19 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.flexbox.FlexDirection;
 import com.google.android.flexbox.FlexboxLayoutManager;
 import com.google.android.flexbox.JustifyContent;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.LoadAdError;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.OnUserEarnedRewardListener;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+import com.google.android.gms.ads.interstitial.InterstitialAd;
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
+import com.google.android.gms.ads.rewarded.RewardItem;
+import com.google.android.gms.ads.rewardedinterstitial.RewardedInterstitialAd;
+import com.google.android.gms.ads.rewardedinterstitial.RewardedInterstitialAdLoadCallback;
 
 
 import java.io.File;
@@ -58,9 +73,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
-public class MainActivity extends AppCompatActivity implements ItemClick_dapan, ItemClick_cauhoi {
+public class MainActivity extends AppCompatActivity implements ItemClick_dapan, ItemClick_cauhoi, OnUserEarnedRewardListener {
     RecyclerView listcauhoi,dapan;
     ImageView help,shop,layout_2,back;
     TextView level,slgRuby;
@@ -79,8 +97,11 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
     TableLayout tb;
     boolean nhacback=true;
     boolean nhacXB=true;
-
     float volumn1,volumn2;
+    LinearLayout adContainerView;
+    private RewardedInterstitialAd rewardedInterstitialAd;
+    private InterstitialAd mInterstitialAd;
+    private String TAG = "MainActivity";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,6 +114,32 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
         int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
         decorView.setSystemUiVisibility(uiOptions);
         setContentView(R.layout.activity_main);
+        //Quảng cáo
+        MobileAds.initialize(this, new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) {
+                loadAd();
+            }
+        });
+        AdRequest adRequest = new AdRequest.Builder().build();
+
+        InterstitialAd.load(this,"ca-app-pub-3940256099942544/1033173712", adRequest,
+                new InterstitialAdLoadCallback() {
+                    @Override
+                    public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
+                        // The mInterstitialAd reference will be null until
+                        // an ad is loaded.
+                        mInterstitialAd = interstitialAd;
+                        Log.i(TAG, "onAdLoaded");
+                    }
+
+                    @Override
+                    public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+                        // Handle the error
+                        Log.d(TAG, loadAdError.toString());
+                        mInterstitialAd = null;
+                    }
+                });
         help = findViewById(R.id.help);
         shop = findViewById(R.id.napvip);
         layout_2 = findViewById(R.id.layout_2);
@@ -101,6 +148,8 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
         back = findViewById(R.id.back1);
         csdl = new CSDL(getApplicationContext());
         tb = findViewById(R.id.deme);
+        adContainerView = findViewById(R.id.layoutAd);
+        loadBanner();
 
 //        verifyStoragePemission(MainActivity.this);
         mp = new MediaPlayer();
@@ -156,6 +205,10 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
 
 
     }
+    @Override
+    public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
+        Toast.makeText(this, "Done", Toast.LENGTH_SHORT).show();
+    }
     private void ktraAmthanh() {
         if (nhacback) {
             back.setImageResource(R.drawable.loa);
@@ -187,6 +240,56 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
 //        else
 //            back.setImageResource(R.drawable.mute2);
 
+    }
+    private AdSize getAdSize() {
+        // Determine the screen width (less decorations) to use for the ad width.
+        Display display = getWindowManager().getDefaultDisplay();
+        DisplayMetrics outMetrics = new DisplayMetrics();
+        display.getMetrics(outMetrics);
+
+        float density = outMetrics.density;
+
+        float adWidthPixels = adContainerView.getWidth();
+
+        // If the ad hasn't been laid out, default to the full screen width.
+        if (adWidthPixels == 0) {
+            adWidthPixels = outMetrics.widthPixels;
+        }
+
+        int adWidth = (int) (adWidthPixels / density);
+        return AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(this, adWidth);
+    }
+
+    private void loadBanner() {
+
+        // Create a new ad view.
+        AdView adView = new AdView(this);
+        adView.setAdSize(getAdSize());
+        adView.setAdUnitId("ca-app-pub-3940256099942544/9214589741");
+
+        // Replace ad container with new ad view.
+        adContainerView.removeAllViews();
+        adContainerView.addView(adView);
+
+        // Start loading the ad in the background.
+        AdRequest adRequest = new AdRequest.Builder().build();
+        adView.loadAd(adRequest);
+    }
+    public void loadAd() {
+        // Use the test ad unit ID to load an ad.
+        rewardedInterstitialAd.load(MainActivity.this, "ca-app-pub-3940256099942544/5354046379",
+                new AdRequest.Builder().build(),  new RewardedInterstitialAdLoadCallback() {
+                    @Override
+                    public void onAdLoaded(RewardedInterstitialAd ad) {
+                        Log.d(TAG, "Ad was loaded.");
+                        rewardedInterstitialAd = ad;
+                    }
+                    @Override
+                    public void onAdFailedToLoad(LoadAdError loadAdError) {
+                        Log.d(TAG, loadAdError.toString());
+                        rewardedInterstitialAd = null;
+                    }
+                });
     }
     private SeekBar volumeSeekBar1,volumeSeekBar2;
     private void showDialogSettings() {
@@ -305,6 +408,17 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
 
 
     private void showDialogChucMung() {
+        if (mInterstitialAd != null) {
+            ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
+            service.scheduleAtFixedRate(() -> {
+                runOnUiThread(() -> {
+                    mInterstitialAd.show(MainActivity.this);
+                });
+            }, 30, 30, TimeUnit.SECONDS);
+        } else {
+            Log.d("TAG", "The interstitial ad wasn't ready yet.");
+        }
+
         Dialog dialog = new Dialog(MainActivity.this, android.R.style.Theme_Dialog);
         dialog.setContentView(R.layout.dialog_chucmung_dapan);
         dialog.getWindow().getDecorView().setSystemUiVisibility( View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
@@ -387,6 +501,14 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
         Animation blinkk=AnimationUtils.loadAnimation(this,R.anim.blink2);
         cham.setAnimation(blinkk);
         String[] lblZpTransToken = {""};
+        xemQC.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(rewardedInterstitialAd != null) {
+                    rewardedInterstitialAd.show(MainActivity.this, MainActivity.this);
+                }
+            }
+        });
         mua1.setOnClickListener(new View.OnClickListener() {
 
             @Override
