@@ -21,8 +21,8 @@
             android:src="@drawable/loa">
         </ImageView>
         <TextView
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
+            android:layout_width="45dp"
+            android:layout_height="65dp"
             android:id="@+id/level"
             android:text="6"
             android:layout_gravity="center"
@@ -30,8 +30,7 @@
             android:textSize="42dp"
             android:textColor="@color/black"
             android:textStyle="italic"
-            android:layout_weight="1.6"
-            android:layout_marginLeft="15dp"
+            android:layout_weight="1.5"
             android:gravity="center"
             android:textAlignment="center">
         </TextView>
@@ -60,15 +59,48 @@
             </ImageView>
         </LinearLayout>
     </LinearLayout>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Đây là gì?"
-        android:layout_margin="20dp"
-        android:textSize="32dp"
-        android:textColor="@color/white">
-    </TextView>
     <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:orientation="horizontal"
+        android:weightSum="3">
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="66dp"
+            android:layout_weight="0.7"
+            android:layout_gravity="center">
+        </ImageView>
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_weight="1.6"
+            android:background="@drawable/daylagi">
+        </TextView>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.2"
+
+            android:weightSum="2"
+            android:layout_gravity="center"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="32dp"
+                android:layout_weight="1"
+                android:textAlignment="viewEnd">
+            </TextView>
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp">
+            </ImageView>
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_marginTop="30dp"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_weight="1.5"

@@ -2,21 +2,21 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 
     android:layout_width="wrap_content"
-    android:layout_height="350dp"
+    android:layout_height="300dp"
     android:background="#00FFFFFF"
     >
     <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_height="400dp"
-        android:layout_marginTop="80dp"
+        android:layout_height="235dp"
         android:id="@+id/shopp"
-        android:background="@drawable/shop12">
+        android:background="@drawable/back_setting">
 
     </RelativeLayout>
     <ImageView
-        android:layout_width="260dp"
-        android:layout_height="160dp"
-        android:src="@drawable/settings"
+        android:layout_width="120dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="30dp"
+        android:src="@drawable/titlie_set"
         android:id="@+id/title"
         android:scaleType="fitCenter"
         android:layout_gravity="center"
@@ -32,7 +32,7 @@
            android:layout_width="40dp"
            android:layout_height="40dp"
            android:id="@+id/nhacback"
-           android:src="@drawable/loa"
+           android:src="@drawable/notnhac"
            >
        </ImageView>
        <SeekBar
@@ -55,7 +55,7 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:id="@+id/nhacxb"
-            android:src="@drawable/dau_bac"
+            android:src="@drawable/voicexb"
             >
         </ImageView>
         <SeekBar
@@ -67,42 +67,18 @@
             >
         </SeekBar>
     </RelativeLayout>
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/nhacxb1"
-        android:layout_centerHorizontal="true">
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/tatnhacBack"
-            android:visibility="gone"
-            android:text="nhạc nền"
-            >
-        </Button>
-        <Button
-            android:id="@+id/tattiengxb"
-            android:layout_toRightOf="@+id/tatnhacBack"
-            android:layout_width="wrap_content"
-            android:layout_centerVertical="true"
-            android:text="tiếng xb"
-            android:visibility="gone"
-            android:layout_height="wrap_content"
-            >
-        </Button>
-    </RelativeLayout>
+
     <TextView
+        android:id="@+id/cham"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAlignment="center"
-        android:text="Chạm để thoát"
-        android:id="@+id/cham"
-        android:textColor="@color/white"
-        android:textStyle="italic"
-        android:textSize="20dp"
-        android:gravity="center"
+        android:layout_below="@+id/shopp"
         android:layout_alignParentBottom="true"
-        android:layout_below="@+id/shopp">
-
+        android:gravity="center"
+        android:text="Chạm để thoát"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="20dp"
+        android:textStyle="italic">
     </TextView>
 </RelativeLayout>

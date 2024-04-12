@@ -1,0 +1,20 @@
+<!-- custom_progress_bar.xml -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Define the background track -->
+    <item android:id="@android:id/background">
+        <shape>
+            <solid android:color="@color/custom_progress_background_color" /> <!-- Set your desired color -->
+            <corners android:radius="5dp" /> <!-- Adjust the corner radius as needed -->
+        </shape>
+    </item>
+
+    <!-- Define the progress track -->
+    <item android:id="@android:id/progress">
+        <clip>
+            <shape>
+                <solid android:color="@color/custom_progress_color" /> <!-- Set your desired color -->
+                <corners android:radius="5dp" /> <!-- Adjust the corner radius as needed -->
+            </shape>
+        </clip>
+    </item>
+</layer-list>

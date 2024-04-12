@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -160,16 +161,36 @@ public class CSDL {
         }
         return cauHoi;
     }
-    public int HienRuby(Context context){
-        Cursor dataCV=db.GetData("SELECT * FROM Ruby  LIMIT 1");
-        int soluong=0;
-        if (dataCV != null && dataCV.moveToFirst()) {
-             soluong = dataCV.getInt(1);
-//            Toast.makeText(context, "id: " + dataCV.getInt(1) , Toast.LENGTH_SHORT).show();
-
-        }
-        return soluong;
+//    public int HienRuby(Context context){
+//        Cursor dataCV=db.GetData("SELECT * FROM Ruby  LIMIT 1");
+//        int soluong=0;
+//        if (dataCV != null && dataCV.moveToFirst()) {
+//             soluong = dataCV.getInt(1);
+////            Toast.makeText(context, "id: " + dataCV.getInt(1) , Toast.LENGTH_SHORT).show();
+//
+//        }
+//        return soluong;
+//    }
+public int HienRuby(Context context) {
+    Cursor dataCV = db.GetData("SELECT * FROM Ruby LIMIT 1");
+    int soluong = 0;
+    if (dataCV != null && dataCV.moveToFirst()) {
+        soluong = dataCV.getInt(1);
+        // Log the retrieved value for debugging
+        Log.d("HienRuby", "SoLuong: " + soluong);
+        // Optionally show a toast message for debugging
+        // Toast.makeText(context, "SoLuong: " + soluong, Toast.LENGTH_SHORT).show();
+    } else {
+        // Log an error message if no data is found
+        Log.e("HienRuby", "No data found in Ruby table");
     }
+    // Close the cursor to release resources
+    if (dataCV != null) {
+        dataCV.close();
+    }
+    return soluong;
+}
+
     public void Update(Context context, int id){
         db.QueryData("update CauHoi set TinhTrang=1 where id="+id);
     }

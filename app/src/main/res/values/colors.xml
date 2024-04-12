@@ -5,4 +5,6 @@
     <color name="colorPrimary">#FF9800</color>
     <color name="colorPrimaryDark">#FF9800</color>
     <color name="colorAccent">#2196F3</color>
+    <color name="custom_progress_background_color">#414243</color>
+    <color name="custom_progress_color">#F44336</color>
 </resources>

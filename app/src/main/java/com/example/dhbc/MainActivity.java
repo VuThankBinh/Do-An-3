@@ -115,6 +115,28 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
         int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
         decorView.setSystemUiVisibility(uiOptions);
         setContentView(R.layout.activity_main);
+
+        help = findViewById(R.id.help);
+        shop = findViewById(R.id.napvip);
+        layout_2 = findViewById(R.id.layout_2);
+        level = findViewById(R.id.level);
+        slgRuby = findViewById(R.id.ruby);
+        back = findViewById(R.id.back1);
+        csdl = new CSDL(getApplicationContext());
+        tb = findViewById(R.id.deme);
+        adContainerView = findViewById(R.id.layoutAd);
+
+        mp = new MediaPlayer();
+        mp1 = new MediaPlayer();
+
+
+        prefs= getSharedPreferences("game", MODE_PRIVATE);
+        nhacback = prefs.getBoolean("isMute", true);
+        nhacXB = prefs.getBoolean("isXB", true);
+        volumn1=prefs.getFloat("volumnBack",1);
+        volumn2=prefs.getFloat("volumnXB",1);
+
+        loadTrang();
         //Quảng cáo
         MobileAds.initialize(this, new OnInitializationCompleteListener() {
             @Override
@@ -142,27 +164,16 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
                     }
                 });
 
-        help = findViewById(R.id.help);
-        shop = findViewById(R.id.napvip);
-        layout_2 = findViewById(R.id.layout_2);
-        level = findViewById(R.id.level);
-        slgRuby = findViewById(R.id.ruby);
-        back = findViewById(R.id.back1);
-        csdl = new CSDL(getApplicationContext());
-        tb = findViewById(R.id.deme);
-        adContainerView = findViewById(R.id.layoutAd);
+
         loadBanner();
 
 //        verifyStoragePemission(MainActivity.this);
-        mp = new MediaPlayer();
-        mp1 = new MediaPlayer();
+
         ActivityCompat.requestPermissions(this, new String[]{WRITE_EXTERNAL_STORAGE, READ_EXTERNAL_STORAGE}, PackageManager.PERMISSION_GRANTED);
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
 
         File dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-
-
 
         help.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -176,13 +187,7 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
                 showDialogShop();
             }
         });
-        prefs= getSharedPreferences("game", MODE_PRIVATE);
-        nhacback = prefs.getBoolean("isMute", true);
-        nhacXB = prefs.getBoolean("isXB", true);
-        volumn1=prefs.getFloat("volumnBack",1);
-        volumn2=prefs.getFloat("volumnXB",1);
-        ktraAmthanh();
-        loadTrang();
+
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -192,6 +197,7 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
             }
         });
 
+        ktraAmthanh();
 
     }
     public void loadTrang(){
@@ -220,15 +226,6 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
                     recreate();
                 }
             });
-
-            // Nút hủy
-//            builder.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
-//                @Override
-//                public void onClick(DialogInterface dialog, int which) {
-//                    // Xử lý khi người dùng nhấn nút hủy
-//                    dialog.dismiss(); // Đóng dialog
-//                }
-//            });
 
             AlertDialog dialog = builder.create();
             dialog.show();
@@ -306,33 +303,38 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
             dapan.setLayoutManager(layoutManager2);
             listcauhoi.setAdapter(adapter);
             dapan.setAdapter(adap);
-            if(nhacXB){
-                try {
-                    mp1.reset();
-                    mp1.setDataSource(getResources().openRawResourceFd(R.raw.daylagi0));
-                    mp1.setVolume(volumn2,volumn2);
-                    mp1.prepare();
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            mp1.start();
-                        }
-                    }, 2000);
-
-
-                    mp1.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                        @Override
-                        public void onCompletion(MediaPlayer mp) {
-
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    if(nhacXB){
+                        int[] list_daylagi={R.raw.daylagi0,R.raw.daylagi1,R.raw.daylagi2,R.raw.daylagi3,R.raw.daylagi4};
+                        Random random1 = new Random();
+                        int randomIndex = random1.nextInt(list_daylagi.length);
+                        int randomItem = list_daylagi[randomIndex];
+//                        Toast.makeText(MainActivity.this, "bài: "+randomIndex, Toast.LENGTH_SHORT).show();
+                        try {
                             mp1.reset();
-                            mp1.setVolume(volumn2, volumn2);
-                        }
-                    });
+                            mp1.setDataSource(getResources().openRawResourceFd(randomItem));
+                            mp1.setVolume(volumn2,volumn2);
+                            mp1.prepare();
+                            mp1.start();
 
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
+
+                            mp1.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                                @Override
+                                public void onCompletion(MediaPlayer mp) {
+
+                                    mp1.reset();
+                                    mp1.setVolume(volumn2, volumn2);
+                                }
+                            });
+
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
                 }
-            }
+            },2000);
 
         }
 
@@ -341,7 +343,10 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
     }
     @Override
     public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
-        Toast.makeText(this, "Done", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Nhận thưởng thành công", Toast.LENGTH_SHORT).show();
+        csdl.UpdateRuby(MainActivity.this,10);
+        slgRuby1= csdl.HienRuby(MainActivity.this);
+        slgRuby.setText(String.valueOf(slgRuby1));
     }
 
     private AdSize getAdSize() {
@@ -400,31 +405,22 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
             back.setImageResource(R.drawable.loa);
             try {
                 mp.reset();
-                mp.setDataSource(getResources().openRawResourceFd(R.raw.nhac0));
+                mp.setDataSource(getResources().openRawResourceFd(R.raw.nhacback));
                 mp.setVolume(volumn1,volumn1);
                 mp.prepare();
-//                mp.start();
-//                mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-//                    @Override
-//                    public void onCompletion(MediaPlayer mediaPlayer) {
-//                        mp.start();
-//                    }
-//                });
-                mp.seekTo(3000);
+                mp.start();
                 mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                     @Override
-                    public void onCompletion(MediaPlayer mp) {
-                        mp.seekTo(3500);
+                    public void onCompletion(MediaPlayer mediaPlayer) {
                         mp.start();
                     }
                 });
+
 
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         }
-//        else
-//            back.setImageResource(R.drawable.mute2);
 
     }
     private void showDialogSettings() {
@@ -433,65 +429,9 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
         dialog.getWindow().getDecorView().setSystemUiVisibility( View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
         dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         TextView cham=dialog.findViewById(R.id.cham);
-        Button tatnhacBack=dialog.findViewById(R.id.tatnhacBack);
-        Button tatnhacXB=dialog.findViewById(R.id.tattiengxb);
         ImageView nhacback12=dialog.findViewById(R.id.nhacback);
         ImageView nhacXB12=dialog.findViewById(R.id.nhacxb);
-//        if(nhacXB==true){
-//            mp1.start();
-//            tatnhacXB.setText("Tắt tiếng");
-//        }
-//        else {
-//            mp1.pause();
-//            tatnhacXB.setText("Bật tiếng");
-//        }
-//        if(nhacback==true){
-//            mp.start();
-//            tatnhacBack.setText("Tắt nhạc");
-//        }
-//        else {
-//            mp.pause();
-//            tatnhacBack.setText("Bật nhạc");
-//        }
-        tatnhacXB.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
 
-                SharedPreferences.Editor editor = prefs.edit();
-                editor.putBoolean("isXB", nhacXB);
-                editor.apply();
-                if(nhacXB){
-                    mp1.start();
-                    tatnhacXB.setText("Tắt tiếng");
-                    nhacXB=false;
-                }
-                else {
-                    mp1.pause();
-                    tatnhacXB.setText("Bật tiếng");
-                    nhacXB=true;
-                }
-            }
-        });
-        tatnhacBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                SharedPreferences.Editor editor = prefs.edit();
-                editor.putBoolean("isMute", nhacback);
-                editor.apply();
-                if(nhacback){
-                    mp.start();
-                    tatnhacBack.setText("Tắt nhạc");
-                    nhacback=false;
-                }
-                else {
-                    mp.pause();
-                    tatnhacBack.setText("Bật nhạc");
-                    nhacback=true;
-                }
-                ktraAmthanh();
-            }
-        });
         Animation blinkk=AnimationUtils.loadAnimation(this,R.anim.blink2);
         cham.setAnimation(blinkk);
         cham.setOnClickListener(new View.OnClickListener() {
@@ -514,11 +454,11 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 if(progress!=0){
-                    nhacback12.setImageResource(R.drawable.loa);
+                    nhacback12.setImageResource(R.drawable.notnhac);
                     nhacback=true;
                 }
                 else {
-                    nhacback12.setImageResource(R.drawable.mute2);
+                    nhacback12.setImageResource(R.drawable.notnhac_mute);
                     nhacback=false;
                 }
                  volumn1 = (float) (1 - (Math.log(100 - progress) / Math.log(100)));
@@ -527,6 +467,7 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
                 editor.putFloat("volumnBack", volumn1);
                 editor.putBoolean("isMute",nhacback);
                 editor.apply();
+                ktraAmthanh();
             }
 
             @Override
@@ -540,11 +481,11 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 if(progress!=0){
-                    nhacXB12.setImageResource(R.drawable.dau_bac);
+                    nhacXB12.setImageResource(R.drawable.voicexb);
                     nhacXB=true;
                 }
                 else {
-                    nhacXB12.setImageResource(R.drawable.batdau);
+                    nhacXB12.setImageResource(R.drawable.voicexb_mute);
                     nhacXB=false;
                 }
                 volumn2 = (float) (1 - (Math.log(100 - progress) / Math.log(100)));
@@ -692,23 +633,7 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
         dialog.show();
 
     }
-    private void ShareLinkApp(){
-        final Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-        // Thay đổi thành URI của liên kết bạn muốn chia sẻ
-        Uri uri = Uri.parse("https://youtube.com");
-
-        // Đặt nội dung của Intent thành liên kết
-        intent.putExtra(Intent.EXTRA_TEXT, uri.toString());
-
-        // Thêm cờ cho phép ứng dụng đính kèm xử lý dữ liệu từ URI được cung cấp
-        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-
-        // Đặt loại dữ liệu của Intent thành "text/plain"
-        intent.setType("text/plain");
-        startActivity(Intent.createChooser(intent,"Share to..."));
-    }
     int slgRuby1=0;
     FlexboxLayoutManager layoutManager,layoutManager2;
 

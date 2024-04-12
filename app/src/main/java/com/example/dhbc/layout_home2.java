@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.drawable.AnimationDrawable;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -135,21 +136,22 @@ public class layout_home2 extends AppCompatActivity {
                 try {
                     mp.stop();
                     mp.reset();
-                    mp1.setDataSource(getResources().openRawResourceFd(R.raw.huonglen1));
+                    mp1.setDataSource(getResources().openRawResourceFd(R.raw.win));
                     mp1.setVolume(volumn1,volumn1);
                     mp1.prepare();
 
                     mp1.start();
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (mp1.isPlaying()) {
-                                mp1.stop();
-                                startActivity(new Intent(layout_home2.this,MainActivity.class));
-                                layout_home2.this.finish();
-                            }
-                        }
-                    }, 1000);
+//                    new Handler().postDelayed(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            if (mp1.isPlaying()) {
+//                                mp1.stop();
+//
+//                            }
+//                        }
+//                    }, 1000);
+                    startActivity(new Intent(layout_home2.this,MainActivity.class));
+                    layout_home2.this.finish();
 
                 } catch (IOException e) {
                     throw new RuntimeException(e);
@@ -186,6 +188,23 @@ public class layout_home2 extends AppCompatActivity {
             }
         }
 
+    }
+    private void ShareLinkApp(){
+        final Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+        // Thay đổi thành URI của liên kết bạn muốn chia sẻ
+        Uri uri = Uri.parse("https://youtube.com");
+
+        // Đặt nội dung của Intent thành liên kết
+        intent.putExtra(Intent.EXTRA_TEXT, uri.toString());
+
+        // Thêm cờ cho phép ứng dụng đính kèm xử lý dữ liệu từ URI được cung cấp
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+        // Đặt loại dữ liệu của Intent thành "text/plain"
+        intent.setType("text/plain");
+        startActivity(Intent.createChooser(intent,"Share to..."));
     }
     private void showConfirmationDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);

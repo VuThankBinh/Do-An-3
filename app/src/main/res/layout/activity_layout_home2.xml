@@ -23,8 +23,8 @@
         android:src="@drawable/back1">
     </ImageView>
     <TextView
-        android:layout_width="50dp"
-        android:layout_height="wrap_content"
+        android:layout_width="45dp"
+        android:layout_height="65dp"
         android:id="@+id/level"
         android:text="6"
         android:layout_gravity="center"
@@ -32,8 +32,8 @@
         android:textSize="42dp"
         android:textColor="@color/black"
         android:textStyle="italic"
-        android:layout_weight="1.6"
-        android:layout_marginLeft="15dp"
+        android:layout_weight="1.5"
+        android:layout_marginLeft="5dp"
         android:gravity="center"
         android:textAlignment="center">
     </TextView>
