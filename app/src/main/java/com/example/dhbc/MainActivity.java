@@ -547,6 +547,7 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
             @Override
             public void run() {
                 if(nhacXB){
+
                     try {
                         mp1.reset();
                         mp1.setDataSource(getResources().openRawResourceFd(R.raw.xinchucmung));
@@ -738,10 +739,14 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
 
             if(dapan1KhongDau.equals(dapan2KhongDau)){
                 if(nhacXB){
+                    int[] list_daylagi={R.raw.chinhxac1,R.raw.chinhxac6,R.raw.chinhxac7,R.raw.chinhxac8,R.raw.chinhxac9};
+                    Random random1 = new Random();
+                    int randomIndex = random1.nextInt(list_daylagi.length);
+                    int randomItem = list_daylagi[randomIndex];
                     try {
                         mp1.reset();
                         mp1.setVolume(volumn2, volumn2);
-                        mp1.setDataSource(getResources().openRawResourceFd(R.raw.chinhxac1));
+                        mp1.setDataSource(getResources().openRawResourceFd(randomItem));
                         mp1.prepare();
                         mp1.start();
 
@@ -800,8 +805,12 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
             }
             else {
                 if(nhacXB){
+                    int[] list_daylagi={R.raw.chuachinhxac0,R.raw.chuachinhxac1,R.raw.chuachinhxac2,R.raw.chuachinhxac3,R.raw.chuachinhxac4,R.raw.chuachinhxac5,R.raw.chuachinhxac6};
+                    Random random1 = new Random();
+                    int randomIndex = random1.nextInt(list_daylagi.length);
+                    int randomItem = list_daylagi[randomIndex];
                     try {
-                        mp1.setDataSource(getResources().openRawResourceFd(R.raw.chuachinhxac0));
+                        mp1.setDataSource(getResources().openRawResourceFd(randomItem));
                         mp1.setVolume(volumn2, volumn2);
                         mp1.prepare();
                         mp1.start();
