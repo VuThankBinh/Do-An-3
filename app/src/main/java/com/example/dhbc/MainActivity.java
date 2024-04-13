@@ -200,6 +200,26 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
         ktraAmthanh();
 
     }
+    private void loadInterstitialAds() {
+        AdRequest adRequest = new AdRequest.Builder().build();
+        InterstitialAd.load(this,"ca-app-pub-3940256099942544/1033173712", adRequest,
+                new InterstitialAdLoadCallback() {
+                    @Override
+                    public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
+                        // The mInterstitialAd reference will be null until
+                        // an ad is loaded.
+                        mInterstitialAd = interstitialAd;
+                        Log.i(TAG, "onAdLoaded");
+                    }
+
+                    @Override
+                    public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+                        // Handle the error
+                        Log.d(TAG, loadAdError.toString());
+                        mInterstitialAd = null;
+                    }
+                });
+    }
     public void loadTrang(){
         vi_tri_dau_cach=new ArrayList<>();
         trogiup=new ArrayList<>();
@@ -592,7 +612,6 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
         TextView cham=dialog.findViewById(R.id.cham);
         Animation blinkk=AnimationUtils.loadAnimation(this,R.anim.blink2);
         cham.setAnimation(blinkk);
-        String[] lblZpTransToken = {""};
         xemQC.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -754,15 +773,11 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
                             @Override
                             public void onCompletion(MediaPlayer mp) {
                                 if (mInterstitialAd != null) {
-                                    ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
-                                    service.scheduleAtFixedRate(() -> {
-                                        runOnUiThread(() -> {
-                                            mInterstitialAd.show(MainActivity.this);
-                                        });
-                                    }, 1, 1, TimeUnit.SECONDS);
+                                    mInterstitialAd.show(MainActivity.this);
                                 } else {
                                     Log.d("TAG", "The interstitial ad wasn't ready yet.");
                                 }
+                                loadInterstitialAds();
                                 showDialogChucMung();
                                 mp1.reset();
                                 mp1.setVolume(volumn2, volumn2);
@@ -788,15 +803,11 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
                         @Override
                         public void run() {
                             if (mInterstitialAd != null) {
-                                ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
-                                service.scheduleAtFixedRate(() -> {
-                                    runOnUiThread(() -> {
-                                        mInterstitialAd.show(MainActivity.this);
-                                    });
-                                }, 1, 1, TimeUnit.SECONDS);
+                                mInterstitialAd.show(MainActivity.this);
                             } else {
                                 Log.d("TAG", "The interstitial ad wasn't ready yet.");
                             }
+                            loadInterstitialAds();
                             showDialogChucMung();
                         }
                     }, 1500);
@@ -998,7 +1009,7 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
             public void onClick(View view) {
                 dialog.dismiss();
                 if(slgRuby1>=30){
-                    loadTrang();
+//                    loadTrang();
                     for(int i=0;i<trogiup.size();i++){
 
                         HienTroGiup();

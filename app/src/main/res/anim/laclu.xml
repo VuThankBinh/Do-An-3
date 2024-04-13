@@ -4,16 +4,11 @@
     android:pivotX="0%"
     android:pivotY="0%"
     android:toDegrees="-10"
-    android:fromDegrees="70"
-    android:duration="5000">
+    android:fromDegrees="40"
+    android:duration="5000"
+    android:repeatMode="reverse"
+    android:repeatCount="infinite">
 
 </rotate>
-    <rotate
-        android:pivotX="0%"
-        android:startOffset="5000"
-        android:pivotY="0%"
-        android:toDegrees="10"
-        android:fromDegrees="-10"
-        android:duration="3000"
-        android:repeatMode="reverse"/>
+
 </set>

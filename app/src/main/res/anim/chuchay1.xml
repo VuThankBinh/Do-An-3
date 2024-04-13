@@ -11,13 +11,11 @@
 </rotate>
     <translate
         android:toXDelta="250%"
-        android:fromXDelta="0%"
-        android:duration="5000"
-        android:startOffset="5000">
-    </translate>
-    <translate
-        android:toXDelta="0%"
         android:fromXDelta="-250%"
-        android:duration="5000">
+        android:duration="10000"
+
+        android:repeatMode="restart"
+        android:repeatCount="infinite">
     </translate>
+
 </set>

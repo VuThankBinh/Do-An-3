@@ -80,13 +80,7 @@
                     android:layout_gravity="center"
                     android:background="@drawable/xuanbac0" />
 
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/line3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+            
 
                 <ImageView
                     android:id="@+id/acong"

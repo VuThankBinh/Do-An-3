@@ -49,7 +49,6 @@ public class layout_home1 extends AppCompatActivity {
         bacnoi=findViewById(R.id.xb);
         as1=findViewById(R.id.asleft);
         as2=findViewById(R.id.asright);
-        lin3=findViewById(R.id.line3);
         chua=findViewById(R.id.chua);
         Animation chay1=AnimationUtils.loadAnimation(this,R.anim.chuchay1);
 
