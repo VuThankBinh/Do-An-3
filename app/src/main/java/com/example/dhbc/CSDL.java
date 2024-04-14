@@ -21,10 +21,10 @@ public class CSDL {
     }
     public void TaoCSDL(Context context) {
 //        db.QueryData("DROP TABLE IF EXISTS Ruby" );
-        Cursor cursor1 = db.GetData("SELECT name FROM sqlite_master WHERE type='table' AND name='Ruby'");
+        Cursor cursor1 = db.GetData("SELECT name FROM sqlite_master WHERE type='table' AND name='Rubys'");
         if (cursor1 == null || cursor1.getCount() <= 0) {
-            db.QueryData("CREATE TABLE IF NOT EXISTS Ruby (id INTEGER PRIMARY KEY AUTOINCREMENT,SoLuong Integer)");
-            db.QueryData("INSERT INTO Ruby  VALUES (null,9999)");
+            db.QueryData("CREATE TABLE IF NOT EXISTS Rubys (id INTEGER PRIMARY KEY AUTOINCREMENT,SoLuong Integer)");
+            db.QueryData("INSERT INTO Rubys  VALUES (null,9999)");
         }
 
 
@@ -172,7 +172,7 @@ public class CSDL {
 //        return soluong;
 //    }
 public int HienRuby(Context context) {
-    Cursor dataCV = db.GetData("SELECT * FROM Ruby LIMIT 1");
+    Cursor dataCV = db.GetData("SELECT * FROM Rubys LIMIT 1");
     int soluong = 0;
     if (dataCV != null && dataCV.moveToFirst()) {
         soluong = dataCV.getInt(1);
@@ -195,7 +195,7 @@ public int HienRuby(Context context) {
         db.QueryData("update CauHoi set TinhTrang=1 where id="+id);
     }
     public void UpdateRuby(Context context, int slg){
-        db.QueryData("update Ruby set SoLuong= SoLuong+"+slg);
+        db.QueryData("update Rubys set SoLuong= SoLuong+"+slg);
     }
 
 }
