@@ -6,6 +6,7 @@ import static com.example.dhbc.layout_home1.volumn1;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -63,32 +64,33 @@ public class layout_home2 extends AppCompatActivity {
         if(ch.getId()==-1){
             level.setText("Xuan Bac");
             start.setVisibility(View.GONE);
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("Xác nhận");
-            builder.setMessage("Bạn đã chơi hết các level, bạn có muốn chơi lại không?");
-            builder.setCancelable(false);
-            // Nút xác nhận
-            builder.setPositiveButton("Xác nhận", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    // Xử lý khi người dùng nhấn nút xác nhận
-                    // Thêm code xử lý ở đây
-                    csdl.ChoiLai(layout_home2.this);
-                    recreate();
-                }
-            });
-
-            // Nút hủy
-            builder.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    // Xử lý khi người dùng nhấn nút hủy
-                    dialog.dismiss(); // Đóng dialog
-                }
-            });
-
-            AlertDialog dialog = builder.create();
-            dialog.show();
+//            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//            builder.setTitle("Xác nhận");
+//            builder.setMessage("Bạn đã chơi hết các level, bạn có muốn chơi lại không?");
+//            builder.setCancelable(false);
+//            // Nút xác nhận
+//            builder.setPositiveButton("Xác nhận", new DialogInterface.OnClickListener() {
+//                @Override
+//                public void onClick(DialogInterface dialog, int which) {
+//                    // Xử lý khi người dùng nhấn nút xác nhận
+//                    // Thêm code xử lý ở đây
+//                    csdl.ChoiLai(layout_home2.this);
+//                    recreate();
+//                }
+//            });
+//
+//            // Nút hủy
+//            builder.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
+//                @Override
+//                public void onClick(DialogInterface dialog, int which) {
+//                    // Xử lý khi người dùng nhấn nút hủy
+//                    dialog.dismiss(); // Đóng dialog
+//                }
+//            });
+//
+//            AlertDialog dialog = builder.create();
+//            dialog.show();
+            showDialogChoiLai();
         }
         else {
             level.setText(String.valueOf(ch.getId()));
@@ -112,7 +114,8 @@ public class layout_home2 extends AppCompatActivity {
                         public void run() {
                             if (mp1.isPlaying()) {
                                 mp1.stop();
-                                showConfirmationDialog();
+//                                showConfirmationDialog();
+                                showDialogChoiLai();
                             }
                         }
                     }, 1000);
@@ -189,6 +192,32 @@ public class layout_home2 extends AppCompatActivity {
         }
 
     }
+
+    private void showDialogChoiLai() {
+        Dialog dialog = new Dialog(layout_home2.this, android.R.style.Theme_Dialog);
+        dialog.setContentView(R.layout.dialog_choilai);
+        dialog.getWindow().getDecorView().setSystemUiVisibility( View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        dialog.setCancelable(false);
+        Button close=dialog.findViewById(R.id.tuchoi);
+        Button ok=dialog.findViewById(R.id.chapnhan);
+        close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+        ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                csdl.ChoiLai(layout_home2.this);
+                recreate();
+            }
+        });
+        dialog.show();
+
+    }
+
     private void ShareLinkApp(){
         final Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

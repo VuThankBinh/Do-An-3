@@ -136,11 +136,66 @@ public class CSDL {
             db.QueryData("INSERT INTO CauHoi  VALUES (null,'tamtoi', 'tăm tối', 0)");
             db.QueryData("INSERT INTO CauHoi  VALUES (null,'tinhtruong', 'tình trường', 0)");
             db.QueryData("INSERT INTO CauHoi  VALUES (null,'xehoa', 'xe hoa', 0)");
-            db.QueryData("INSERT INTO CauHoi  VALUES (null,'xemtuong', 'xem tướng', 0)");
-            db.QueryData("INSERT INTO CauHoi  VALUES (null,'xichlo', 'xích lô', 0)");
-            db.QueryData("INSERT INTO CauHoi  VALUES (null,'xuongrong', 'xương rồng', 0)");
+//            db.QueryData("INSERT INTO CauHoi  VALUES (null,'xemtuong', 'xem tướng', 0)");
+//            db.QueryData("INSERT INTO CauHoi  VALUES (null,'xichlo', 'xích lô', 0)");
+//            db.QueryData("INSERT INTO CauHoi  VALUES (null,'xuongrong', 'xương rồng', 0)");
         }
     }
+//public void TaoCSDL(Context context) {
+//    // Kiểm tra và tạo bảng Rubys
+//    Cursor cursor1 = db.GetData("SELECT name FROM sqlite_master WHERE type='table' AND name='Rubys'");
+//    if (cursor1 == null || cursor1.getCount() <= 0) {
+//        db.QueryData("CREATE TABLE IF NOT EXISTS Rubys (id INTEGER PRIMARY KEY AUTOINCREMENT, SoLuong Integer)");
+//        db.QueryData("INSERT INTO Rubys  VALUES (null,9999)");
+//    }
+//
+//    // Kiểm tra và tạo bảng CauHoi
+//    Cursor cursor = db.GetData("SELECT name FROM sqlite_master WHERE type='table' AND name='CauHoi'");
+//    if (cursor == null || cursor.getCount() <= 0) {
+//        db.QueryData("CREATE TABLE IF NOT EXISTS CauHoi (id INTEGER PRIMARY KEY AUTOINCREMENT, HinhAnh TEXT, DapAn NVARCHAR(100), TinhTrang INTEGER DEFAULT 0)");
+//
+//        // Dữ liệu bạn muốn thêm vào bảng
+//        String[] newData = {
+//                "('baocao', 'báo cáo', 0)",
+//                "('aomua', 'áo mưa', 0)",
+//                // Thêm dữ liệu mới ở đây nếu cần
+//        };
+//
+//        // Thêm dữ liệu mới vào bảng
+//        for (String item : newData) {
+//            db.QueryData("INSERT INTO CauHoi (HinhAnh, DapAn, TinhTrang) VALUES " + item);
+//        }
+//    }
+//}
+    public void insertNewData() {
+        // Dữ liệu bạn muốn thêm vào bảng
+        // Thêm các hình ảnh khác tương tự ở đây
+        String[] hinhAnhList = {"xemtuong","xichlo","xuongrong"};
+
+        // Thêm các câu trả lời khác tương tự ở đây
+        String[] dapAnList = {"xem tướng","xích lô","xương rồng"};
+
+        // Kiểm tra xem số lượng hình ảnh và câu trả lời có khớp nhau không
+        if (hinhAnhList.length != dapAnList.length) {
+            // Nếu không khớp, bạn có thể xử lý tùy thuộc vào yêu cầu cụ thể của ứng dụng, ví dụ: thông báo cho người dùng.
+            // Ví dụ: Toast.makeText(context, "Số lượng hình ảnh và câu trả lời không khớp nhau.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Duyệt qua từng phần tử trong mảng hinhAnhList và dapAnList
+        for (int i = 0; i < hinhAnhList.length; i++) {
+            // Kiểm tra xem dữ liệu đã tồn tại trong cơ sở dữ liệu chưa
+            Cursor cursor = db.GetData("SELECT * FROM CauHoi WHERE HinhAnh = '" + hinhAnhList[i] + "' AND DapAn = '" + dapAnList[i] + "'");
+            if (cursor == null || cursor.getCount() <= 0) {
+                // Nếu không tìm thấy dữ liệu tương ứng, thực hiện câu lệnh insert dữ liệu mới vào bảng
+                db.QueryData("INSERT INTO CauHoi (HinhAnh, DapAn, TinhTrang) VALUES ('" + hinhAnhList[i] + "', '" + dapAnList[i] + "', 0)");
+            } else {
+                // Nếu dữ liệu đã tồn tại, bạn có thể thực hiện các hành động phù hợp, ví dụ: thông báo cho người dùng.
+                // Ví dụ: Toast.makeText(context, "Dữ liệu đã tồn tại trong cơ sở dữ liệu.", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
     public CauHoi HienCSDL(Context context){
         Cursor dataCV=db.GetData("SELECT * FROM CauHoi WHERE TinhTrang = 0 LIMIT 1");
         CauHoi cauHoi=null;

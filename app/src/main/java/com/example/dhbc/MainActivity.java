@@ -220,6 +220,31 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
                     }
                 });
     }
+    private void showDialogChoiLai() {
+        Dialog dialog = new Dialog(MainActivity.this, android.R.style.Theme_Dialog);
+        dialog.setContentView(R.layout.dialog_choilai);
+        dialog.getWindow().getDecorView().setSystemUiVisibility( View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        dialog.setCancelable(false);
+        Button close=dialog.findViewById(R.id.tuchoi);
+        Button ok=dialog.findViewById(R.id.chapnhan);
+        close.setVisibility(View.GONE);
+        close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+        ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                csdl.ChoiLai(MainActivity.this);
+                recreate();
+            }
+        });
+        dialog.show();
+
+    }
     public void loadTrang(){
         vi_tri_dau_cach=new ArrayList<>();
         trogiup=new ArrayList<>();
@@ -232,23 +257,24 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
 
             tb.setVisibility(View.GONE);
             level.setText("Thanh Binh");
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("Xác nhận");
-            builder.setMessage("Bạn đã chơi hết các level, bạn có muốn chơi lại không?");
-            builder.setCancelable(false);
-            // Nút xác nhận
-            builder.setPositiveButton("Xác nhận", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    // Xử lý khi người dùng nhấn nút xác nhận
-                    // Thêm code xử lý ở đây
-                    csdl.ChoiLai(MainActivity.this);
-                    recreate();
-                }
-            });
-
-            AlertDialog dialog = builder.create();
-            dialog.show();
+//            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//            builder.setTitle("Xác nhận");
+//            builder.setMessage("Bạn đã chơi hết các level, bạn có muốn chơi lại không?");
+//            builder.setCancelable(false);
+//            // Nút xác nhận
+//            builder.setPositiveButton("Xác nhận", new DialogInterface.OnClickListener() {
+//                @Override
+//                public void onClick(DialogInterface dialog, int which) {
+//                    // Xử lý khi người dùng nhấn nút xác nhận
+//                    // Thêm code xử lý ở đây
+//                    csdl.ChoiLai(MainActivity.this);
+//                    recreate();
+//                }
+//            });
+//
+//            AlertDialog dialog = builder.create();
+//            dialog.show();
+            showDialogChoiLai();
         }
         else {
             level.setText(String.valueOf(ch.getId()));

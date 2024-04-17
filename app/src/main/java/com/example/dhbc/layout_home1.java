@@ -80,6 +80,7 @@ public class layout_home1 extends AppCompatActivity {
         CSDL csdl=new CSDL(getApplicationContext());
 //        csdl.db = new DataBase(getApplicationContext(), "DHBC.sql", null, 1);
         csdl.TaoCSDL(getApplicationContext());
+        csdl.insertNewData();
 
         Animation laclu1 = AnimationUtils.loadAnimation(this, R.anim.laclu);
 
