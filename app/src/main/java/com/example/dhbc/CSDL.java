@@ -9,6 +9,8 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
+import java.util.ArrayList;
+
 public class CSDL {
     DataBase db;
     public CSDL(Context applicationContext) {
@@ -24,7 +26,7 @@ public class CSDL {
         Cursor cursor1 = db.GetData("SELECT name FROM sqlite_master WHERE type='table' AND name='Rubys'");
         if (cursor1 == null || cursor1.getCount() <= 0) {
             db.QueryData("CREATE TABLE IF NOT EXISTS Rubys (id INTEGER PRIMARY KEY AUTOINCREMENT,SoLuong Integer)");
-            db.QueryData("INSERT INTO Rubys  VALUES (null,9999)");
+            db.QueryData("INSERT INTO Rubys  VALUES (null,24)");
         }
 
 
@@ -136,9 +138,21 @@ public class CSDL {
             db.QueryData("INSERT INTO CauHoi  VALUES (null,'tamtoi', 'tăm tối', 0)");
             db.QueryData("INSERT INTO CauHoi  VALUES (null,'tinhtruong', 'tình trường', 0)");
             db.QueryData("INSERT INTO CauHoi  VALUES (null,'xehoa', 'xe hoa', 0)");
-//            db.QueryData("INSERT INTO CauHoi  VALUES (null,'xemtuong', 'xem tướng', 0)");
-//            db.QueryData("INSERT INTO CauHoi  VALUES (null,'xichlo', 'xích lô', 0)");
-//            db.QueryData("INSERT INTO CauHoi  VALUES (null,'xuongrong', 'xương rồng', 0)");
+            db.QueryData("INSERT INTO CauHoi  VALUES (null,'xemtuong', 'xem tướng', 0)");
+            db.QueryData("INSERT INTO CauHoi  VALUES (null,'xichlo', 'xích lô', 0)");
+            db.QueryData("INSERT INTO CauHoi  VALUES (null,'xuongrong', 'xương rồng', 0)");
+        }
+        Cursor cursor2 = db.GetData("SELECT name FROM sqlite_master WHERE type='table' AND name='avt'");
+        if (cursor2 == null || cursor2.getCount() <= 0) {
+            db.QueryData("CREATE TABLE IF NOT EXISTS avt (id INTEGER PRIMARY KEY AUTOINCREMENT, hinhAnh INTEGER,price INTEGER,tinhtrang INTEGER)");
+            db.QueryData("INSERT INTO avt  VALUES (null,'avt1',0,1)");
+            db.QueryData("INSERT INTO avt  VALUES (null,'avt2',5,0)");
+        }
+        Cursor cursor3 = db.GetData("SELECT name FROM sqlite_master WHERE type='table' AND name='khung'");
+        if (cursor3 == null || cursor3.getCount() <= 0) {
+            db.QueryData("CREATE TABLE IF NOT EXISTS khung (id INTEGER PRIMARY KEY AUTOINCREMENT, hinhAnh INTEGER,price INTEGER,tinhtrang INTEGER)");
+            db.QueryData("INSERT INTO khung  VALUES (null,'khung1',0,1)");
+            db.QueryData("INSERT INTO khung  VALUES (null,'khung2',5,0)");
         }
     }
 //public void TaoCSDL(Context context) {
@@ -195,6 +209,60 @@ public class CSDL {
             }
         }
     }
+    public void insertNewAvt(){
+
+    }
+    public void insertNewKhung(){
+
+    }
+
+
+
+    public  boolean KiemTraNhanVat(Context context){
+        Cursor cursor1 = db.GetData("SELECT name FROM sqlite_master WHERE type='table' AND name='ThongTinNguoiChoi'");
+        if (cursor1 == null || cursor1.getCount() <= 0) {
+//            db.QueryData("CREATE TABLE IF NOT EXISTS Rubys (id INTEGER PRIMARY KEY AUTOINCREMENT,SoLuong Integer)");
+//            db.QueryData("INSERT INTO Rubys  VALUES (null,9999)");
+            return true;
+        }
+        return false;
+    }
+    public void TaoNhanVat(String name){
+        db.QueryData("CREATE TABLE IF NOT EXISTS ThongTinNguoiChoi (" +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                "name value, " +
+                "ruby integer," +
+                " level integer, " +
+                "avt_ID integer," +
+                " khung_id integer  )");
+        db.QueryData("INSERT INTO ThongTinNguoiChoi  VALUES (null,'" + name+  "', 24,1,1,1)");
+    }
+    public void SuaThongTinNhanVat(String name, int avt_ID,int khung_id){
+        db.QueryData("Update ThongTinNguoiChoi set name='"+name+"', avt_ID="+avt_ID+", khung_id="+khung_id);
+    }
+    public ThongTinNguoiChoi HienThongTinNhanVat(){
+        Cursor dataCV=db.GetData("SELECT * FROM ThongTinNguoiChoi ");
+        ThongTinNguoiChoi thongTinNguoiChoi=null;
+        if (dataCV != null && dataCV.moveToFirst()) {
+            int id = dataCV.getInt(0);
+            String name=dataCV.getString(1);
+            int ruby = dataCV.getInt(2);
+            int level = dataCV.getInt(3);
+            int avt_id = dataCV.getInt(4);
+            int khung_id = dataCV.getInt(5);
+            thongTinNguoiChoi= new ThongTinNguoiChoi(name,ruby,level,avt_id,khung_id);
+        }
+        else {
+            int id = -1;
+            String name="name";
+            int ruby = 0;
+            int level = 0;
+            int avt_id = -1;
+            int khung_id = -1;
+            thongTinNguoiChoi= new ThongTinNguoiChoi(name,ruby,level,avt_id,khung_id);
+        }
+        return thongTinNguoiChoi;
+    }
 
     public CauHoi HienCSDL(Context context){
         Cursor dataCV=db.GetData("SELECT * FROM CauHoi WHERE TinhTrang = 0 LIMIT 1");
@@ -226,33 +294,84 @@ public class CSDL {
 //        }
 //        return soluong;
 //    }
-public int HienRuby(Context context) {
-    Cursor dataCV = db.GetData("SELECT * FROM Rubys LIMIT 1");
-    int soluong = 0;
-    if (dataCV != null && dataCV.moveToFirst()) {
-        soluong = dataCV.getInt(1);
-        // Log the retrieved value for debugging
-        Log.d("HienRuby", "SoLuong: " + soluong);
-        // Optionally show a toast message for debugging
-        // Toast.makeText(context, "SoLuong: " + soluong, Toast.LENGTH_SHORT).show();
-    } else {
-        // Log an error message if no data is found
-        Log.e("HienRuby", "No data found in Ruby table");
+//public int HienRuby(Context context) {
+//    Cursor dataCV = db.GetData("SELECT * FROM Rubys LIMIT 1");
+//    int soluong = 0;
+//    if (dataCV != null && dataCV.moveToFirst()) {
+//        soluong = dataCV.getInt(1);
+//        // Log the retrieved value for debugging
+//        Log.d("HienRuby", "SoLuong: " + soluong);
+//        // Optionally show a toast message for debugging
+//        // Toast.makeText(context, "SoLuong: " + soluong, Toast.LENGTH_SHORT).show();
+//    } else {
+//        // Log an error message if no data is found
+//        Log.e("HienRuby", "No data found in Ruby table");
+//    }
+//    // Close the cursor to release resources
+//    if (dataCV != null) {
+//        dataCV.close();
+//    }
+//    return soluong;
+//}
+public ArrayList<SanPham> HienDS_AVT(){
+    ArrayList<SanPham> danhSachSanPham = new ArrayList<>();
+    Cursor dataCV = db.GetData("SELECT * FROM avt");
+
+    while (dataCV.moveToNext()) {
+        int id = dataCV.getInt(0);
+        String hinhanh = dataCV.getString(1);
+        int price=dataCV.getInt(2);
+        int tinhtrang = dataCV.getInt(3);
+        // Tạo một đối tượng SanPham từ dữ liệu và thêm vào danh sách
+        SanPham sanPham = new SanPham(id, hinhanh,price,tinhtrang); // Cần sửa constructor của SanPham để phù hợp
+        danhSachSanPham.add(sanPham);
     }
-    // Close the cursor to release resources
-    if (dataCV != null) {
-        dataCV.close();
-    }
-    return soluong;
+
+    // Đóng con trỏ sau khi sử dụng để tránh rò rỉ bộ nhớ
+    dataCV.close();
+
+    // Trả về danh sách các sản phẩm
+    return danhSachSanPham;
 }
 
+    public ArrayList<SanPham> HienDS_Khung(){
+        ArrayList<SanPham> danhSachSanPham = new ArrayList<>();
+        Cursor dataCV = db.GetData("SELECT * FROM khung");
+
+        while (dataCV.moveToNext()) {
+            int id = dataCV.getInt(0);
+            String hinhanh = dataCV.getString(1);
+            int price=dataCV.getInt(2);
+            int tinhtrang = dataCV.getInt(3);
+            // Tạo một đối tượng SanPham từ dữ liệu và thêm vào danh sách
+            SanPham sanPham = new SanPham(id, hinhanh,price,tinhtrang); // Cần sửa constructor của SanPham để phù hợp
+            danhSachSanPham.add(sanPham);
+        }
+
+        // Đóng con trỏ sau khi sử dụng để tránh rò rỉ bộ nhớ
+        dataCV.close();
+
+        // Trả về danh sách các sản phẩm
+        return danhSachSanPham;
+    }
+
+    //update câu hỏi
     public void Update(Context context, int id){
         db.QueryData("update CauHoi set TinhTrang=1 where id="+id);
     }
     public void UpdateRuby(Context context, int slg){
-        db.QueryData("update Rubys set SoLuong= SoLuong+"+slg);
-    }
 
+//        db.QueryData("update Rubys set SoLuong= SoLuong+"+slg);
+        db.QueryData("update ThongTinNguoiChoi set ruby=ruby +"+slg);
+    }
+    public void UpdateThongTin( int level,int levelMax){
+        if(level>levelMax)
+            db.QueryData("update ThongTinNguoiChoi set level="+level);
+    }
+    //update mua sản phẩm
+    public void UpdateSanPham(String table, int id){
+        db.QueryData("Update "+ table +" set tinhtrang = 1 where id="+id);
+    }
 }
 class DataBase extends SQLiteOpenHelper {
     public DataBase(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version) {

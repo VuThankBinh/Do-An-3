@@ -30,13 +30,14 @@ import java.io.IOException;
 public class layout_home2 extends AppCompatActivity {
 
     ImageView back,bacnoi;
-    TextView level,slgRuby,battat;
+    TextView level,slgRuby,battat,tvname;
 
     Button choilai, start;
     LinearLayout lin1;
 
     MediaPlayer mp,mp1;
     CSDL csdl;
+    ThongTinNguoiChoi thongTinNguoiChoi;
     AnimationDrawable animationDrawable;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,8 +59,11 @@ public class layout_home2 extends AppCompatActivity {
         lin1=findViewById(R.id.line1);
         battat=findViewById(R.id.battat);
         choilai=findViewById(R.id.choilai);
+        tvname=findViewById(R.id.tvname);
+
         mp1=new MediaPlayer();
         csdl=new CSDL(getApplicationContext());
+        thongTinNguoiChoi=csdl.HienThongTinNhanVat();
         CauHoi ch=csdl.HienCSDL(getApplicationContext());
         if(ch.getId()==-1){
             level.setText("Xuan Bac");
@@ -96,8 +100,10 @@ public class layout_home2 extends AppCompatActivity {
             level.setText(String.valueOf(ch.getId()));
         }
 
-        int slgRuby1= csdl.HienRuby(layout_home2.this);
+//        int slgRuby1= csdl.HienRuby(layout_home2.this);
+        int slgRuby1= thongTinNguoiChoi.getRuby();
         slgRuby.setText(String.valueOf(slgRuby1));
+        tvname.setText(thongTinNguoiChoi.getName());
 
         choilai.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -168,6 +174,13 @@ public class layout_home2 extends AppCompatActivity {
         Resources res = getResources();
         AnimationDrawable animationDrawable = (AnimationDrawable) res.getDrawable(R.drawable.listanh);
         bacnoi.setImageDrawable(animationDrawable);
+        bacnoi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(layout_home2.this,cuahangvatpham.class));
+                layout_home2.this.finish();
+            }
+        });
         mp = new MediaPlayer();
         // Bắt đầu animation
         animationDrawable.start();
@@ -223,7 +236,7 @@ public class layout_home2 extends AppCompatActivity {
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
         // Thay đổi thành URI của liên kết bạn muốn chia sẻ
-        Uri uri = Uri.parse("https://youtube.com");
+        Uri uri = Uri.parse("https://drive.google.com/drive/folders/1j1AV8odUsTbpCG3Zhma5Kqj-_QB8TULn?usp=sharing");
 
         // Đặt nội dung của Intent thành liên kết
         intent.putExtra(Intent.EXTRA_TEXT, uri.toString());

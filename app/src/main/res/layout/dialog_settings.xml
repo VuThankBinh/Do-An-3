@@ -2,16 +2,18 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 
     android:layout_width="wrap_content"
-    android:layout_height="300dp"
+    android:layout_height="330dp"
     android:background="#00FFFFFF"
     >
+
     <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="235dp"
         android:id="@+id/shopp"
+        android:layout_width="wrap_content"
+        android:layout_height="280dp"
         android:background="@drawable/back_setting">
 
     </RelativeLayout>
+
     <ImageView
         android:layout_width="120dp"
         android:layout_height="60dp"
@@ -43,6 +45,17 @@
            android:layout_height="wrap_content"
            >
        </SeekBar>
+       <TextView
+           android:layout_toRightOf="@+id/seek1"
+           android:layout_width="30dp"
+           android:textColor="@color/black"
+           android:text="100"
+           android:gravity="center"
+           android:textStyle="bold"
+           android:id="@+id/volumn1"
+           android:layout_height="30dp"
+           >
+       </TextView>
    </RelativeLayout>
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -66,7 +79,26 @@
             android:layout_height="wrap_content"
             >
         </SeekBar>
+        <TextView
+            android:layout_toRightOf="@+id/seek2"
+            android:layout_width="30dp"
+            android:textColor="@color/black"
+            android:text="100"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:id="@+id/volumn2"
+            android:layout_height="30dp"
+            >
+        </TextView>
     </RelativeLayout>
+    <ImageView
+        android:id="@+id/sharelink"
+        android:layout_below="@+id/nhacxb1"
+        android:layout_centerHorizontal="true"
+        android:layout_width="80dp"
+        android:layout_height="50dp"
+        android:background="@drawable/share3">
+    </ImageView>
 
     <TextView
         android:id="@+id/cham"

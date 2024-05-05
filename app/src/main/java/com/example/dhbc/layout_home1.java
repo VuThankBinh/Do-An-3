@@ -2,6 +2,7 @@ package com.example.dhbc;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
@@ -17,9 +18,13 @@ import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.AnimationUtils;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 
 import java.io.IOException;
@@ -32,6 +37,7 @@ public class layout_home1 extends AppCompatActivity {
     MediaPlayer mp,mp1;
      static boolean nhacXB ;
     static float volumn1;
+    CSDL csdl;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,7 +83,7 @@ public class layout_home1 extends AppCompatActivity {
         mp = new MediaPlayer();
         // Bắt đầu animation
         animationDrawable.start();
-        CSDL csdl=new CSDL(getApplicationContext());
+        csdl=new CSDL(getApplicationContext());
 //        csdl.db = new DataBase(getApplicationContext(), "DHBC.sql", null, 1);
         csdl.TaoCSDL(getApplicationContext());
         csdl.insertNewData();
@@ -110,37 +116,102 @@ public class layout_home1 extends AppCompatActivity {
             }
         }
         mp1= new MediaPlayer();
-
+//        showDialogDatTen();
 
         play1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                try {
-                    mp.stop();
-                    mp.reset();
-                    mp1.reset();
-                    mp1.setDataSource(getResources().openRawResourceFd(R.raw.huonglen1));
-                    mp1.setVolume(volumn1,volumn1);
-                    mp1.prepare();
+                if(csdl.KiemTraNhanVat(layout_home1.this)){
+                    showDialogDatTen();
 
-                    mp1.start();
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (mp1.isPlaying()) {
-                                mp1.stop();
-                                startActivity(new Intent(layout_home1.this, layout_home2.class));
-                            }
-                        }
-                    }, 1000);
-
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
                 }
+                else {
+                    try {
+                        mp.stop();
+                        mp.reset();
+                        mp1.reset();
+                        mp1.setDataSource(getResources().openRawResourceFd(R.raw.huonglen1));
+                        mp1.setVolume(volumn1,volumn1);
+                        mp1.prepare();
+
+                        mp1.start();
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (mp1.isPlaying()) {
+                                    mp1.stop();
+                                    startActivity(new Intent(layout_home1.this, layout_home2.class));
+                                }
+                            }
+                        }, 1000);
+
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+
             }
         });
 
+    }
+    private void showDialogDatTen(){
+        Dialog dialog = new Dialog(layout_home1.this,android.R.style.Theme_Dialog );
+
+        dialog.setContentView(R.layout.dialog_datten);
+        EditText tvname=dialog.findViewById(R.id.tvname);
+        ImageButton btnXN=dialog.findViewById(R.id.btnname);
+
+        TextView cham=dialog.findViewById(R.id.cham);
+        TextView chuy=dialog.findViewById(R.id.chuy);
+        chuy.setVisibility(View.GONE);
+        Animation blinkk=AnimationUtils.loadAnimation(this,R.anim.blink2);
+        cham.setAnimation(blinkk);
+        dialog.setCancelable(false);
+        cham.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+        cham.setVisibility(View.GONE);
+        btnXN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(tvname.getText().toString().trim().equals("")){
+                    Toast.makeText(layout_home1.this, "Bạn phải nhập tên nhân vật", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    csdl.TaoNhanVat(tvname.getText().toString());
+                    dialog.dismiss();
+                    try {
+                        mp.stop();
+                        mp.reset();
+                        mp1.reset();
+                        mp1.setDataSource(getResources().openRawResourceFd(R.raw.huonglen1));
+                        mp1.setVolume(volumn1,volumn1);
+                        mp1.prepare();
+
+                        mp1.start();
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (mp1.isPlaying()) {
+                                    mp1.stop();
+                                    startActivity(new Intent(layout_home1.this, layout_home2.class));
+                                }
+                            }
+                        }, 1000);
+
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+        });
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        dialog.getWindow().getDecorView().setSystemUiVisibility( View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+        dialog.show();
     }
     @Override
     protected void onResume() {

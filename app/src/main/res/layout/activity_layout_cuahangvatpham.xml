@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/nestedScrollView"
+    tools:context=".cuahangvatpham">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white">
+        <ImageView
+            android:layout_width="200dp"
+            android:layout_height="120dp"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/title"
+            android:background="@drawable/thongtin">
+        </ImageView>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/thongtin"
+            android:layout_below="@+id/title"
+            android:orientation="horizontal"
+            android:weightSum="3"
+            android:layout_margin="20dp">
+            <ImageView
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:padding="20dp"
+                android:layout_gravity="center"
+                android:id="@+id/avt1"
+                android:layout_weight="0"
+                android:src="@drawable/avt1"
+                android:background="@drawable/khung1">
+            </ImageView>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="18dp"
+                android:layout_gravity="center"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/tvnameNG"
+                    android:textStyle="bold"
+                    android:textSize="16dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Name: Thank Binh"
+                    android:textColor="@color/black">
+                </TextView>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16dp"
+                    android:textStyle="bold"
+                    android:id="@+id/hightCore"
+                    android:text="Hight core: 100"
+                    android:textColor="@color/black">
+                </TextView>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/linmua"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Ruby: 22"
+                        android:gravity="center"
+                        android:textStyle="bold"
+                        android:textSize="15dp"
+                        android:layout_weight="1"
+                        android:id="@+id/ruby"
+                        android:textColor="@color/black">
+                    </TextView>
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ruby">
+                    </ImageView>
+                </LinearLayout>
+                <ImageButton
+                    android:layout_width="88dp"
+                    android:layout_height="33dp"
+                    android:layout_marginTop="13dp"
+                    android:id="@+id/btndoiten"
+                    android:background="@drawable/btndoi">
+                </ImageButton>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/muaruby"
+            android:layout_width="wrap_content"
+            android:layout_height="170dp"
+            android:layout_below="@+id/thongtin"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginBottom="15dp"
+            android:background="@drawable/backgroundimg"
+            android:orientation="vertical">
+
+        </LinearLayout>
+        <ImageView
+            android:layout_width="140dp"
+            android:layout_height="50dp"
+            android:id="@+id/vatpham"
+            android:layout_below="@+id/muaruby"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/vatpham">
+        </ImageView>
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:id="@+id/cohoanh"
+            android:layout_below="@+id/vatpham"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/cohoanh">
+        </ImageView>
+
+        <TabHost
+            android:layout_below="@+id/cohoanh"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:id="@+id/tabHost">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TabWidget
+                    android:id="@android:id/tabs"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <FrameLayout
+                    android:id="@android:id/tabcontent"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <LinearLayout
+                        android:id="@+id/Avatar"
+
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/dsAVT"
+                            android:layout_gravity="center">
+                        </androidx.recyclerview.widget.RecyclerView>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/Khung"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/dsKhung">
+                        </androidx.recyclerview.widget.RecyclerView>
+                    </LinearLayout>
+
+
+                </FrameLayout>
+            </LinearLayout>
+        </TabHost>
+
+
+    </RelativeLayout>
+</androidx.core.widget.NestedScrollView>

@@ -86,6 +86,7 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
     MediaPlayer mp, mp1;
     Button nextdemo;
     CSDL csdl;
+    ThongTinNguoiChoi thongTinNguoiChoi;
     CauHoi ch;
     List<Integer> vi_tri_dau_cach;
     List<Integer> trogiup;
@@ -123,6 +124,8 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
         slgRuby = findViewById(R.id.ruby);
         back = findViewById(R.id.back1);
         csdl = new CSDL(getApplicationContext());
+        thongTinNguoiChoi=csdl.HienThongTinNhanVat();
+
         tb = findViewById(R.id.deme);
         adContainerView = findViewById(R.id.layoutAd);
 
@@ -250,7 +253,9 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
         trogiup=new ArrayList<>();
         vitrioDapAn=new ArrayList<>();
         ch= csdl.HienCSDL(getApplicationContext());
-        slgRuby1= csdl.HienRuby(MainActivity.this);
+//        slgRuby1= csdl.HienRuby(MainActivity.this);
+
+        slgRuby1=csdl.HienThongTinNhanVat().getRuby();
         slgRuby.setText(String.valueOf(slgRuby1));
         trogiup12[0]=false;
         if(ch.getId()==-1){
@@ -391,7 +396,8 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
     public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
         Toast.makeText(this, "Nhận thưởng thành công", Toast.LENGTH_SHORT).show();
         csdl.UpdateRuby(MainActivity.this,10);
-        slgRuby1= csdl.HienRuby(MainActivity.this);
+        loadAd();
+        slgRuby1= csdl.HienThongTinNhanVat().getRuby();
         slgRuby.setText(String.valueOf(slgRuby1));
     }
 
@@ -445,6 +451,23 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
                     }
                 });
     }
+    private void ShareLinkApp(){
+        final Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+        // Thay đổi thành URI của liên kết bạn muốn chia sẻ
+        Uri uri = Uri.parse("https://drive.google.com/drive/folders/1j1AV8odUsTbpCG3Zhma5Kqj-_QB8TULn?usp=sharing");
+
+        // Đặt nội dung của Intent thành liên kết
+        intent.putExtra(Intent.EXTRA_TEXT, uri.toString());
+
+        // Thêm cờ cho phép ứng dụng đính kèm xử lý dữ liệu từ URI được cung cấp
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+        // Đặt loại dữ liệu của Intent thành "text/plain"
+        intent.setType("text/plain");
+        startActivity(Intent.createChooser(intent,"Share to..."));
+    }
     private SeekBar volumeSeekBar1,volumeSeekBar2;
     private void ktraAmthanh() {
         if (nhacback) {
@@ -475,9 +498,17 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
         dialog.getWindow().getDecorView().setSystemUiVisibility( View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
         dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         TextView cham=dialog.findViewById(R.id.cham);
+        TextView volumn1a=dialog.findViewById(R.id.volumn1);
+        TextView volumn2a=dialog.findViewById(R.id.volumn2);
         ImageView nhacback12=dialog.findViewById(R.id.nhacback);
         ImageView nhacXB12=dialog.findViewById(R.id.nhacxb);
-
+        ImageView sharelink=dialog.findViewById(R.id.sharelink);
+        sharelink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ShareLinkApp();
+            }
+        });
         Animation blinkk=AnimationUtils.loadAnimation(this,R.anim.blink2);
         cham.setAnimation(blinkk);
         cham.setOnClickListener(new View.OnClickListener() {
@@ -490,10 +521,11 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
         volumeSeekBar2 = dialog.findViewById(R.id.seek2);
         volumeSeekBar1.setMax(100);
         int progress1 = (int) (100 - Math.pow(10, (1 - volumn1) * Math.log10(100)));
+        volumn1a.setText(String.valueOf(progress1));
         volumeSeekBar1.setProgress(progress1); // Thiết lập mức âm lượng mặc định
         volumeSeekBar2.setMax(100);
         int progress2 = (int) (100 - Math.pow(10, (1 - volumn2) * Math.log10(100)));
-
+        volumn2a.setText(String.valueOf(progress2));
         volumeSeekBar2.setProgress(progress2);
         // nhạc nền
         volumeSeekBar1.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -509,6 +541,7 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
                 }
                  volumn1 = (float) (1 - (Math.log(100 - progress) / Math.log(100)));
                 mp.setVolume(volumn1, volumn1); // Thiết lập âm lượng của MediaPlayer
+                volumn1a.setText(String.valueOf(progress));
                 SharedPreferences.Editor editor = prefs.edit();
                 editor.putFloat("volumnBack", volumn1);
                 editor.putBoolean("isMute",nhacback);
@@ -536,6 +569,7 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
                 }
                 volumn2 = (float) (1 - (Math.log(100 - progress) / Math.log(100)));
                 mp1.setVolume(volumn2, volumn2);
+                volumn2a.setText(String.valueOf(progress));
                 SharedPreferences.Editor editor = prefs.edit();
                 editor.putFloat("volumnXB", volumn2);
                 editor.putBoolean("isXB",nhacXB);
@@ -583,6 +617,7 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
                 // Thực hiện cập nhật CSDL và tải lại trang
                 csdl.Update(MainActivity.this,ch.getId());
                 csdl.UpdateRuby(MainActivity.this,3);
+                csdl.UpdateThongTin(ch.getId(),thongTinNguoiChoi.getLevel());
                 loadTrang();
             }
         });
@@ -955,7 +990,7 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
                     }
                     HienTroGiup();
                     csdl.UpdateRuby(MainActivity.this,-5);
-                    slgRuby1=csdl.HienRuby(MainActivity.this);
+                    slgRuby1=csdl.HienThongTinNhanVat().getRuby();
                     slgRuby.setText(String.valueOf(slgRuby1));
                 }
                 else {
@@ -1016,7 +1051,7 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
 
                         }
                         csdl.UpdateRuby(MainActivity.this,-15);
-                        slgRuby1=csdl.HienRuby(MainActivity.this);
+                        slgRuby1=csdl.HienThongTinNhanVat().getRuby();
                         slgRuby.setText(String.valueOf(slgRuby1));
 
                     }
@@ -1041,7 +1076,7 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
                         HienTroGiup();
                     }
                     csdl.UpdateRuby(MainActivity.this,-30);
-                    slgRuby1=csdl.HienRuby(MainActivity.this);
+                    slgRuby1=csdl.HienThongTinNhanVat().getRuby();
                     slgRuby.setText(String.valueOf(slgRuby1));
 
                 }
