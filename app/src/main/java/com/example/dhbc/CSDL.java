@@ -259,7 +259,7 @@ public class CSDL {
                 " level integer, " +
                 "avt_ID integer," +
                 " khung_id integer  )");
-        db.QueryData("INSERT INTO ThongTinNguoiChoi  VALUES (null,'" + name+  "', 24,1,1,1)");
+        db.QueryData("INSERT INTO ThongTinNguoiChoi  VALUES (null,'" + name+  "', 24,0,1,1)");
     }
     public void SuaThongTinNhanVat(String name, int avt_ID,int khung_id){
         db.QueryData("Update ThongTinNguoiChoi set name='"+name+"', avt_ID="+avt_ID+", khung_id="+khung_id);
