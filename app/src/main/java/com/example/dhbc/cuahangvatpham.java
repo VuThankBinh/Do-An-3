@@ -5,8 +5,10 @@ import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -27,20 +29,25 @@ import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.tabs.TabLayout;
+
 import java.io.IOException;
 import java.util.ArrayList;
 
 public class cuahangvatpham extends AppCompatActivity implements ItemClick_dapan, ItemClick_cauhoi{
 
-    CSDL csdl;
+    static CSDL csdl;
     SanPham_avt_Adapter adapter_avt;
     SanPham_khung_Adapter adapter_khung;
     ArrayList<SanPham> dsAVT,dsKhung;
     RecyclerView recyclerView_avt,recyclerView_khung;
-    ImageView avt;
-    TextView hightcore,name,ruby;
+    static ImageView avt;
+    static TextView hightcore;
+    static TextView name;
+    static TextView ruby;
     ImageButton doiten;
-    ThongTinNguoiChoi tt;
+    static ThongTinNguoiChoi tt;
+    private CategoryPagerAdapter adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,61 +62,23 @@ public class cuahangvatpham extends AppCompatActivity implements ItemClick_dapan
         setContentView(R.layout.activity_layout_cuahangvatpham);
         ScrollView scrollView = findViewById(R.id.nestedScrollView);
 
-        recyclerView_avt=findViewById(R.id.dsAVT);
-        recyclerView_khung=findViewById(R.id.dsKhung);
 
         hightcore=findViewById(R.id.hightCore);
         name=findViewById(R.id.tvnameNG);
         avt=findViewById(R.id.avt1);
         ruby=findViewById(R.id.ruby);
         doiten=findViewById(R.id.btndoiten);
+        ViewPager viewPager = findViewById(R.id.vp_shop_viewpager);
+        TabLayout tabLayout = findViewById(R.id.tl_shop_tablayout);
+        adapter = new CategoryPagerAdapter(getSupportFragmentManager());
+        adapter.addFragment(new FragmentAvatar(), "Avatar");
+        adapter.addFragment(new FragmentKhung(), "Khung");
 
-        // Scroll to top
-
-        scrollView.post(new Runnable() {
-            @Override
-            public void run() {
-                scrollView.scrollTo(0, 0);
-            }
-        });
-        TabHost tabHost = findViewById(R.id.tabHost);
-        tabHost.setup();
-
-        TabHost.TabSpec tabSpec1 = tabHost.newTabSpec("Avatar");
-        tabSpec1.setIndicator(Html.fromHtml("<font color='#000000'>Avatar</font>"));
-        tabSpec1.setContent(R.id.Avatar); // Liên kết với LinearLayout chứa ImageView "Avatar"
-
-        TabHost.TabSpec tabSpec2 = tabHost.newTabSpec("Khung");
-        tabSpec2.setIndicator(Html.fromHtml("<font color='#000000'>Khung</font>")); // Set text color to black
-        tabSpec2.setContent(R.id.Khung); // Liên kết với LinearLayout chứa ImageView "Khung"
-        tabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
-
-            @Override
-            public void onTabChanged(String tabId) {
-
-                // Reset the text style for all tabs
-                for (int i = 0; i < tabHost.getTabWidget().getChildCount(); i++) {
-                    TextView tabTextView = (TextView) tabHost.getTabWidget().getChildAt(i).findViewById(android.R.id.title);
-                    tabTextView.setTypeface(null, Typeface.NORMAL);
-                }
-
-                // Get the selected tab view and make its text bold
-                TextView selectedTabTextView = (TextView) tabHost.getCurrentTabView().findViewById(android.R.id.title);
-                selectedTabTextView.setTypeface(null, Typeface.BOLD);
-
-//                scrollView.postDelayed(new Runnable() {
-//                    @Override
-//                    public void run() {
-//
-//                    }
-//                }, 000);
-            }
-        });
-        tabHost.addTab(tabSpec1);
-        tabHost.addTab(tabSpec2);
+        viewPager.setAdapter(adapter);
+        tabLayout.setupWithViewPager(viewPager);
         csdl=new CSDL(this);
         tt=csdl.HienThongTinNhanVat();
-        CapNhatDuLieu();
+        CapNhatDuLieu(cuahangvatpham.this);
 //        hightcore.setText("Hight core: "+ tt.getLevel());
 //        name.setText("Name: "+tt.getName());
 
@@ -153,7 +122,7 @@ public class cuahangvatpham extends AppCompatActivity implements ItemClick_dapan
                     if(csdl.HienThongTinNhanVat().getRuby()>=10){
                         csdl.SuaThongTinNhanVat(tvname.getText().toString(),csdl.HienThongTinNhanVat().getAvt_id(),csdl.HienThongTinNhanVat().getKhung_id());
                         csdl.UpdateRuby(cuahangvatpham.this,-10);
-                        CapNhatDuLieu();
+                        CapNhatDuLieu(cuahangvatpham.this);
                         Toast.makeText(cuahangvatpham.this, "Bạn đã đổi tên thành công", Toast.LENGTH_SHORT).show();
                         dialog.dismiss();
                     }
@@ -171,15 +140,15 @@ public class cuahangvatpham extends AppCompatActivity implements ItemClick_dapan
         dialog.show();
     }
 
-    private void CapNhatDuLieu() {
+    public static void CapNhatDuLieu(Context context) {
         tt=csdl.HienThongTinNhanVat();
         hightcore.setText("High score: "+ tt.getLevel());
         name.setText("Name: "+tt.getName());
         ruby.setText("Ruby: "+csdl.HienThongTinNhanVat().getRuby());
         String fileAvt = "avt"+String.valueOf(tt.getAvt_id()); // Lấy tên tệp ảnh từ đối tượng baiHat
-        int resId = getResources().getIdentifier(fileAvt, "drawable", getPackageName()); // Tìm ID tài nguyên dựa trên tên tệp ảnh
+        int resId = context.getResources().getIdentifier(fileAvt, "drawable", context.getPackageName()); // Tìm ID tài nguyên dựa trên tên tệp ảnh
         String fileKhung = "khung"+String.valueOf(tt.getKhung_id()); // Lấy tên tệp ảnh từ đối tượng baiHat
-        int resId2 = getResources().getIdentifier(fileKhung, "drawable", getPackageName()); // Tìm ID tài nguyên dựa trên tên tệp ảnh
+        int resId2 = context.getResources().getIdentifier(fileKhung, "drawable", context.getPackageName()); // Tìm ID tài nguyên dựa trên tên tệp ảnh
 
         if (resId != 0) {
             avt.setImageResource(resId); // Thiết lập hình ảnh cho ImageView
@@ -191,17 +160,6 @@ public class cuahangvatpham extends AppCompatActivity implements ItemClick_dapan
         } else {
             // Xử lý trường hợp không tìm thấy tệp ảnh
         }
-        dsAVT=csdl.HienDS_AVT();
-        dsKhung=csdl.HienDS_Khung();
-        adapter_avt=new SanPham_avt_Adapter(this,dsAVT,this);
-        adapter_khung=new SanPham_khung_Adapter(this,dsKhung,this);
-        GridLayoutManager layoutManager1 = new GridLayoutManager(this, 3, GridLayoutManager.VERTICAL, false);
-        GridLayoutManager layoutManager2 = new GridLayoutManager(this, 3, GridLayoutManager.VERTICAL, false);
-
-        recyclerView_avt.setLayoutManager(layoutManager1);
-        recyclerView_avt.setAdapter(adapter_avt);
-        recyclerView_khung.setLayoutManager(layoutManager2);
-        recyclerView_khung.setAdapter(adapter_khung);
 
     }
 
@@ -209,13 +167,13 @@ public class cuahangvatpham extends AppCompatActivity implements ItemClick_dapan
     public void onItemClick(int position) {
         if(dsAVT.get(position).getTinhtrang()==1){
             csdl.SuaThongTinNhanVat(csdl.HienThongTinNhanVat().getName(),dsAVT.get(position).getId(),csdl.HienThongTinNhanVat().getKhung_id());
-            CapNhatDuLieu();
+            CapNhatDuLieu(cuahangvatpham.this);
         }
         if(dsAVT.get(position).getTinhtrang()==0){
             if(csdl.HienThongTinNhanVat().getRuby()>=dsAVT.get(position).getPrice()){
                 csdl.UpdateSanPham("avt",dsAVT.get(position).getId());
                 csdl.UpdateRuby(cuahangvatpham.this,-dsAVT.get(position).getPrice());
-                CapNhatDuLieu();
+                CapNhatDuLieu(cuahangvatpham.this);
             }
             else {
                 Toast.makeText(this, "Bạn không đủ ruby để mua vật phẩm này", Toast.LENGTH_SHORT).show();
@@ -227,13 +185,13 @@ public class cuahangvatpham extends AppCompatActivity implements ItemClick_dapan
     public void onItemCauHoiClick(int position) {
         if(dsKhung.get(position).getTinhtrang()==1){
             csdl.SuaThongTinNhanVat(csdl.HienThongTinNhanVat().getName(),csdl.HienThongTinNhanVat().getAvt_id(),dsKhung.get(position).getId());
-            CapNhatDuLieu();
+            CapNhatDuLieu(cuahangvatpham.this);
         }
         if(dsKhung.get(position).getTinhtrang()==0){
             if(csdl.HienThongTinNhanVat().getRuby()>=dsKhung.get(position).getPrice()){
                 csdl.UpdateSanPham("khung",dsKhung.get(position).getId());
                 csdl.UpdateRuby(cuahangvatpham.this,-dsKhung.get(position).getPrice());
-                CapNhatDuLieu();
+                CapNhatDuLieu(cuahangvatpham.this);
             }
             else {
                 Toast.makeText(this, "Bạn không đủ ruby để mua vật phẩm này", Toast.LENGTH_SHORT).show();
