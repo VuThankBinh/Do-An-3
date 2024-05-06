@@ -39,6 +39,9 @@ public class layout_home2 extends AppCompatActivity {
     CSDL csdl;
     ThongTinNguoiChoi thongTinNguoiChoi;
     AnimationDrawable animationDrawable;
+    ImageView avt;
+    TextView hightcore,name,ruby3;
+    ThongTinNguoiChoi tt;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,18 +54,41 @@ public class layout_home2 extends AppCompatActivity {
         int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
         decorView.setSystemUiVisibility(uiOptions);
         setContentView(R.layout.activity_layout_home2);
+        csdl=new CSDL(getApplicationContext());
         back=findViewById(R.id.back1);
         start=findViewById(R.id.choitiep);
         bacnoi=findViewById(R.id.bacnoi);
         level=findViewById(R.id.level);
         slgRuby=findViewById(R.id.ruby);
         lin1=findViewById(R.id.line1);
+
         battat=findViewById(R.id.battat);
         choilai=findViewById(R.id.choilai);
-        tvname=findViewById(R.id.tvname);
+        hightcore=findViewById(R.id.hightCore);
+        name=findViewById(R.id.tvnameNG);
+        avt=findViewById(R.id.avt1);
+        ruby3=findViewById(R.id.ruby3);
+        tt=csdl.HienThongTinNhanVat();
+        hightcore.setText("High score: "+ tt.getLevel());
+        name.setText(tt.getName());
+        ruby3.setText(String.valueOf(csdl.HienThongTinNhanVat().getRuby()));
+        String fileAvt = "avt"+String.valueOf(tt.getAvt_id()); // Lấy tên tệp ảnh từ đối tượng baiHat
+        int resId = getResources().getIdentifier(fileAvt, "drawable", getPackageName()); // Tìm ID tài nguyên dựa trên tên tệp ảnh
+        String fileKhung = "khung"+String.valueOf(tt.getKhung_id()); // Lấy tên tệp ảnh từ đối tượng baiHat
+        int resId2 = getResources().getIdentifier(fileKhung, "drawable", getPackageName()); // Tìm ID tài nguyên dựa trên tên tệp ảnh
 
+        if (resId != 0) {
+            avt.setImageResource(resId); // Thiết lập hình ảnh cho ImageView
+        } else {
+            // Xử lý trường hợp không tìm thấy tệp ảnh
+        }
+        if (resId2 != 0) {
+            avt.setBackgroundResource(resId2); // Thiết lập hình ảnh cho ImageView
+        } else {
+            // Xử lý trường hợp không tìm thấy tệp ảnh
+        }
         mp1=new MediaPlayer();
-        csdl=new CSDL(getApplicationContext());
+
         thongTinNguoiChoi=csdl.HienThongTinNhanVat();
         CauHoi ch=csdl.HienCSDL(getApplicationContext());
         if(ch.getId()==-1){
@@ -103,7 +129,6 @@ public class layout_home2 extends AppCompatActivity {
 //        int slgRuby1= csdl.HienRuby(layout_home2.this);
         int slgRuby1= thongTinNguoiChoi.getRuby();
         slgRuby.setText(String.valueOf(slgRuby1));
-        tvname.setText(thongTinNguoiChoi.getName());
 
         choilai.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -174,7 +199,7 @@ public class layout_home2 extends AppCompatActivity {
         Resources res = getResources();
         AnimationDrawable animationDrawable = (AnimationDrawable) res.getDrawable(R.drawable.listanh);
         bacnoi.setImageDrawable(animationDrawable);
-        bacnoi.setOnClickListener(new View.OnClickListener() {
+        avt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(layout_home2.this,cuahangvatpham.class));

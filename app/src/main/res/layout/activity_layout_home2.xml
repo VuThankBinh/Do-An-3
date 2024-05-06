@@ -13,7 +13,8 @@
       android:layout_height="80dp"
       android:orientation="horizontal"
       android:weightSum="3"
-      android:background="@drawable/titlelv">
+      android:background="@drawable/titlelv"
+      android:visibility="gone">
     <ImageView
         android:layout_width="50dp"
         android:layout_height="66dp"
@@ -63,29 +64,87 @@
       </ImageView>
     </LinearLayout>
   </LinearLayout>
+  <RelativeLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/thongtin"
+        android:orientation="horizontal"
+
+        android:layout_margin="20dp">
+      <ImageView
+          android:layout_width="100dp"
+          android:layout_height="100dp"
+          android:paddingTop="15dp"
+          android:paddingLeft="15dp"
+          android:paddingRight="15dp"
+          android:id="@+id/avt1"
+          android:src="@drawable/avt3"
+          android:background="@drawable/khung2">
+      </ImageView>
+      <LinearLayout
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginLeft="8dp"
+          android:layout_gravity="center"
+          android:orientation="vertical">
+        <TextView
+            android:id="@+id/tvnameNG"
+            android:textStyle="bold"
+            android:textSize="16dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Thank Binh"
+            android:textColor="@color/white">
+        </TextView>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16dp"
+            android:textStyle="bold"
+            android:id="@+id/hightCore"
+            android:text="High score: 100"
+            android:textColor="@color/white">
+        </TextView>
+
+
+      </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/thongtin"
+        android:orientation="horizontal"
+        android:layout_centerVertical="true">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="22"
+            android:gravity="center"
+            android:textStyle="italic"
+            android:textSize="25dp"
+            android:layout_weight="1"
+            android:id="@+id/ruby3"
+            android:textColor="@color/white">
+        </TextView>
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ruby">
+        </ImageView>
+      </LinearLayout>
+  </RelativeLayout>
 <RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="400dp">
-
-  <TextView
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_marginStart="10dp"
-      android:layout_marginTop="10dp"
-      android:layout_marginEnd="10dp"
-      android:layout_marginBottom="10dp"
-      android:text="Vũ Thanh Bình"
-      android:textAlignment="center"
-      android:textColor="@color/white"
-      android:textSize="35dp"
-      android:id="@+id/tvname"
-      android:textStyle="italic">
-  </TextView>
   <ImageView
       android:id="@+id/layout_2"
       android:layout_width="match_parent"
       android:layout_height="240dp"
-      android:layout_centerInParent="true"
       android:background="@drawable/whatisthis">
   </ImageView>
 

@@ -88,6 +88,8 @@ public class layout_home1 extends AppCompatActivity {
         csdl.TaoCSDL(getApplicationContext());
         csdl.insertNewData();
 
+        csdl.insertNewAvt();
+        csdl.insertNewKhung();
         Animation laclu1 = AnimationUtils.loadAnimation(this, R.anim.laclu);
 
         Animation laclu2 = AnimationUtils.loadAnimation(this, R.anim.laclubtn);

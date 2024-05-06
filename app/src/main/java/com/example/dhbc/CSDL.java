@@ -147,6 +147,7 @@ public class CSDL {
             db.QueryData("CREATE TABLE IF NOT EXISTS avt (id INTEGER PRIMARY KEY AUTOINCREMENT, hinhAnh INTEGER,price INTEGER,tinhtrang INTEGER)");
             db.QueryData("INSERT INTO avt  VALUES (null,'avt1',0,1)");
             db.QueryData("INSERT INTO avt  VALUES (null,'avt2',5,0)");
+            db.QueryData("INSERT INTO avt  VALUES (null,'avt3',10,0)");
         }
         Cursor cursor3 = db.GetData("SELECT name FROM sqlite_master WHERE type='table' AND name='khung'");
         if (cursor3 == null || cursor3.getCount() <= 0) {
@@ -155,32 +156,6 @@ public class CSDL {
             db.QueryData("INSERT INTO khung  VALUES (null,'khung2',5,0)");
         }
     }
-//public void TaoCSDL(Context context) {
-//    // Kiểm tra và tạo bảng Rubys
-//    Cursor cursor1 = db.GetData("SELECT name FROM sqlite_master WHERE type='table' AND name='Rubys'");
-//    if (cursor1 == null || cursor1.getCount() <= 0) {
-//        db.QueryData("CREATE TABLE IF NOT EXISTS Rubys (id INTEGER PRIMARY KEY AUTOINCREMENT, SoLuong Integer)");
-//        db.QueryData("INSERT INTO Rubys  VALUES (null,9999)");
-//    }
-//
-//    // Kiểm tra và tạo bảng CauHoi
-//    Cursor cursor = db.GetData("SELECT name FROM sqlite_master WHERE type='table' AND name='CauHoi'");
-//    if (cursor == null || cursor.getCount() <= 0) {
-//        db.QueryData("CREATE TABLE IF NOT EXISTS CauHoi (id INTEGER PRIMARY KEY AUTOINCREMENT, HinhAnh TEXT, DapAn NVARCHAR(100), TinhTrang INTEGER DEFAULT 0)");
-//
-//        // Dữ liệu bạn muốn thêm vào bảng
-//        String[] newData = {
-//                "('baocao', 'báo cáo', 0)",
-//                "('aomua', 'áo mưa', 0)",
-//                // Thêm dữ liệu mới ở đây nếu cần
-//        };
-//
-//        // Thêm dữ liệu mới vào bảng
-//        for (String item : newData) {
-//            db.QueryData("INSERT INTO CauHoi (HinhAnh, DapAn, TinhTrang) VALUES " + item);
-//        }
-//    }
-//}
     public void insertNewData() {
         // Dữ liệu bạn muốn thêm vào bảng
         // Thêm các hình ảnh khác tương tự ở đây
@@ -210,11 +185,60 @@ public class CSDL {
         }
     }
     public void insertNewAvt(){
+        // Khởi tạo mảng hình ảnh và giá
+        String[] hinhAnhList = new String[15];
+        int[] priceList = new int[15];
 
+        // Tạo dữ liệu cho mảng hình ảnh và giá
+        for (int i = 0; i < 15; i++) {
+            hinhAnhList[i] = "avt" + (i + 1); // Tạo tên hình ảnh theo mẫu "avt1", "avt2",...
+            priceList[i] = i * 5; // Giá tăng lên 5 sau mỗi lần
+        }
+
+        // Kiểm tra xem số lượng hình ảnh và giá có khớp nhau không
+        if (hinhAnhList.length != priceList.length) {
+            // Xử lý tùy thuộc vào yêu cầu cụ thể của ứng dụng, ví dụ: thông báo cho người dùng.
+            return;
+        }
+
+        // Duyệt qua từng phần tử trong mảng hinhAnhList và priceList
+        for (int i = 0; i < hinhAnhList.length; i++) {
+            // Kiểm tra xem dữ liệu đã tồn tại trong cơ sở dữ liệu chưa
+            Cursor cursor = db.GetData("SELECT * FROM avt WHERE hinhAnh = '" + hinhAnhList[i] + "' AND price = " + priceList[i]);
+            if (cursor == null || cursor.getCount() <= 0) {
+                // Nếu không tìm thấy dữ liệu tương ứng, thực hiện câu lệnh insert dữ liệu mới vào bảng
+                db.QueryData("INSERT INTO avt (hinhAnh, price, tinhtrang) VALUES ('" + hinhAnhList[i] + "', " + priceList[i] + ", 0)");
+            } else {
+                // Nếu dữ liệu đã tồn tại, bạn có thể thực hiện các hành động phù hợp, ví dụ: thông báo cho người dùng.
+            }
+        }
     }
+
     public void insertNewKhung(){
+        // Dữ liệu bạn muốn thêm vào bảng khung
+        // Thêm các hình ảnh khung khác tương tự ở đây
+        String[] hinhAnhList = new String[15];
+        int[] priceList = new int[15];
 
+        // Khởi tạo dữ liệu cho mảng hình ảnh và giá cả
+        for (int i = 0; i < 15; i++) {
+            hinhAnhList[i] = "khung" + (i + 1);
+            priceList[i] = i * 5;
+        }
+
+        // Duyệt qua từng phần tử trong mảng hinhAnhList và priceList
+        for (int i = 0; i < hinhAnhList.length; i++) {
+            // Kiểm tra xem dữ liệu đã tồn tại trong cơ sở dữ liệu chưa
+            Cursor cursor = db.GetData("SELECT * FROM khung WHERE hinhAnh = '" + hinhAnhList[i] + "' AND price = " + priceList[i]);
+            if (cursor == null || cursor.getCount() <= 0) {
+                // Nếu không tìm thấy dữ liệu tương ứng, thực hiện câu lệnh insert dữ liệu mới vào bảng
+                db.QueryData("INSERT INTO khung (hinhAnh, price, tinhtrang) VALUES ('" + hinhAnhList[i] + "', " + priceList[i] + ", 0)");
+            } else {
+                // Nếu dữ liệu đã tồn tại, bạn có thể thực hiện các hành động phù hợp, ví dụ: thông báo cho người dùng.
+            }
+        }
     }
+
 
 
 
@@ -284,36 +308,7 @@ public class CSDL {
         }
         return cauHoi;
     }
-//    public int HienRuby(Context context){
-//        Cursor dataCV=db.GetData("SELECT * FROM Ruby  LIMIT 1");
-//        int soluong=0;
-//        if (dataCV != null && dataCV.moveToFirst()) {
-//             soluong = dataCV.getInt(1);
-////            Toast.makeText(context, "id: " + dataCV.getInt(1) , Toast.LENGTH_SHORT).show();
-//
-//        }
-//        return soluong;
-//    }
-//public int HienRuby(Context context) {
-//    Cursor dataCV = db.GetData("SELECT * FROM Rubys LIMIT 1");
-//    int soluong = 0;
-//    if (dataCV != null && dataCV.moveToFirst()) {
-//        soluong = dataCV.getInt(1);
-//        // Log the retrieved value for debugging
-//        Log.d("HienRuby", "SoLuong: " + soluong);
-//        // Optionally show a toast message for debugging
-//        // Toast.makeText(context, "SoLuong: " + soluong, Toast.LENGTH_SHORT).show();
-//    } else {
-//        // Log an error message if no data is found
-//        Log.e("HienRuby", "No data found in Ruby table");
-//    }
-//    // Close the cursor to release resources
-//    if (dataCV != null) {
-//        dataCV.close();
-//    }
-//    return soluong;
-//}
-public ArrayList<SanPham> HienDS_AVT(){
+    public ArrayList<SanPham> HienDS_AVT(){
     ArrayList<SanPham> danhSachSanPham = new ArrayList<>();
     Cursor dataCV = db.GetData("SELECT * FROM avt");
 
