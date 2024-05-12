@@ -347,8 +347,6 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
             layoutManager.setFlexDirection(FlexDirection.ROW);
             layoutManager.setJustifyContent(JustifyContent.FLEX_START);
 
-//        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-//        LinearLayoutManager layoutManager2 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
 
             listcauhoi.setLayoutManager(layoutManager);
             dapan.setLayoutManager(layoutManager2);
