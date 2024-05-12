@@ -11,7 +11,7 @@ import java.util.List;
 public class CategoryPagerAdapter extends FragmentPagerAdapter {
     private final List<Fragment> fragmentList = new ArrayList<>();
     private final List<String> fragmentTitleList = new ArrayList<>();
-
+//ânfna
     public CategoryPagerAdapter(FragmentManager manager) {
         super(manager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
     }
