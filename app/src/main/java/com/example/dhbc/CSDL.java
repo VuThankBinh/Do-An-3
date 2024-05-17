@@ -4,10 +4,13 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+
+import com.example.dhbc.ClassDL.CauHoi;
+import com.example.dhbc.ClassDL.SanPham;
+import com.example.dhbc.ClassDL.ThongTinNguoiChoi;
 
 import java.util.ArrayList;
 

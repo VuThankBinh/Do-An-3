@@ -6,95 +6,68 @@
     android:orientation="vertical"
     android:background="@drawable/backchoi"
     android:id="@+id/deme">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:orientation="horizontal"
-        android:weightSum="3"
-        android:background="@drawable/titlelv">
-        <ImageView
-            android:layout_width="50dp"
-            android:layout_height="66dp"
-            android:id="@+id/back1"
-            android:layout_weight="1"
-            android:layout_gravity="center"
-            android:src="@drawable/loa">
-        </ImageView>
-        <TextView
-            android:layout_width="45dp"
-            android:layout_height="65dp"
-            android:id="@+id/level"
-            android:text="6"
-            android:layout_gravity="center"
-            android:background="@drawable/level"
-            android:textSize="42dp"
-            android:textColor="@color/black"
-            android:textStyle="italic"
-            android:layout_weight="1.5"
-            android:gravity="center"
-            android:textAlignment="center">
-        </TextView>
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.2"
 
-            android:weightSum="2"
-            android:layout_gravity="center"
-            android:orientation="horizontal">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="22"
-                android:textSize="28dp"
-                android:layout_weight="1"
-                android:id="@+id/ruby"
-                android:textAlignment="viewEnd"
-                android:textColor="@color/black">
-            </TextView>
-            <ImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:src="@drawable/ruby">
-            </ImageView>
-        </LinearLayout>
-    </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:orientation="horizontal"
         android:weightSum="3">
-        <ImageView
-            android:layout_width="50dp"
-            android:layout_height="66dp"
-            android:layout_weight="0.7"
-            android:layout_gravity="center">
-        </ImageView>
         <TextView
+            android:layout_marginTop="10dp"
+            android:layout_width="80dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:id="@+id/level"
+            android:text="01"
+            android:textAlignment="center"
+            android:gravity="center"
+            android:fontFamily="@font/sedgwickave_regular"
+            android:textStyle="bold"
+            android:textColor="#684005"
+            android:textSize="26dp"
+            android:layout_marginLeft="5dp"
+            android:layout_gravity="center"
+            android:background="@drawable/level">
+        </TextView>
+        <ImageView
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:layout_weight="1.6"
+            android:layout_marginLeft="5dp"
+            android:layout_gravity="center"
+            android:layout_weight="1"
             android:background="@drawable/daylagi">
-        </TextView>
+        </ImageView>
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.2"
-
+            android:layout_marginTop="10dp"
+            android:layout_width="80dp"
+            android:layout_height="60dp"
+            android:layout_marginRight="10dp"
+            android:layout_weight="1"
+            android:orientation="horizontal"
             android:weightSum="2"
-            android:layout_gravity="center"
-            android:orientation="horizontal">
+            android:layout_marginLeft="5dp"
+            android:background="@drawable/khungtien"
+            android:layout_gravity="center">
+
             <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="32dp"
+                android:layout_height="match_parent"
+                android:text="2200"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:id="@+id/ruby"
+                android:layout_marginLeft="5dp"
+                android:textAlignment="viewEnd"
+                android:textSize="20dp"
                 android:layout_weight="1"
-                android:textAlignment="viewEnd">
+                android:fontFamily="@font/sedgwickave_regular"
+                android:textColor="@color/colorPrimary">
             </TextView>
             <ImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp">
+                android:layout_width="30dp"
+                android:layout_height="match_parent"
+                android:src="@drawable/ruby">
             </ImageView>
         </LinearLayout>
     </LinearLayout>
@@ -104,27 +77,27 @@
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_weight="1.5"
-        android:background="@drawable/backgroundimg"
+        android:background="@drawable/backgroundimg2"
         android:orientation="vertical">
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             app:cardCornerRadius="5dp"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:layout_marginTop="23dp"
             android:gravity="center"
             android:layout_marginBottom="32dp"
-            app:cardBackgroundColor="#222121"
-            android:backgroundTint="#222121"
+            app:cardBackgroundColor="@color/black"
+            android:backgroundTint="@color/black"
 
             >
             <ImageView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:id="@+id/layout_2"
                 android:scaleType="centerInside"
-                android:backgroundTint="#222121"
+                android:backgroundTint="@color/black"
                 android:layout_gravity="center"
                 android:src="@drawable/hoidong">
             </ImageView>
@@ -163,7 +136,7 @@
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_alignParentLeft="true"
-            android:src="@drawable/shop">
+            android:background="@drawable/icon_shop">
 
         </ImageView>
         <Button
@@ -181,7 +154,7 @@
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_alignParentRight="true"
-            android:src="@drawable/help">
+            android:background="@drawable/btninfo">
         </ImageView>
 
     </RelativeLayout>

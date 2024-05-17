@@ -4,6 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".layout_shop_tuban">
+    tools:context=".views.layout_shop_tuban">
 
 </androidx.constraintlayout.widget.ConstraintLayout>

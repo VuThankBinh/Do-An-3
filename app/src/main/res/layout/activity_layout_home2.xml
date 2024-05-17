@@ -1,72 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".layout_home2"
-    android:orientation="vertical"
-    android:background="@drawable/backchoi">
-  <LinearLayout
-      android:layout_width="match_parent"
-      android:layout_height="80dp"
-      android:orientation="horizontal"
-      android:weightSum="3"
-      android:background="@drawable/titlelv"
-      android:visibility="gone">
-    <ImageView
-        android:layout_width="50dp"
-        android:layout_height="66dp"
-        android:id="@+id/back1"
-        android:layout_weight="1"
-        android:layout_gravity="center"
-        android:src="@drawable/back1">
-    </ImageView>
-    <TextView
-        android:layout_width="45dp"
-        android:layout_height="65dp"
-        android:id="@+id/level"
-        android:text="6"
-        android:layout_gravity="center"
-        android:background="@drawable/level"
-        android:textSize="42dp"
-        android:textColor="@color/black"
-        android:textStyle="italic"
-        android:layout_weight="1.5"
-        android:layout_marginLeft="5dp"
-        android:gravity="center"
-        android:textAlignment="center">
-    </TextView>
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.2"
+    tools:context=".views.layout_home2"
+    android:background="@drawable/background_chon">
 
-        android:weightSum="2"
-        android:layout_gravity="center"
-        android:orientation="horizontal">
-      <TextView
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:text="22"
-          android:textStyle="italic"
-          android:textSize="32dp"
-          android:layout_weight="1"
-          android:id="@+id/ruby"
-          android:textAlignment="viewEnd"
-          android:textColor="@color/black">
-      </TextView>
-      <ImageView
-          android:layout_width="40dp"
-          android:layout_height="40dp"
-          android:src="@drawable/ruby">
-      </ImageView>
-    </LinearLayout>
-  </LinearLayout>
   <RelativeLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
+      android:id="@+id/res1"
       >
     <LinearLayout
         android:layout_width="match_parent"
@@ -95,188 +40,138 @@
             android:id="@+id/tvnameNG"
             android:textStyle="bold"
             android:textSize="16dp"
+            android:fontFamily="@font/sedgwickave_regular"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Thank Binh"
-            android:textColor="@color/white">
+            android:textColor="#FFC107">
         </TextView>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="16dp"
+            android:fontFamily="@font/sedgwickave_regular"
             android:textStyle="bold"
             android:id="@+id/hightCore"
             android:text="High score: 100"
-            android:textColor="@color/white">
+            android:textColor="#FFC107">
         </TextView>
 
 
       </LinearLayout>
     </LinearLayout>
+
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="100dp"
+        android:layout_height="60dp"
         android:layout_alignRight="@+id/thongtin"
         android:orientation="horizontal"
+        android:weightSum="2"
+        android:background="@drawable/khungtien"
         android:layout_centerVertical="true">
 
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="22"
+            android:layout_height="match_parent"
+            android:text="22000"
             android:gravity="center"
-            android:textStyle="italic"
-            android:textSize="25dp"
+            android:textStyle="bold"
+            android:layout_marginLeft="5dp"
+            android:textSize="20dp"
             android:layout_weight="1"
+            android:fontFamily="@font/sedgwickave_regular"
             android:id="@+id/ruby3"
-            android:textColor="@color/white">
+            android:textColor="@color/colorPrimary">
         </TextView>
         <ImageView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="30dp"
+            android:layout_height="match_parent"
             android:src="@drawable/ruby">
         </ImageView>
       </LinearLayout>
+
   </RelativeLayout>
-<RelativeLayout
-    android:layout_width="match_parent"
-    android:layout_height="400dp">
-  <ImageView
-      android:id="@+id/layout_2"
-      android:layout_width="match_parent"
-      android:layout_height="240dp"
-      android:background="@drawable/whatisthis">
-  </ImageView>
-
-  <LinearLayout
-      android:layout_below="@+id/layout_2"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:orientation="horizontal"
-      android:layout_marginLeft="5dp"
-      android:layout_marginRight="5dp"
-      android:layout_marginTop="10dp"
-      android:weightSum="2">
-    <Button
-        android:id="@+id/choitiep"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:padding="5dp"
-        android:textColor="@color/white"
-        android:text="Chơi tiếp"
-        android:textStyle="italic"
-        android:textSize="20dp"
-        android:backgroundTint="#F44336">
-
-    </Button>
-    <Button
-        android:id="@+id/choilai"
-        android:padding="5dp"
-        android:layout_marginLeft="5dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:textColor="@color/white"
-        android:text="Chơi lại"
-        android:textStyle="italic"
-        android:textSize="20dp"
-        android:backgroundTint="#FF9800">
-
-    </Button>
-  </LinearLayout>
-</RelativeLayout>
-
-
-  <LinearLayout
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:orientation="horizontal"
-      android:layout_gravity="center"
-      android:id="@+id/line1"
-      android:visibility="gone">
-
-    <Button
-        android:id="@+id/battat"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="10dp"
-        android:backgroundTint="#FFEB3B"
-        android:text="Nhạc nền đã tắt"
-        android:textColor="@color/black"
-        android:textSize="28dp">
-
-
-    </Button>
     <ImageView
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:src="@drawable/dau_bac"
-        android:scaleType="fitCenter"
-        android:layout_gravity="center_vertical"
-        android:layout_marginLeft="-20dp"
-        android:layout_marginTop="-10dp"/>
-  </LinearLayout>
+        android:layout_width="wrap_content"
+        android:layout_height="200dp"
+        android:src="@drawable/tieude"
+        android:id="@+id/tieude"
+        android:layout_below="@+id/res1">
+    </ImageView>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/lin2"
+        android:layout_below="@+id/tieude" >
 
-  <RelativeLayout
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      >
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnChoiNgay"
+            android:layout_width="230dp"
+            android:layout_height="80dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/button_choingay">
+        </androidx.appcompat.widget.AppCompatButton>
 
-      <ImageView
-          android:layout_width="140dp"
-          android:layout_height="300dp"
-          android:id="@+id/bacnoi"
-          android:src="@drawable/xuanbac0"
-          android:layout_alignParentLeft="true"
-          android:layout_above="@+id/t1">
-      </ImageView>
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnChoiLai"
+            android:layout_width="230dp"
+            android:layout_height="80dp"
+            android:layout_below="@+id/btnChoiNgay"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/button_choilai">
+        </androidx.appcompat.widget.AppCompatButton>
 
-      <ImageView
-          android:id="@+id/bxh"
-          android:layout_width="150dp"
-          android:layout_height="150dp"
-          android:layout_marginLeft="50dp"
-          android:background="@drawable/bxh"
-          android:layout_alignParentRight="true"
-          android:layout_toRightOf="@+id/bacnoi"
-          android:layout_above="@+id/t1">
-      </ImageView>
-    <TextView
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnBXH"
+            android:layout_width="230dp"
+            android:layout_height="80dp"
+            android:layout_below="@+id/btnChoiLai"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/button_bxh">
+        </androidx.appcompat.widget.AppCompatButton>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnThoat"
+            android:layout_width="230dp"
+            android:layout_height="80dp"
+            android:layout_below="@+id/btnBXH"
+            android:layout_marginTop="5dp"
+            android:layout_centerInParent="true"
+            android:background="@drawable/button_thoat">
+        </androidx.appcompat.widget.AppCompatButton>
+    </RelativeLayout>
+    <LinearLayout
+        android:id="@+id/lin2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="25dp"
-        android:textAlignment="center"
-        android:id="@+id/t1"
-        android:layout_above="@+id/t2"
-        android:textColor="@color/white"
-        android:textStyle="bold"
-        android:text="Thiết kế by Bình Vũ">
-    </TextView>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="25dp"
-        android:textAlignment="center"
-        android:textColor="@color/white"
-        android:layout_above="@+id/t3"
-        android:id="@+id/t2"
-        android:textStyle="bold"
-        android:text="MSV:12521069">
-    </TextView>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textAlignment="center"
-        android:id="@+id/t3"
         android:layout_alignParentBottom="true"
-        android:textSize="25dp"
-        android:textColor="@color/white"
-        android:textStyle="bold"
-        android:text="Lớp: SEK 19.5"
-        >
-    </TextView>
-  </RelativeLayout>
+        android:orientation="horizontal"
+        android:gravity="center"
 
-  </LinearLayout>
+        android:layout_marginBottom="50dp">
+        <androidx.appcompat.widget.AppCompatButton
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:id="@+id/shop"
+            android:background="@drawable/icon_shop">
+        </androidx.appcompat.widget.AppCompatButton>
+        <androidx.appcompat.widget.AppCompatButton
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:id="@+id/setting"
+            android:layout_marginLeft="5dp"
+            android:background="@drawable/icon_setting">
+        </androidx.appcompat.widget.AppCompatButton>
+        <androidx.appcompat.widget.AppCompatButton
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:id="@+id/share"
+            android:layout_marginLeft="5dp"
+            android:background="@drawable/icon_share">
+        </androidx.appcompat.widget.AppCompatButton>
+    </LinearLayout>
+
+  </RelativeLayout>
