@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="455dp"
+    android:layout_height="match_parent"
     android:paddingBottom="5dp"
     android:background="@drawable/backchucmung">
 
     <ImageView
         android:id="@+id/chucmung"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="350dp"
+        android:layout_height="200dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:src="@drawable/chucmung">
@@ -16,28 +16,29 @@
 
     <ImageView
         android:id="@+id/asdang"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_centerInParent="true"
-        android:src="@drawable/asdang">
+        android:src="@drawable/asang">
     </ImageView>
     <TextView
         android:id="@+id/dapan"
-        android:layout_marginTop="-20dp"
-        android:layout_width="match_parent"
+        android:layout_marginTop="30dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Báo cáo"
         android:layout_below="@+id/chucmung"
-        android:gravity="center"
-        android:textSize="30dp"
+        android:layout_centerHorizontal="true"
+        android:textSize="60dp"
         android:textStyle="bold"
-        android:textColor="#FF5722">
+        android:fontFamily="@font/sedgwickave_regular"
+        android:textColor="@color/colorPrimary">
     </TextView>
 
     <ImageView
         android:id="@+id/ruby"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
         android:layout_centerInParent="true"
         android:src="@drawable/congrub">
     </ImageView>
@@ -49,8 +50,7 @@
         android:id="@+id/cong"
         android:textColor="#9C27B0"
         android:text="Bạn được cộng 3 Ruby"
-        android:layout_below="@+id/asdang"
-        android:layout_marginTop="-125dp"
+        android:layout_below="@+id/ruby"
         android:gravity="center">
     </TextView>
     <androidx.appcompat.widget.AppCompatButton
@@ -58,7 +58,7 @@
         android:layout_width="200dp"
         android:layout_height="60dp"
         android:layout_below="@id/cong"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="80dp"
         android:layout_centerHorizontal="true"
         android:background="@drawable/btntiep">
     </androidx.appcompat.widget.AppCompatButton>

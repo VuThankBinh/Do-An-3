@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools" >
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -9,14 +9,26 @@
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@drawable/dau_bac"
+        android:icon="@drawable/chua"
         android:label="Đồ án 3"
-        android:roundIcon="@drawable/dau_bac"
+        android:roundIcon="@drawable/chua"
         android:supportsRtl="true"
         android:theme="@style/Theme.DHBC"
-        tools:targetApi="31">
+        tools:targetApi="31" >
         <activity
-            android:name=".GameShowRound1"
+            android:name=".GameShowRound3"
+            android:exported="false" />
+        <activity
+            android:name=".views.cauhoi_roung2"
+            android:exported="false" />
+        <activity
+            android:name=".views.cauCaDao_round2"
+            android:exported="false" />
+         <activity
+         android:name=".views.GameShowRound2"
+         android:exported="false" />
+        <activity
+            android:name=".views.GameShowRound1"
             android:exported="false" />
         <activity
             android:name=".views.ChonCheDoChoi"
@@ -30,16 +42,11 @@
             android:value="ca-app-pub-3940256099942544~3347511713" />
 
         <activity
-            android:name=".views.layout_shop_tuban"
+            android:name=".views.MainActivity"
             android:exported="false" />
         <activity
-            android:name=".views.MainActivity"
-            android:exported="false" /> <!-- <activity -->
-        <!-- android:name=".views.layout_home2" -->
-        <!-- android:exported="false" /> -->
-        <activity
             android:name=".views.layout_home2"
-            android:exported="true">
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -55,7 +62,7 @@
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"
             android:exported="false"
-            android:grantUriPermissions="true">
+            android:grantUriPermissions="true" >
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/paths" />

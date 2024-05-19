@@ -6,6 +6,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -76,6 +77,11 @@ public class cuahangvatpham extends AppCompatActivity implements ItemClick_dapan
 
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
+        // Đặt màu đen cho các tiêu đề Tab
+        tabLayout.setTabTextColors(Color.BLACK, Color.RED); // Màu văn bản khi không chọn và khi được chọn
+
+        // Đặt màu đen cho chỉ báo (indicator) tab
+        tabLayout.setSelectedTabIndicatorColor(Color.BLACK);
         csdl=new CSDL(this);
         tt=csdl.HienThongTinNhanVat();
         CapNhatDuLieu(cuahangvatpham.this);

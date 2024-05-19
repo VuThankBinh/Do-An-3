@@ -12,7 +12,6 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
-import com.example.dhbc.GameShowRound1;
 import com.example.dhbc.R;
 
 import java.io.IOException;

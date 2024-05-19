@@ -451,7 +451,7 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
     private void showDialogChucMung() {
 
 
-        Dialog dialog = new Dialog(MainActivity.this, android.R.style.Theme_Dialog);
+        Dialog dialog = new Dialog(MainActivity.this, android.R.style.Theme_Black_NoTitleBar_Fullscreen);
         dialog.setContentView(R.layout.dialog_chucmung_dapan);
         dialog.getWindow().getDecorView().setSystemUiVisibility( View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
 

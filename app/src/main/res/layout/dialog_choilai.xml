@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:layout_height="300dp"
     android:background="@drawable/khungchoilai">
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="270dp"
+        android:layout_height="100dp"
         android:src="@drawable/choilai"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="50dp"
         android:id="@+id/title">
     </ImageView>
     <LinearLayout
@@ -20,27 +20,20 @@
         android:layout_centerHorizontal="true"
         android:weightSum="2">
         <Button
-            android:layout_width="125dp"
-            android:layout_height="wrap_content"
-            android:text="Chấp nhận"
-            android:textSize="16dp"
-            android:textColor="@color/black"
-            android:textStyle="italic"
+            android:layout_width="120dp"
+            android:layout_height="60dp"
             android:id="@+id/chapnhan"
             android:layout_weight="1"
-            android:backgroundTint="@color/colorPrimary">
+            android:background="@drawable/btnchapnhan">
         </Button>
         <Button
-            android:layout_width="125dp"
-            android:layout_height="wrap_content"
-            android:text="Từ chối"
-            android:textSize="16dp"
-            android:textColor="@color/black"
-            android:textStyle="italic"
+
+            android:layout_width="120dp"
+            android:layout_height="60dp"
             android:id="@+id/tuchoi"
             android:layout_marginLeft="5dp"
             android:layout_weight="1"
-            android:backgroundTint="#FF5722">
+            android:background="@drawable/btntuchoi">
         </Button>
     </LinearLayout>
 

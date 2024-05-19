@@ -6,13 +6,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/nestedScrollView"
-    android:background="@color/white"
+    android:background="@drawable/backshopavt"
     android:descendantFocusability="blocksDescendants"
     tools:context=".views.cuahangvatpham">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white">
+        >
         <ImageView
             android:layout_width="200dp"
             android:layout_height="120dp"
@@ -51,7 +51,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Name: Thank Binh"
-                    android:textColor="@color/black">
+                    android:textColor="@color/colorPrimary"
+                    android:fontFamily="@font/sedgwickave_regular">
                 </TextView>
                 <TextView
                     android:layout_width="wrap_content"
@@ -60,7 +61,8 @@
                     android:textStyle="bold"
                     android:id="@+id/hightCore"
                     android:text="High score: 100"
-                    android:textColor="@color/black">
+                    android:textColor="@color/colorPrimary"
+                    android:fontFamily="@font/sedgwickave_regular">
                 </TextView>
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -76,7 +78,8 @@
                         android:textSize="15dp"
                         android:layout_weight="1"
                         android:id="@+id/ruby"
-                        android:textColor="@color/black">
+                        android:textColor="@color/colorPrimary"
+                        android:fontFamily="@font/sedgwickave_regular">
                     </TextView>
                     <ImageView
                         android:layout_width="20dp"
@@ -114,12 +117,14 @@
                         android:layout_gravity="center"
                         android:layout_width="80dp"
                         android:layout_height="80dp"
-                        android:layout_marginTop="-5dp"
-                        android:src="@drawable/rubyy"/>
+                        android:padding="5dp"
+                        android:src="@drawable/hhhvid"
+                        android:background="@drawable/backruby"/>
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="10 ruby"
+                        android:fontFamily="@font/sedgwickave_regular"
                         android:textColor="#E6780D"
                         android:textStyle="bold"
                         android:textSize="21dp"
@@ -140,13 +145,15 @@
                         android:layout_gravity="center"
                         android:layout_width="80dp"
                         android:layout_height="80dp"
-                        android:layout_marginTop="-5dp"
-                        android:src="@drawable/ruby2"/>
+                        android:padding="5dp"
+                        android:src="@drawable/hhh20k"
+                        android:background="@drawable/backruby"/>
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="100 ruby"
                         android:textColor="#E6780D"
+                        android:fontFamily="@font/sedgwickave_regular"
                         android:textStyle="bold"
                         android:textSize="21dp"
                         android:layout_gravity="center" />
@@ -156,13 +163,9 @@
                         android:textAlignment="center"
                         android:layout_width="80dp"
                         android:layout_height="40dp"
-                        android:padding="5dp"
-                        android:textSize="18dp"
-                        android:textStyle="bold"
                         android:textColor="#F65430"
                         android:id="@+id/ruby_20k"
-                        android:text="20k"
-                        android:background="@drawable/btn" />
+                        android:background="@drawable/hh20k" />
                 </LinearLayout>
                 <LinearLayout
                     android:layout_width="120dp"
@@ -172,12 +175,14 @@
                         android:layout_gravity="center"
                         android:layout_width="80dp"
                         android:layout_height="80dp"
-                        android:layout_marginTop="-5dp"
-                        android:src="@drawable/ruby3"/>
+                        android:padding="5dp"
+                        android:src="@drawable/hhh50k"
+                        android:background="@drawable/backruby"/>
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="300 ruby"
+                        android:text="500 ruby"
+                        android:fontFamily="@font/sedgwickave_regular"
                         android:textColor="#E6780D"
                         android:textStyle="bold"
                         android:textSize="21dp"
@@ -189,45 +194,10 @@
                         android:layout_width="80dp"
                         android:layout_height="40dp"
                         android:padding="5dp"
-                        android:textSize="18dp"
-                        android:textStyle="bold"
-                        android:textColor="#F65430"
-                        android:text="50k"
                         android:id="@+id/ruby_50k"
-                        android:background="@drawable/btn" />
+                        android:background="@drawable/hh50k" />
                 </LinearLayout>
-                <LinearLayout
-                    android:layout_width="120dp"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-                    <ImageView
-                        android:layout_gravity="center"
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
-                        android:layout_marginTop="-5dp"
-                        android:src="@drawable/ruby4"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="800 ruby"
-                        android:textColor="#E6780D"
-                        android:textStyle="bold"
-                        android:textSize="21dp"
-                        android:layout_gravity="center" />
-                    <androidx.appcompat.widget.AppCompatButton
-                        android:layout_marginTop="10dp"
-                        android:layout_gravity="center"
-                        android:textAlignment="center"
-                        android:layout_width="80dp"
-                        android:layout_height="40dp"
-                        android:padding="5dp"
-                        android:textSize="18dp"
-                        android:textStyle="bold"
-                        android:textColor="#F65430"
-                        android:text="100k"
-                        android:id="@+id/ruby_100k"
-                        android:background="@drawable/btn" />
-                </LinearLayout>
+
             </LinearLayout>
         </HorizontalScrollView>
 

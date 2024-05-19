@@ -21,10 +21,13 @@ import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.dhbc.CSDL;
 import com.example.dhbc.ClassDL.CauHoi;
@@ -61,6 +64,7 @@ public class layout_home2 extends AppCompatActivity {
         share=findViewById(R.id.share);
 
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,35 +79,40 @@ public class layout_home2 extends AppCompatActivity {
         setContentView(R.layout.activity_layout_home2);
         prefs= getSharedPreferences("game", MODE_PRIVATE);
         nhacXB = prefs.getBoolean("isXB", true);
-        volumn1=prefs.getFloat("volumnXB",1);
+        volumn1=prefs.getFloat("volumnBack",1);
+        volumn2=prefs.getFloat("volumnXB",1);
         AnhXa();
         csdl=new CSDL(getApplicationContext());
         csdl.TaoCSDL(getApplicationContext());
         csdl.insertNewData();
-
+        csdl.TaoCSDL_gameshow_round2();
         csdl.insertNewAvt();
         csdl.insertNewKhung();
-        nhacXB = prefs.getBoolean("isXB", true);
-        volumn1=prefs.getFloat("volumnXB",1);
-        tt=csdl.HienThongTinNhanVat();
-        hightcore.setText("High score: "+ tt.getLevel());
-        name.setText(tt.getName());
-        ruby3.setText(String.valueOf(csdl.HienThongTinNhanVat().getRuby()));
-        String fileAvt = "avt"+String.valueOf(tt.getAvt_id()); // Lấy tên tệp ảnh từ đối tượng baiHat
-        int resId = getResources().getIdentifier(fileAvt, "drawable", getPackageName()); // Tìm ID tài nguyên dựa trên tên tệp ảnh
-        String fileKhung = "khung"+String.valueOf(tt.getKhung_id()); // Lấy tên tệp ảnh từ đối tượng baiHat
-        int resId2 = getResources().getIdentifier(fileKhung, "drawable", getPackageName()); // Tìm ID tài nguyên dựa trên tên tệp ảnh
+        if(csdl.KiemTraNhanVat(this)){
+            ShowDialogDoiTen();
+        }
+        if(!csdl.KiemTraNhanVat(layout_home2.this)){
+            tt=csdl.HienThongTinNhanVat();
+            hightcore.setText("High score: "+ tt.getLevel());
+            name.setText(tt.getName());
+            ruby3.setText(String.valueOf(csdl.HienThongTinNhanVat().getRuby()));
+            String fileAvt = "avt"+String.valueOf(tt.getAvt_id()); // Lấy tên tệp ảnh từ đối tượng baiHat
+            int resId = getResources().getIdentifier(fileAvt, "drawable", getPackageName()); // Tìm ID tài nguyên dựa trên tên tệp ảnh
+            String fileKhung = "khung"+String.valueOf(tt.getKhung_id()); // Lấy tên tệp ảnh từ đối tượng baiHat
+            int resId2 = getResources().getIdentifier(fileKhung, "drawable", getPackageName()); // Tìm ID tài nguyên dựa trên tên tệp ảnh
 
-        if (resId != 0) {
-            avt.setImageResource(resId); // Thiết lập hình ảnh cho ImageView
-        } else {
-            // Xử lý trường hợp không tìm thấy tệp ảnh
+            if (resId != 0) {
+                avt.setImageResource(resId); // Thiết lập hình ảnh cho ImageView
+            } else {
+                // Xử lý trường hợp không tìm thấy tệp ảnh
+            }
+            if (resId2 != 0) {
+                avt.setBackgroundResource(resId2); // Thiết lập hình ảnh cho ImageView
+            } else {
+                // Xử lý trường hợp không tìm thấy tệp ảnh
+            }
         }
-        if (resId2 != 0) {
-            avt.setBackgroundResource(resId2); // Thiết lập hình ảnh cho ImageView
-        } else {
-            // Xử lý trường hợp không tìm thấy tệp ảnh
-        }
+
         mp1=new MediaPlayer();
 
         choilai.setOnClickListener(new View.OnClickListener() {
@@ -257,29 +266,86 @@ public class layout_home2 extends AppCompatActivity {
             }
         });
     }
-    private SeekBar volumeSeekBar1,volumeSeekBar2;
-    private void ktraAmthanh() {
-        if (nhacback) {
-            try {
-                mp.reset();
-                mp.setDataSource(getResources().openRawResourceFd(R.raw.nhacback));
-                mp.setVolume(volumn1,volumn1);
-                mp.prepare();
-                mp.start();
-                mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                    @Override
-                    public void onCompletion(MediaPlayer mediaPlayer) {
-                        mp.start();
-                    }
-                });
+    private void ShowDialogDoiTen() {
+        Dialog dialog = new Dialog(layout_home2.this,android.R.style.Theme_Dialog );
 
+        dialog.setContentView(R.layout.dialog_datten);
+        EditText tvname=dialog.findViewById(R.id.tvname);
+        ImageButton btnXN=dialog.findViewById(R.id.btnname);
 
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+        TextView cham=dialog.findViewById(R.id.cham);
+        Animation blinkk= AnimationUtils.loadAnimation(this,R.anim.blink2);
+        cham.setAnimation(blinkk);
+        cham.setVisibility(View.GONE);
+        dialog.setCancelable(false);
+        cham.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
             }
-        }
+        });
+//        cham.setVisibility(View.GONE);
+        btnXN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(tvname.getText().toString().trim().equals("")){
+                    Toast.makeText(layout_home2.this, "Tên nhân vật không hợp lệ", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    csdl.TaoNhanVat(tvname.getText().toString());
+                    Toast.makeText(layout_home2.this, "Bạn đã đặt tên thành công", Toast.LENGTH_SHORT).show();
+                    dialog.dismiss();
+                    tt=csdl.HienThongTinNhanVat();
+                    hightcore.setText("High score: "+ tt.getLevel());
+                    name.setText(tt.getName());
+                    ruby3.setText(String.valueOf(csdl.HienThongTinNhanVat().getRuby()));
+                    String fileAvt = "avt"+String.valueOf(tt.getAvt_id()); // Lấy tên tệp ảnh từ đối tượng baiHat
+                    int resId = getResources().getIdentifier(fileAvt, "drawable", getPackageName()); // Tìm ID tài nguyên dựa trên tên tệp ảnh
+                    String fileKhung = "khung"+String.valueOf(tt.getKhung_id()); // Lấy tên tệp ảnh từ đối tượng baiHat
+                    int resId2 = getResources().getIdentifier(fileKhung, "drawable", getPackageName()); // Tìm ID tài nguyên dựa trên tên tệp ảnh
 
+                    if (resId != 0) {
+                        avt.setImageResource(resId); // Thiết lập hình ảnh cho ImageView
+                    } else {
+                        // Xử lý trường hợp không tìm thấy tệp ảnh
+                    }
+                    if (resId2 != 0) {
+                        avt.setBackgroundResource(resId2); // Thiết lập hình ảnh cho ImageView
+                    } else {
+                        // Xử lý trường hợp không tìm thấy tệp ảnh
+                    }
+
+
+                }
+            }
+        });
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        dialog.getWindow().getDecorView().setSystemUiVisibility( View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+        dialog.show();
     }
+    private SeekBar volumeSeekBar1,volumeSeekBar2;
+//    private void ktraAmthanh() {
+//        if (nhacback) {
+//            try {
+//                mp.reset();
+//                mp.setDataSource(getResources().openRawResourceFd(R.raw.nhacback));
+//                mp.setVolume(volumn1,volumn1);
+//                mp.prepare();
+//                mp.start();
+//                mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+//                    @Override
+//                    public void onCompletion(MediaPlayer mediaPlayer) {
+//                        mp.start();
+//                    }
+//                });
+//
+//
+//            } catch (IOException e) {
+//                throw new RuntimeException(e);
+//            }
+//        }
+//
+//    }
     private void showDialogSettings() {
         Dialog dialog = new Dialog(layout_home2.this, android.R.style.Theme_Dialog);
         dialog.setContentView(R.layout.dialog_settings);
@@ -290,13 +356,7 @@ public class layout_home2 extends AppCompatActivity {
         TextView volumn2a=dialog.findViewById(R.id.volumn2);
         ImageView nhacback12=dialog.findViewById(R.id.nhacback);
         ImageView nhacXB12=dialog.findViewById(R.id.nhacxb);
-        ImageView sharelink=dialog.findViewById(R.id.sharelink);
-        sharelink.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ShareLinkApp();
-            }
-        });
+
         Animation blinkk= AnimationUtils.loadAnimation(this,R.anim.blink2);
         cham.setAnimation(blinkk);
         cham.setOnClickListener(new View.OnClickListener() {
@@ -334,7 +394,7 @@ public class layout_home2 extends AppCompatActivity {
                 editor.putFloat("volumnBack", volumn1);
                 editor.putBoolean("isMute",nhacback);
                 editor.apply();
-                ktraAmthanh();
+//                ktraAmthanh();
             }
 
             @Override
@@ -447,10 +507,14 @@ public class layout_home2 extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
 
-        // Giải phóng MediaPlayer khi activity bị destroy
-        if (mp != null) {
-            mp.release();
-            mp = null;
+        // Kiểm tra nếu audio đang phát
+        if (mp != null && mp.isPlaying()) {
+            // Tạm dừng audio
+            mp.pause();
+        }
+        if (mp1 != null && mp1.isPlaying()) {
+            // Tạm dừng audio
+            mp1.pause();
         }
     }
     @Override
@@ -464,25 +528,28 @@ public class layout_home2 extends AppCompatActivity {
         if (mp1 != null && !mp1.isPlaying()) {
             mp1.start();
         }
-        tt=csdl.HienThongTinNhanVat();
-        hightcore.setText("High score: "+ tt.getLevel());
-        name.setText(tt.getName());
-        ruby3.setText(String.valueOf(csdl.HienThongTinNhanVat().getRuby()));
-        String fileAvt = "avt"+String.valueOf(tt.getAvt_id()); // Lấy tên tệp ảnh từ đối tượng baiHat
-        int resId = getResources().getIdentifier(fileAvt, "drawable", getPackageName()); // Tìm ID tài nguyên dựa trên tên tệp ảnh
-        String fileKhung = "khung"+String.valueOf(tt.getKhung_id()); // Lấy tên tệp ảnh từ đối tượng baiHat
-        int resId2 = getResources().getIdentifier(fileKhung, "drawable", getPackageName()); // Tìm ID tài nguyên dựa trên tên tệp ảnh
+        if(!csdl.KiemTraNhanVat(layout_home2.this)){
+            tt=csdl.HienThongTinNhanVat();
+            hightcore.setText("High score: "+ tt.getLevel());
+            name.setText(tt.getName());
+            ruby3.setText(String.valueOf(csdl.HienThongTinNhanVat().getRuby()));
+            String fileAvt = "avt"+String.valueOf(tt.getAvt_id()); // Lấy tên tệp ảnh từ đối tượng baiHat
+            int resId = getResources().getIdentifier(fileAvt, "drawable", getPackageName()); // Tìm ID tài nguyên dựa trên tên tệp ảnh
+            String fileKhung = "khung"+String.valueOf(tt.getKhung_id()); // Lấy tên tệp ảnh từ đối tượng baiHat
+            int resId2 = getResources().getIdentifier(fileKhung, "drawable", getPackageName()); // Tìm ID tài nguyên dựa trên tên tệp ảnh
 
-        if (resId != 0) {
-            avt.setImageResource(resId); // Thiết lập hình ảnh cho ImageView
-        } else {
-            // Xử lý trường hợp không tìm thấy tệp ảnh
+            if (resId != 0) {
+                avt.setImageResource(resId); // Thiết lập hình ảnh cho ImageView
+            } else {
+                // Xử lý trường hợp không tìm thấy tệp ảnh
+            }
+            if (resId2 != 0) {
+                avt.setBackgroundResource(resId2); // Thiết lập hình ảnh cho ImageView
+            } else {
+                // Xử lý trường hợp không tìm thấy tệp ảnh
+            }
         }
-        if (resId2 != 0) {
-            avt.setBackgroundResource(resId2); // Thiết lập hình ảnh cho ImageView
-        } else {
-            // Xử lý trường hợp không tìm thấy tệp ảnh
-        }
+
     }
     @Override
     protected void onPause() {
@@ -492,6 +559,10 @@ public class layout_home2 extends AppCompatActivity {
         if (mp != null && mp.isPlaying()) {
             // Tạm dừng audio
             mp.pause();
+        }
+        if (mp1 != null && mp1.isPlaying()) {
+            // Tạm dừng audio
+            mp1.pause();
         }
     }
 }
