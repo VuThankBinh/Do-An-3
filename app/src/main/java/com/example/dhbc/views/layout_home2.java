@@ -62,6 +62,8 @@ public class layout_home2 extends AppCompatActivity {
         shop=findViewById(R.id.shop);
         settings=findViewById(R.id.setting);
         share=findViewById(R.id.share);
+        mp=new MediaPlayer();
+        mp1=new MediaPlayer();
 
     }
 
@@ -119,26 +121,9 @@ public class layout_home2 extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if(nhacXB){
-                    try {
-                        mp1.setDataSource(getResources().openRawResourceFd(R.raw.huonglen1));
-                        mp1.setVolume(volumn1,volumn1);
-                        mp1.prepare();
-
-                        mp1.start();
-                        new Handler().postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (mp1.isPlaying()) {
-                                    mp1.stop();
-//                                showConfirmationDialog();
-
-                                }
-                            }
-                        }, 1000);
-
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
+                    mp=MediaPlayer.create(layout_home2.this,R.raw.win);
+                    mp1.setVolume(volumn1,volumn1);
+                    mp1.start();
                 }
                 showDialogChoiLai();
 
@@ -155,20 +140,9 @@ public class layout_home2 extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if(nhacXB){
-                    try {
-                        mp1.stop();
-                        mp1.reset();
-                        mp1.setDataSource(getResources().openRawResourceFd(R.raw.win));
-                        mp1.setVolume(volumn1,volumn1);
-                        mp1.prepare();
-
-                        mp1.start();
-
-//                    layout_home2.this.finish();
-
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
+                    mp=MediaPlayer.create(layout_home2.this,R.raw.win);
+                    mp1.setVolume(volumn1,volumn1);
+                    mp1.start();
                 }
                 startActivity(new Intent(layout_home2.this,ChonCheDoChoi.class));
 
@@ -200,44 +174,27 @@ public class layout_home2 extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (nhacXB){
-                    try {
-                        mp1.stop();
-                        mp1.reset();
-                        mp1.setDataSource(getResources().openRawResourceFd(R.raw.win));
+                        mp=MediaPlayer.create(layout_home2.this,R.raw.win);
                         mp1.setVolume(volumn1,volumn1);
-                        mp1.prepare();
-
                         mp1.start();
 
-
-//                    layout_home2.this.finish();
-
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
                 }
-                startActivity(new Intent(layout_home2.this,cuahangvatpham.class));
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        startActivity(new Intent(layout_home2.this,cuahangvatpham.class));
+                    }
+                },1000);
+
             }
         });
         share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (nhacXB) {
-                    try {
-                        mp1.stop();
-                        mp1.reset();
-                        mp1.setDataSource(getResources().openRawResourceFd(R.raw.win));
-                        mp1.setVolume(volumn1, volumn1);
-                        mp1.prepare();
-
-                        mp1.start();
-
-//                        startActivity(new Intent(layout_home2.this, ChonCheDoChoi.class));
-//                    layout_home2.this.finish();
-
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
+                    mp=MediaPlayer.create(layout_home2.this,R.raw.win);
+                    mp1.setVolume(volumn1,volumn1);
+                    mp1.start();
                 }
                 ShareLinkApp();
             }
@@ -246,21 +203,9 @@ public class layout_home2 extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (nhacXB) {
-                    try {
-                        mp1.stop();
-                        mp1.reset();
-                        mp1.setDataSource(getResources().openRawResourceFd(R.raw.win));
-                        mp1.setVolume(volumn1, volumn1);
-                        mp1.prepare();
-
-                        mp1.start();
-
-//                        startActivity(new Intent(layout_home2.this, ChonCheDoChoi.class));
-//                    layout_home2.this.finish();
-
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
+                    mp=MediaPlayer.create(layout_home2.this,R.raw.win);
+                    mp1.setVolume(volumn1,volumn1);
+                    mp1.start();
                 }
                 showDialogSettings();
             }
@@ -324,28 +269,7 @@ public class layout_home2 extends AppCompatActivity {
         dialog.show();
     }
     private SeekBar volumeSeekBar1,volumeSeekBar2;
-//    private void ktraAmthanh() {
-//        if (nhacback) {
-//            try {
-//                mp.reset();
-//                mp.setDataSource(getResources().openRawResourceFd(R.raw.nhacback));
-//                mp.setVolume(volumn1,volumn1);
-//                mp.prepare();
-//                mp.start();
-//                mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-//                    @Override
-//                    public void onCompletion(MediaPlayer mediaPlayer) {
-//                        mp.start();
-//                    }
-//                });
-//
-//
-//            } catch (IOException e) {
-//                throw new RuntimeException(e);
-//            }
-//        }
-//
-//    }
+
     private void showDialogSettings() {
         Dialog dialog = new Dialog(layout_home2.this, android.R.style.Theme_Dialog);
         dialog.setContentView(R.layout.dialog_settings);

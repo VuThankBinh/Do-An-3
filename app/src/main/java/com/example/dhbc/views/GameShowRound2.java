@@ -585,6 +585,7 @@ public class GameShowRound2 extends AppCompatActivity implements ItemClick_dapan
         for(int i=0;i<traloidung.length;i++){
             if(traloidung[i]){
                 buttonList.get(i).setBackgroundResource(R.drawable.transparent_color);
+                buttonList.get(i).setText("");
             }
         }
     }

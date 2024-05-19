@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="300dp"
+    android:layout_height="250dp"
     android:background="@drawable/khungchoilai">
     <ImageView
-        android:layout_width="270dp"
+        android:layout_width="200dp"
         android:layout_height="100dp"
         android:src="@drawable/choilai"
         android:layout_centerHorizontal="true"
@@ -20,16 +20,16 @@
         android:layout_centerHorizontal="true"
         android:weightSum="2">
         <Button
-            android:layout_width="120dp"
-            android:layout_height="60dp"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
             android:id="@+id/chapnhan"
             android:layout_weight="1"
             android:background="@drawable/btnchapnhan">
         </Button>
         <Button
 
-            android:layout_width="120dp"
-            android:layout_height="60dp"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
             android:id="@+id/tuchoi"
             android:layout_marginLeft="5dp"
             android:layout_weight="1"

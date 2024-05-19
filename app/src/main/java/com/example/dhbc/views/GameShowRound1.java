@@ -82,7 +82,7 @@ public class GameShowRound1 extends AppCompatActivity implements ItemClick_dapan
 
             @Override
             public void onClick(View view) {
-                loadTrang();
+                showDialogNext();
             }
         });
         csdl=new CSDL(GameShowRound1.this);
@@ -98,6 +98,31 @@ public class GameShowRound1 extends AppCompatActivity implements ItemClick_dapan
         volumn2=prefs.getFloat("volumnXB",1);
         startTimer(timeLeftInMillis);
         loadTrang();
+    }
+
+    private void showDialogNext() {
+        Dialog dialog = new Dialog(GameShowRound1.this, android.R.style.Theme_Dialog);
+        dialog.setContentView(R.layout.dialog_nextcau);
+        dialog.getWindow().getDecorView().setSystemUiVisibility( View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        dialog.setCancelable(false);
+        Button chapnhan=dialog.findViewById(R.id.chapnhan);
+        Button tuchoi=dialog.findViewById(R.id.tuchoi);
+        chapnhan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                loadTrang();
+                dialog.dismiss();
+
+            }
+        });
+        tuchoi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
     }
 
     private void showDialogBack() {
@@ -285,6 +310,9 @@ public class GameShowRound1 extends AppCompatActivity implements ItemClick_dapan
                     public void onClick(View view) {
                         diemR1=diem;
                         startActivity(new Intent(GameShowRound1.this,GameShowRound2.class));
+                        if (countDownTimer != null) {
+                            countDownTimer.cancel();
+                        }
                         GameShowRound1.this.finish();
                     }
                 });
@@ -330,6 +358,9 @@ public class GameShowRound1 extends AppCompatActivity implements ItemClick_dapan
                     public void onClick(View view) {
                         diemR1=diem;
                         startActivity(new Intent(GameShowRound1.this,GameShowRound2.class));
+                        if (countDownTimer != null) {
+                            countDownTimer.cancel();
+                        }
                         GameShowRound1.this.finish();
                     }
                 });
