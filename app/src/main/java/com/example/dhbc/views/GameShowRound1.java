@@ -309,10 +309,12 @@ public class GameShowRound1 extends AppCompatActivity implements ItemClick_dapan
                     @Override
                     public void onClick(View view) {
                         diemR1=diem;
-                        startActivity(new Intent(GameShowRound1.this,GameShowRound2.class));
                         if (countDownTimer != null) {
                             countDownTimer.cancel();
+                            countDownTimer = null;
                         }
+                        isActivityRunning = false;
+                        startActivity(new Intent(GameShowRound1.this,GameShowRound2.class));
                         GameShowRound1.this.finish();
                     }
                 });
@@ -357,10 +359,12 @@ public class GameShowRound1 extends AppCompatActivity implements ItemClick_dapan
                     @Override
                     public void onClick(View view) {
                         diemR1=diem;
-                        startActivity(new Intent(GameShowRound1.this,GameShowRound2.class));
                         if (countDownTimer != null) {
                             countDownTimer.cancel();
+                            countDownTimer = null;
                         }
+                        isActivityRunning = false;
+                        startActivity(new Intent(GameShowRound1.this,GameShowRound2.class));
                         GameShowRound1.this.finish();
                     }
                 });
@@ -391,7 +395,7 @@ public class GameShowRound1 extends AppCompatActivity implements ItemClick_dapan
         dialog.show();
 
     }
-
+    private boolean isActivityRunning=true;
 
     MediaPlayer mp3;
     @Override
@@ -644,6 +648,7 @@ public class GameShowRound1 extends AppCompatActivity implements ItemClick_dapan
         }
         if (countDownTimer != null) {
             countDownTimer.cancel();
+            countDownTimer = null;
         }
     }
 
@@ -669,19 +674,26 @@ public class GameShowRound1 extends AppCompatActivity implements ItemClick_dapan
 
             @Override
             public void onTick(long millisUntilFinished) {
-                timeLeftInMillis = millisUntilFinished;
-                int minutes = (int) (millisUntilFinished / 1000) / 60;
-                int seconds = (int) (millisUntilFinished / 1000) % 60;
-                String timeLeftFormatted = String.format("%02d:%02d", minutes, seconds);
-                countdown.setText(timeLeftFormatted);
+                if (!isActivityRunning) {
+                    cancel();
+                } else {
+                    timeLeftInMillis = millisUntilFinished;
+                    int minutes = (int) (millisUntilFinished / 1000) / 60;
+                    int seconds = (int) (millisUntilFinished / 1000) % 60;
+                    String timeLeftFormatted = String.format("%02d:%02d", minutes, seconds);
+                    countdown.setText(timeLeftFormatted);
+                }
+
             }
 
             @Override
             public void onFinish() {
-                countdown.setText("00:00");
-                isRunning = false;
-                Toast.makeText(GameShowRound1.this, "Trò chơi kết thúc", Toast.LENGTH_SHORT).show();
-                showDialogEndRound1();
+                if (isActivityRunning) {
+                    countdown.setText("00:00");
+                    isRunning = false;
+                    Toast.makeText(GameShowRound1.this, "Trò chơi kết thúc", Toast.LENGTH_SHORT).show();
+                    showDialogEndRound1();
+                }
             }
         }.start();
 //        isRunning = true;
