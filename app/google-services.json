@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "735147254674",
+    "project_id": "doan3andbtlreactnative",
+    "storage_bucket": "doan3andbtlreactnative.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:735147254674:android:1455c29956133e8db7974b",
+        "android_client_info": {
+          "package_name": "com.vtb.dhbc"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "735147254674-5osvjfp3768t31ijh92dfrs12rbcvnv5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.vtb.dhbc",
+            "certificate_hash": "4d8cb9e44c1eafb1853bc128a8a0e90ed00820bc"
+          }
+        },
+        {
+          "client_id": "735147254674-l0icicofgtbdacbhbmu099vik22bsufk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAdqOZ_ciu_aQVfkkRqlXbQqP7oPPvQvfw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "735147254674-l0icicofgtbdacbhbmu099vik22bsufk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
