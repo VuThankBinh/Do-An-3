@@ -127,7 +127,7 @@ public class cuahangvatpham extends AppCompatActivity implements ItemClick_dapan
                 else {
                     if(csdl.HienThongTinNhanVat().getRuby()>=10){
                         csdl.SuaThongTinNhanVat(tvname.getText().toString(),csdl.HienThongTinNhanVat().getAvt_id(),csdl.HienThongTinNhanVat().getKhung_id());
-                        csdl.UpdateRuby(cuahangvatpham.this,-10);
+                        csdl.UpdateRuby(-10);
                         CapNhatDuLieu(cuahangvatpham.this);
                         Toast.makeText(cuahangvatpham.this, "Bạn đã đổi tên thành công", Toast.LENGTH_SHORT).show();
                         dialog.dismiss();
@@ -178,7 +178,7 @@ public class cuahangvatpham extends AppCompatActivity implements ItemClick_dapan
         if(dsAVT.get(position).getTinhtrang()==0){
             if(csdl.HienThongTinNhanVat().getRuby()>=dsAVT.get(position).getPrice()){
                 csdl.UpdateSanPham("avt",dsAVT.get(position).getId());
-                csdl.UpdateRuby(cuahangvatpham.this,-dsAVT.get(position).getPrice());
+                csdl.UpdateRuby(-dsAVT.get(position).getPrice());
                 CapNhatDuLieu(cuahangvatpham.this);
             }
             else {
@@ -196,7 +196,7 @@ public class cuahangvatpham extends AppCompatActivity implements ItemClick_dapan
         if(dsKhung.get(position).getTinhtrang()==0){
             if(csdl.HienThongTinNhanVat().getRuby()>=dsKhung.get(position).getPrice()){
                 csdl.UpdateSanPham("khung",dsKhung.get(position).getId());
-                csdl.UpdateRuby(cuahangvatpham.this,-dsKhung.get(position).getPrice());
+                csdl.UpdateRuby(-dsKhung.get(position).getPrice());
                 CapNhatDuLieu(cuahangvatpham.this);
             }
             else {

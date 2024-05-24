@@ -21,20 +21,30 @@ public class CSDL {
     public CSDL(Context applicationContext) {
         db = new DataBase(applicationContext, "DHBC.sql", null, 1);
     }
+    public void recreateDatabase() {
+        db.deleteAllTables();
+        TaoCSDL();
+        insertNewAvt();
+        insertNewData();
+        insertNewKhung();
+        TaoCSDL_gameshow_round2();
+        TaoNhanVat("Khach");
+    }
+    public void LoginTroLai(int ruby, String name, int level, int khung, int avt){
+        SuaThongTinNhanVat(name,avt,khung);
+        UpdateRuby(ruby - HienThongTinNhanVat().getRuby());
+        if(level>0){
+            for(int i=1;i<=level;i++){
+                Update(i);
+            }
+        }
+    }
     public void ChoiLai(Context context){
         db.QueryData("DROP TABLE IF EXISTS CauHoi" );
-        TaoCSDL(context);
+        TaoCSDL();
         Toast.makeText(context, "Bạn đã chọn chơi lại từ đầu", Toast.LENGTH_SHORT).show();
     }
-    public void TaoCSDL(Context context) {
-//        db.QueryData("DROP TABLE IF EXISTS Ruby" );
-        Cursor cursor1 = db.GetData("SELECT name FROM sqlite_master WHERE type='table' AND name='Rubys'");
-        if (cursor1 == null || cursor1.getCount() <= 0) {
-            db.QueryData("CREATE TABLE IF NOT EXISTS Rubys (id INTEGER PRIMARY KEY AUTOINCREMENT,SoLuong Integer)");
-            db.QueryData("INSERT INTO Rubys  VALUES (null,24)");
-        }
-
-
+    public void TaoCSDL() {
         Cursor cursor = db.GetData("SELECT name FROM sqlite_master WHERE type='table' AND name='CauHoi'");
         if (cursor == null || cursor.getCount() <= 0) {
             db.QueryData("CREATE TABLE IF NOT EXISTS CauHoi (id INTEGER PRIMARY KEY AUTOINCREMENT, HinhAnh TEXT, DapAn NVARCHAR(100), TinhTrang INTEGER DEFAULT 0)");
@@ -297,7 +307,6 @@ public class CSDL {
             }
         }
     }
-
     public void insertNewKhung(){
         // Dữ liệu bạn muốn thêm vào bảng khung
         // Thêm các hình ảnh khung khác tương tự ở đây
@@ -322,10 +331,6 @@ public class CSDL {
             }
         }
     }
-
-
-
-
     public  boolean KiemTraNhanVat(Context context){
         Cursor cursor1 = db.GetData("SELECT name FROM sqlite_master WHERE type='table' AND name='ThongTinNguoiChoi1'");
         if (cursor1 == null || cursor1.getCount() <= 0) {
@@ -464,10 +469,10 @@ public class CSDL {
     }
 
     //update câu hỏi
-    public void Update(Context context, int id){
+    public void Update(int id){
         db.QueryData("update CauHoi set TinhTrang=1 where id="+id);
     }
-    public void UpdateRuby(Context context, int slg){
+    public void UpdateRuby(int slg){
 
 //        db.QueryData("update Rubys set SoLuong= SoLuong+"+slg);
         db.QueryData("update ThongTinNguoiChoi1 set ruby=ruby +"+slg);
@@ -503,5 +508,21 @@ class DataBase extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
 
+    }
+    // Phương thức xóa tất cả các bảng
+    public void deleteAllTables() {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        // Truy vấn danh sách các bảng
+        Cursor cursor = db.rawQuery("SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%';", null);
+        if (cursor.moveToFirst()) {
+            do {
+                // Lấy tên bảng
+                String tableName = cursor.getString(0);
+                // Xóa bảng
+                db.execSQL("DROP TABLE IF EXISTS " + tableName);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
     }
 }

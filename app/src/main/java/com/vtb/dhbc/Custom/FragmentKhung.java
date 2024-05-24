@@ -59,7 +59,7 @@ public class FragmentKhung extends Fragment implements ItemClick_cauhoi {
         if(dsKhung.get(position).getTinhtrang()==0){
             if(csdl.HienThongTinNhanVat().getRuby()>=dsKhung.get(position).getPrice()){
                 csdl.UpdateSanPham("khung",dsKhung.get(position).getId());
-                csdl.UpdateRuby(getContext(),-dsKhung.get(position).getPrice());
+                csdl.UpdateRuby(-dsKhung.get(position).getPrice());
                 CapNhatDuLieu();
             }
             else {

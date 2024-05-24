@@ -60,7 +60,7 @@ public class FragmentAvatar extends Fragment implements ItemClick_dapan {
         if(dsAVT.get(position).getTinhtrang()==0){
             if(csdl.HienThongTinNhanVat().getRuby()>=dsAVT.get(position).getPrice()){
                 csdl.UpdateSanPham("avt",dsAVT.get(position).getId());
-                csdl.UpdateRuby(getContext(),-dsAVT.get(position).getPrice());
+                csdl.UpdateRuby(-dsAVT.get(position).getPrice());
                 CapNhatDuLieu();
             }
             else {

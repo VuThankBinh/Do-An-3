@@ -81,7 +81,7 @@ public class layout_home2 extends AppCompatActivity {
         volumn2=prefs.getFloat("volumnXB",1);
         AnhXa();
         csdl=new CSDL(getApplicationContext());
-        csdl.TaoCSDL(getApplicationContext());
+        csdl.TaoCSDL();
         csdl.insertNewData();
         csdl.TaoCSDL_gameshow_round2();
         csdl.insertNewAvt();

@@ -302,7 +302,7 @@ public class GameShowRound1 extends AppCompatActivity implements ItemClick_dapan
                     public void onClick(View view) {
                         dialog.dismiss();
                         GameShowRound1.this.finish();
-                        csdl.UpdateRuby(GameShowRound1.this,5);
+                        csdl.UpdateRuby(5);
                     }
                 });
                 btnchoitiep.setOnClickListener(new View.OnClickListener() {
@@ -337,7 +337,7 @@ public class GameShowRound1 extends AppCompatActivity implements ItemClick_dapan
                     public void onClick(View view) {
                         recreate();
                         dialog.dismiss();
-                        csdl.UpdateRuby(GameShowRound1.this,5);
+                        csdl.UpdateRuby(5);
                     }
                 });
             }
@@ -352,7 +352,7 @@ public class GameShowRound1 extends AppCompatActivity implements ItemClick_dapan
                     public void onClick(View view) {
                         dialog.dismiss();
                         GameShowRound1.this.finish();
-                        csdl.UpdateRuby(GameShowRound1.this,5);
+                        csdl.UpdateRuby(5);
                     }
                 });
                 btnchoitiep.setOnClickListener(new View.OnClickListener() {
@@ -387,7 +387,7 @@ public class GameShowRound1 extends AppCompatActivity implements ItemClick_dapan
                     public void onClick(View view) {
                         recreate();
                         dialog.dismiss();
-                        csdl.UpdateRuby(GameShowRound1.this,5);
+                        csdl.UpdateRuby(5);
                     }
                 });
             }

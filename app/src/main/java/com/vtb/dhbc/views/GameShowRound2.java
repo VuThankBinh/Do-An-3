@@ -511,7 +511,7 @@ public class GameShowRound2 extends AppCompatActivity implements ItemClick_dapan
                     public void onClick(View view) {
                         dialog.dismiss();
                         GameShowRound2.this.finish();
-                        csdl.UpdateRuby(GameShowRound2.this,15);
+                        csdl.UpdateRuby(15);
                     }
                 });
                 btnchoitiep.setOnClickListener(new View.OnClickListener() {
@@ -541,7 +541,7 @@ public class GameShowRound2 extends AppCompatActivity implements ItemClick_dapan
                     public void onClick(View view) {
                         recreate();
                         dialog.dismiss();
-                        csdl.UpdateRuby(GameShowRound2.this,5);
+                        csdl.UpdateRuby(5);
                     }
                 });
             }
