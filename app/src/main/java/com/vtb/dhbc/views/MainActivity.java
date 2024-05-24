@@ -367,7 +367,7 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
     @Override
     public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
         Toast.makeText(this, "Nhận thưởng thành công", Toast.LENGTH_SHORT).show();
-        csdl.UpdateRuby(MainActivity.this,10);
+        csdl.UpdateRuby(10);
         loadAd();
         slgRuby1= csdl.HienThongTinNhanVat().getRuby();
         slgRuby.setText(String.valueOf(slgRuby1));
@@ -476,8 +476,8 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
             @Override
             public void onDismiss(DialogInterface dialogInterface) {
                 // Thực hiện cập nhật CSDL và tải lại trang
-                csdl.Update(MainActivity.this,ch.getId());
-                csdl.UpdateRuby(MainActivity.this,3);
+                csdl.Update(ch.getId());
+                csdl.UpdateRuby(3);
                 csdl.UpdateThongTin(ch.getId(),thongTinNguoiChoi.getLevel());
                 loadTrang();
             }
@@ -850,7 +850,7 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
 
                     }
                     HienTroGiup();
-                    csdl.UpdateRuby(MainActivity.this,-5);
+                    csdl.UpdateRuby(-5);
                     slgRuby1=csdl.HienThongTinNhanVat().getRuby();
                     slgRuby.setText(String.valueOf(slgRuby1));
                 }
@@ -911,7 +911,7 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
 
 
                         }
-                        csdl.UpdateRuby(MainActivity.this,-15);
+                        csdl.UpdateRuby(-15);
                         slgRuby1=csdl.HienThongTinNhanVat().getRuby();
                         slgRuby.setText(String.valueOf(slgRuby1));
 
@@ -936,7 +936,7 @@ public class MainActivity extends AppCompatActivity implements ItemClick_dapan, 
 
                         HienTroGiup();
                     }
-                    csdl.UpdateRuby(MainActivity.this,-30);
+                    csdl.UpdateRuby(-30);
                     slgRuby1=csdl.HienThongTinNhanVat().getRuby();
                     slgRuby.setText(String.valueOf(slgRuby1));
 
