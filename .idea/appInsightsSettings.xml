@@ -8,10 +8,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="com.vtb.dhbc" />
+                  <option name="mobileSdkAppId" value="1:735147254674:android:1455c29956133e8db7974b" />
+                  <option name="projectId" value="doan3andbtlreactnative" />
+                  <option name="projectNumber" value="735147254674" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />
