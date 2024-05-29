@@ -39,6 +39,21 @@ public class PlayerInfoAdapter extends RecyclerView.Adapter<PlayerInfoAdapter.Pl
     @Override
     public void onBindViewHolder(@NonNull PlayerInfoViewHolder holder, int position) {
         ThongTinNguoiChoi playerInfo = playerInfoList.get(position);
+        switch (position) {
+            case(0):
+                holder.ivFrame.setImageResource(R.drawable.khung_top1);
+                break;
+            case(1):
+                holder.ivFrame.setImageResource(R.drawable.khung_top2);
+                break;
+            case(2):
+                holder.ivFrame.setImageResource(R.drawable.khung_top3);
+                break;
+            default:
+                holder.tvTop.setText(String.valueOf(position + 1));
+                holder.tvTop.setVisibility(View.VISIBLE);
+                break;
+        }
         String fileAvt = "avt"+String.valueOf(playerInfo.getAvt_id()); // Lấy tên tệp ảnh từ đối tượng baiHat
         holder.tvName.setText(playerInfo.getName());
         // Kiểm tra xem id của hình ảnh có hợp lệ không
@@ -52,12 +67,12 @@ public class PlayerInfoAdapter extends RecyclerView.Adapter<PlayerInfoAdapter.Pl
         }
         switch (infoName) {
             case("ruby"):
-                holder.tvInfo.setText(playerInfo.getRuby());
+                holder.tvInfo.setText(playerInfo.getRuby() + "");
                 holder.ivImage.setImageResource(R.drawable.ruby);
                 break;
             case("level"):
-                holder.tvInfo.setText(playerInfo.getLevel());
-                holder.ivImage.setImageResource(R.drawable.level);
+                holder.tvInfo.setText(playerInfo.getLevel() + "");
+                holder.ivImage.setVisibility(View.GONE);
                 break;
         }
         // Bind other views if necessary
@@ -69,12 +84,14 @@ public class PlayerInfoAdapter extends RecyclerView.Adapter<PlayerInfoAdapter.Pl
     }
 
     public class PlayerInfoViewHolder extends RecyclerView.ViewHolder {
-        ImageView ivAvatar, ivImage;
-        TextView tvName, tvInfo;
+        ImageView ivAvatar, ivFrame, ivImage;
+        TextView tvTop, tvName, tvInfo;
         public PlayerInfoViewHolder(@NonNull View itemView) {
             super(itemView);
             ivAvatar = itemView.findViewById(R.id.iv_leaderboard_info_avatar);
             ivImage = itemView.findViewById(R.id.iv_leaderboard_info_image);
+            ivFrame = itemView.findViewById(R.id.iv_leaderboard_info_frame);
+            tvTop = itemView.findViewById(R.id.tv_leaderboard_info_top);
             tvName = itemView.findViewById(R.id.tv_leaderboard_info_name);
             tvInfo = itemView.findViewById(R.id.tv_leaderboard_info_info);
         }

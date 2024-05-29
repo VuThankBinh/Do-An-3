@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -28,6 +29,7 @@ import java.util.List;
 
 public class LeaderboardActivity extends AppCompatActivity {
     private CategoryPagerAdapter adapter;
+    Button back2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +41,13 @@ public class LeaderboardActivity extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         hideNavigationBar();
         setContentView(R.layout.activity_leaderboard);
-
+        back2=findViewById(R.id.backr2);
+        back2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
         ViewPager viewPager = findViewById(R.id.vp_leaderboard_viewpager);
         TabLayout tabLayout = findViewById(R.id.tl_leaderboard_tablayout);
 
@@ -74,10 +82,10 @@ public class LeaderboardActivity extends AppCompatActivity {
                     ImageView imageView = tabView.findViewById(R.id.iv_tab_image);
                     switch (i) {
                         case (0):
-                            imageView.setImageResource(R.drawable.avt1);
+                            imageView.setImageResource(R.drawable.ttruby);
                             break;
                         case (1):
-                            imageView.setImageResource(R.drawable.avt2);
+                            imageView.setImageResource(R.drawable.ttch);
                             break;
                     }
                 }

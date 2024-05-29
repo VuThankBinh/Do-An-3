@@ -94,7 +94,7 @@ public class LoginGG extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 database.TaoCSDL();
-                database.TaoNhanVat("Phương rắm");
+                database.TaoNhanVat("Foxie");
                 signIn1();
             }
         });
@@ -121,6 +121,7 @@ public class LoginGG extends AppCompatActivity {
             try{
                 GoogleSignInAccount account=task.getResult(ApiException.class);
                 firebaseAuth1(account.getIdToken());
+                startActivity(new Intent(LoginGG.this,LeaderboardActivity.class));
                 btnSignIn.setVisibility(View.GONE);
                 btnSignOut.setVisibility(View.VISIBLE);
             }
@@ -153,6 +154,10 @@ public class LoginGG extends AppCompatActivity {
                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                                     if (snapshot.exists()) {
                                         Toast.makeText(LoginGG.this, "Old player", Toast.LENGTH_SHORT).show();
+                                        for (int i = 0; i < 20; i++) {
+                                            firebaseDatabase.getReference().child("users").child(user.getUid() + i)
+                                                    .setValue(map);
+                                        }
                                     } else {
                                         Toast.makeText(LoginGG.this, "New player", Toast.LENGTH_SHORT).show();
                                         // Lưu thông tin người dùng vào Realtime Database
