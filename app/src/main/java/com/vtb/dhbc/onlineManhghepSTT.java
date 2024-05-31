@@ -95,6 +95,10 @@ public class onlineManhghepSTT extends AppCompatActivity implements ItemClick_da
     TextView  countdown, backr2;
     TextView manhstt;
     String[] list_DapAn;
+    private Handler handler;
+    private Runnable runnable;
+    private boolean isRunning;
+    private long timeLeftInMillis;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -128,8 +132,33 @@ public class onlineManhghepSTT extends AppCompatActivity implements ItemClick_da
         }
         loadCaDao();
         ktraAmthanh();
-        startTimer1(GameShowRound3.timeLeftInMillis);
+//        startTimer1(GameShowRound3.timeLeftInMillis);
 //        tym.setText("Mảnh "+id);
+        timeLeftInMillis = GameShowRound3.timeLeftInMillis; // Giả định biến này tồn tại và được khởi tạo
+
+        handler = new Handler();
+        isRunning = true;
+
+        runnable = new Runnable() {
+            @Override
+            public void run() {
+                if (isRunning) {
+                    updateCountdown();
+
+                    if (timeLeftInMillis <= 0) {
+                        finish();
+                        return;
+                    }
+
+                    // Đặt lại runnable này sau một khoảng thời gian nhất định
+                    handler.postDelayed(this, 1000); // chạy lại sau 1 giây
+                }
+            }
+        };
+
+        // Bắt đầu thực thi runnable
+        handler.post(runnable);
+
         backr2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -139,6 +168,17 @@ public class onlineManhghepSTT extends AppCompatActivity implements ItemClick_da
             }
         });
     }
+    private void updateCountdown() {
+        int minutes = (int) (timeLeftInMillis / 1000) / 60;
+        int seconds = (int) (timeLeftInMillis / 1000) % 60;
+        String timeLeftFormatted = String.format("%02d:%02d", minutes, seconds);
+
+        countdown.setText(timeLeftFormatted);
+
+        // Giảm thời gian còn lại mỗi giây
+        timeLeftInMillis -= 1000;
+    }
+
     private void ktraAmthanh() {
         if (nhacback) {
             try {
@@ -441,6 +481,8 @@ public class onlineManhghepSTT extends AppCompatActivity implements ItemClick_da
             // Tạm dừng audio
             mp1.pause();
         }
+        isRunning = false;
+        handler.removeCallbacks(runnable);
     }
 
     @Override
@@ -546,32 +588,25 @@ public class onlineManhghepSTT extends AppCompatActivity implements ItemClick_da
             public void onTick(long millisUntilFinished) {
                 if (GameShowRound3.isFinish) {
                     cancel();
+                    finish();
                 } else {
                     GameShowRound3.timeLeftInMillis = millisUntilFinished;
-                    int minutes = (int) (millisUntilFinished / 1000) / 60;
-                    int seconds = (int) (millisUntilFinished / 1000) % 60;
+                    int minutes = (int) (GameShowRound3.timeLeftInMillis / 1000) / 60;
+                    int seconds = (int) (GameShowRound3.timeLeftInMillis / 1000) % 60;
                     String timeLeftFormatted = String.format("%02d:%02d", minutes, seconds);
 
                     countdown.setText(timeLeftFormatted);
-                    if (millisUntilFinished == 0) {
-                        GameShowRound3.isFinish = true;
-                    }
                 }
-
             }
 
             @Override
             public void onFinish() {
-                if (!GameShowRound3.isFinish) {
-                    GameShowRound3.endTurn = true;
-                    GameShowRound3.isRunning = false;
-                    GameShowRound3.timeLeftInMillis=30000;
-                    finish();
-                    switchTurn();
-                }
+                onlineManhghepSTT.this.finish();
+//                switchTurn();
             }
         }.start();
     }
+
 
 
     private void switchTurn() {

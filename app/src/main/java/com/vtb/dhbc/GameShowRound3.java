@@ -1,10 +1,12 @@
 package com.vtb.dhbc;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -13,6 +15,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -213,18 +216,29 @@ public class GameShowRound3 extends AppCompatActivity implements ItemClick_dapan
                         }
                     }
                     turnn=room.getTurn().trim();
-                    if(room.getTurn().trim().equalsIgnoreCase(userId.trim())){
-                        turn.setText("Lượt của bạn còn: ");
-                        timeLeftInMillis=30000;
-                        startTimer1(timeLeftInMillis);
-                        VisibilityItem();
+                    if(!room.getIdWin().trim().equalsIgnoreCase("")){
+                        if(room.getIdWin().trim().equalsIgnoreCase(userId.trim())){
+                            EndGamePvP();
+                        }
+                        else {
+                            ShowGameOver();
+                        }
                     }
                     else {
-                        turn.setText("Lượt đối phương còn: ");
-                        GoneItem();
-                        timeLeftInMillis=30000;
-                        startTimer2(timeLeftInMillis);
+                        if(room.getTurn().trim().equalsIgnoreCase(userId.trim())){
+                            turn.setText("Lượt của bạn còn: ");
+                            timeLeftInMillis=30000;
+                            startTimer1(timeLeftInMillis);
+                            VisibilityItem();
+                        }
+                        else {
+                            turn.setText("Lượt đối phương còn: ");
+                            GoneItem();
+                            timeLeftInMillis=30000;
+                            startTimer2(timeLeftInMillis);
+                        }
                     }
+
                     if(!isload){
                         isload=true;
                         loadcauhoi();
@@ -575,7 +589,7 @@ public class GameShowRound3 extends AppCompatActivity implements ItemClick_dapan
                         mp1.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                             @Override
                             public void onCompletion(MediaPlayer mp) {
-
+                                EndGamePvP();
 //                                showDialogChucMung();
 //                                mp1.reset();
 //                                mp1.setVolume(volumn2, volumn2);
@@ -592,7 +606,7 @@ public class GameShowRound3 extends AppCompatActivity implements ItemClick_dapan
                         @Override
                         public void run() {
                             Toast.makeText(GameShowRound3.this, "Đáp án hoàn toàn chính xác", Toast.LENGTH_SHORT).show();
-
+                            EndGamePvP();
                         }
                     }, 1000);
 
@@ -601,6 +615,7 @@ public class GameShowRound3 extends AppCompatActivity implements ItemClick_dapan
 
             }
             else {
+                mang1--;
                 if(nhacXB){
                     int[] list_daylagi={R.raw.chuachinhxac0,R.raw.chuachinhxac1,R.raw.chuachinhxac2,R.raw.chuachinhxac3,R.raw.chuachinhxac4,R.raw.chuachinhxac5,R.raw.chuachinhxac6};
                     Random random1 = new Random();
@@ -615,6 +630,7 @@ public class GameShowRound3 extends AppCompatActivity implements ItemClick_dapan
                         mp1.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                             @Override
                             public void onCompletion(MediaPlayer mp) {
+                                tym.setText(mang1 + "❤\uFE0F");
 //                                mp1.reset();
 //                                mp1.setVolume(volumn2, volumn2);
 //                                loadTrang();
@@ -627,6 +643,7 @@ public class GameShowRound3 extends AppCompatActivity implements ItemClick_dapan
                 }
                 else {
                     Toast.makeText(this, "Đáp án chưa chính xac, tiếp tục", Toast.LENGTH_SHORT).show();
+                    tym.setText(mang1 + "❤\uFE0F");
 //                    loadTrang();
                 }
 
@@ -634,7 +651,108 @@ public class GameShowRound3 extends AppCompatActivity implements ItemClick_dapan
             }
 
         }
+        if(mang1==0){
+            ShowGameOver();
+        }
     }
+
+    private void EndGamePvP() {
+        EndStatus(roomId,userId);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(false); // Ngăn dialog đóng khi chạm ra ngoài
+
+        // Thiết lập nội dung cho dialog
+        builder.setMessage("Bạn đã chiến thắng")
+                .setPositiveButton("Xác nhận", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // Xử lý khi bấm nút Thoát
+                        csdl.UpdateRuby(25);
+                        dialog.dismiss();
+                        GameShowRound3.this.finish();
+                    }
+                });
+
+        AlertDialog dialog = builder.create();
+
+        // Thiết lập hành vi khi bấm nút back
+        dialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
+            @Override
+            public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP) {
+                    csdl.UpdateRuby(25); // Gọi hàm UpdateRuby khi bấm nút back
+                    dialog.dismiss(); // Đóng dialog
+                    GameShowRound3.this.finish();
+                    return true;
+                }
+                return false;
+            }
+        });
+
+        dialog.show();
+    }
+    private void ShowGameOver() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(false); // Ngăn dialog đóng khi chạm ra ngoài
+
+        // Thiết lập nội dung cho dialog
+        builder.setMessage("GameOver")
+                .setPositiveButton("Xác nhận", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // Xử lý khi bấm nút Thoát
+                        csdl.UpdateRuby(5);
+                        dialog.dismiss();
+                        GameShowRound3.this.finish();
+                    }
+                });
+
+        AlertDialog dialog = builder.create();
+
+        // Thiết lập hành vi khi bấm nút back
+        dialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
+            @Override
+            public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP) {
+                    csdl.UpdateRuby(5); // Gọi hàm UpdateRuby khi bấm nút back
+                    dialog.dismiss(); // Đóng dialog
+                    GameShowRound3.this.finish();
+                    return true;
+                }
+                return false;
+            }
+        });
+
+        dialog.show();
+    }
+    private void EndStatus(String idRoom, String idUser){
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference roomRef = database.getReference("rooms").child(idRoom);
+
+        // Đặt giá trị mới cho trường "status"
+        roomRef.child("status").setValue("gameover", new DatabaseReference.CompletionListener() {
+            @Override
+            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                if (databaseError != null) {
+                    System.out.println("Lỗi khi cập nhật trạng thái phòng: " + databaseError.getMessage());
+                } else {
+                    System.out.println("Cập nhật trạng thái phòng thành công!");
+                }
+            }
+        });
+
+        // Đặt giá trị mới cho trường "idWin"
+        roomRef.child("idWin").setValue(userId, new DatabaseReference.CompletionListener() {
+            @Override
+            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                if (databaseError != null) {
+                    System.out.println("Lỗi khi cập nhật id người chiến thắng: " + databaseError.getMessage());
+                } else {
+                    System.out.println("Cập nhật id người chiến thắng thành công!");
+                }
+            }
+        });
+    }
+
+    int mang1=3;
    static long timeLeftInMillis = 30000;
    static boolean isRunning = true;
    static boolean isFinish = false,isFinish2=false,endTurn=false;
@@ -670,13 +788,13 @@ public class GameShowRound3 extends AppCompatActivity implements ItemClick_dapan
                 if (!isFinish) {
                     endTurn = true;
                     isRunning = false;
-//                    timeLeftInMillis=30000;
                     switchTurn();
 //                    showDialogEndRound1();
                 }
             }
         }.start();
     }
+
     private void startTimer2(long millisInFuture) {
         if(countDownTimer != null) {
             countDownTimer.cancel();
@@ -708,11 +826,6 @@ public class GameShowRound3 extends AppCompatActivity implements ItemClick_dapan
                 if (!isFinish) {
                     endTurn = true;
                     isRunning = false;
-                    timeLeftInMillis=30000;
-//                    Toast.makeText(onlineManhghepSTT.this, "Trò chơi kết thúc", Toast.LENGTH_SHORT).show();
-//                    finish();
-//                    switchTurn();
-//                    showDialogEndRound1();
                 }
             }
         }.start();
