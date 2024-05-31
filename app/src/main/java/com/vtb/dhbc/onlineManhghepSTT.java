@@ -1,13 +1,19 @@
-package com.vtb.dhbc.views;
+package com.vtb.dhbc;
 
+import static android.app.ProgressDialog.show;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -15,26 +21,36 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.vtb.dhbc.Adapter.Round2_cauhoiAdapter;
-import com.vtb.dhbc.Adapter.Round2_dapanAdapter;
-import com.vtb.dhbc.CSDL;
-import com.vtb.dhbc.ClassDL.CaDao;
-import com.vtb.dhbc.Interface.ItemClick_cauhoi;
-import com.vtb.dhbc.Interface.ItemClick_dapan;
-import com.vtb.dhbc.R;
 import com.google.android.flexbox.FlexDirection;
 import com.google.android.flexbox.FlexboxLayoutManager;
 import com.google.android.flexbox.JustifyContent;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.vtb.dhbc.Adapter.Round2_cauhoiAdapter;
+import com.vtb.dhbc.Adapter.Round2_dapanAdapter;
+import com.vtb.dhbc.ClassDL.CaDao;
+import com.vtb.dhbc.ClassDL.Room;
+import com.vtb.dhbc.Interface.ItemClick_cauhoi;
+import com.vtb.dhbc.Interface.ItemClick_dapan;
+import com.vtb.dhbc.views.GameShowRound1;
+import com.vtb.dhbc.views.GameShowRound2;
+import com.vtb.dhbc.views.cauCaDao_round2;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
-public class cauCaDao_round2 extends AppCompatActivity implements ItemClick_dapan, ItemClick_cauhoi {
+public class onlineManhghepSTT extends AppCompatActivity implements ItemClick_dapan, ItemClick_cauhoi {
     static boolean nhacXB ;
     static boolean nhacback;
     static float volumn1,volumn2;
@@ -42,6 +58,8 @@ public class cauCaDao_round2 extends AppCompatActivity implements ItemClick_dapa
     public static CaDao caDao;
 
     public static int id=0;
+    private String userId;
+    private String roomId;
     String[] caDaoTucNgu = {
             "công", "cha", "như", "núi", "Thái", "Sơn", "nghĩa", "mẹ", "như", "nước",
             "trong", "nguồn", "chảy", "ra", "một", "cây", "làm", "chẳng", "nên", "non",
@@ -74,7 +92,8 @@ public class cauCaDao_round2 extends AppCompatActivity implements ItemClick_dapa
     String DapAn="";
     String[] list_tu,list_cautraloi;
     FlexboxLayoutManager layoutManager,layoutManager2;
-    TextView tym,backr2;
+    TextView  countdown, backr2;
+    TextView manhstt;
     String[] list_DapAn;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,11 +106,13 @@ public class cauCaDao_round2 extends AppCompatActivity implements ItemClick_dapa
         View decorView = getWindow().getDecorView();
         int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
         decorView.setSystemUiVisibility(uiOptions);
-        setContentView(R.layout.activity_cau_ca_dao_round2);
-        tym=findViewById(R.id.countdown);
+        setContentView(R.layout.activity_online_manhghep_stt);
+        countdown=findViewById(R.id.countdown);
         backr2=findViewById(R.id.level);
         cautraloi=findViewById(R.id.listcauhoi);
         layout_2=findViewById(R.id.layout_2);
+        manhstt=findViewById(R.id.manhstt);
+        manhstt.setText("Mảnh "+id);
         dapan=findViewById(R.id.dapan);
         mp = new MediaPlayer();
         mp1 = new MediaPlayer();
@@ -100,16 +121,23 @@ public class cauCaDao_round2 extends AppCompatActivity implements ItemClick_dapa
         nhacXB = prefs.getBoolean("isXB", true);
         volumn1=prefs.getFloat("volumnBack",1);
         volumn2=prefs.getFloat("volumnXB",1);
+        Intent intent = getIntent();
+        if (intent != null) {
+            userId = intent.getStringExtra("userId");
+            roomId = intent.getStringExtra("roomId");
+        }
         loadCaDao();
         ktraAmthanh();
-        tym.setText("Mảnh "+id);
+        startTimer1(GameShowRound3.timeLeftInMillis);
+//        tym.setText("Mảnh "+id);
         backr2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                cauCaDao_round2.this.finish();
+//                isFinish=true;
+//                isFinish2=true;
+                finish();
             }
         });
-
     }
     private void ktraAmthanh() {
         if (nhacback) {
@@ -314,10 +342,11 @@ public class cauCaDao_round2 extends AppCompatActivity implements ItemClick_dapa
                         mp1.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                             @Override
                             public void onCompletion(MediaPlayer mp) {
-
-                                GameShowRound2.traloidung[id-1]=true;
-                                GameShowRound2.datraloi[id-1]=true;
-                                cauCaDao_round2.this.finish();
+                                GameShowRound3.isFinish=true;
+                                GameShowRound3.isFinish2=true;
+                                GameShowRound3.timeLeftInMillis=30000;
+                                getRoomData(roomId);
+                                finish();
                             }
                         });
 
@@ -329,11 +358,12 @@ public class cauCaDao_round2 extends AppCompatActivity implements ItemClick_dapa
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(cauCaDao_round2.this, "Đáp án hoàn toàn chính xác", Toast.LENGTH_SHORT).show();
-
-                            GameShowRound2.traloidung[id-1]=true;
-                            GameShowRound2.datraloi[id-1]=true;
-                            cauCaDao_round2.this.finish();
+                            Toast.makeText(onlineManhghepSTT.this, "Đáp án hoàn toàn chính xác", Toast.LENGTH_SHORT).show();
+                            getRoomData(roomId);
+                            GameShowRound3.timeLeftInMillis=30000;
+                            GameShowRound3.isFinish=true;
+                            GameShowRound3.isFinish2=true;
+                            finish();
 
                         }
                     }, 1000);
@@ -354,8 +384,7 @@ public class cauCaDao_round2 extends AppCompatActivity implements ItemClick_dapa
                         mp1.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                             @Override
                             public void onCompletion(MediaPlayer mp) {
-                                GameShowRound2.datraloi[id-1]=true;
-                                cauCaDao_round2.this.finish();
+//                                finish();
                             }
                         });
 
@@ -366,8 +395,7 @@ public class cauCaDao_round2 extends AppCompatActivity implements ItemClick_dapa
                 else {
                     Toast.makeText(this, "Đáp án chưa chính xac, tiếp tục", Toast.LENGTH_SHORT).show();
 //                    loadTrang();
-                    GameShowRound2.datraloi[id-1]=true;
-                    cauCaDao_round2.this.finish();
+//                    finish();
 
                 }
             }
@@ -428,5 +456,154 @@ public class cauCaDao_round2 extends AppCompatActivity implements ItemClick_dapa
             // Tạm dừng audio
             mp1.pause();
         }
+    }
+
+
+
+    public void getRoomData(String Id) {
+
+        DatabaseReference roomRef = FirebaseDatabase.getInstance().getReference().child("rooms").child(Id);
+
+        roomRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Room room = dataSnapshot.getValue(Room.class);
+                if (room != null) {
+                    // Handle the retrieved room data here
+                    Log.d("RoomData", "Room ID: " + dataSnapshot.getKey());
+                    Log.d("RoomData", "User1 ID: " + room.getPlayer1Id());
+                    Log.d("RoomData", "User2 ID: " + room.getPlayer2Id());
+                    Log.d("RoomData", "danhSachManhGhepDaMo: " + room.getDanhSachManhGhepDaMo());
+                    Log.d("RoomData", "danhSachCauCaDao: " + room.getDanhSachCauCaDao());
+                    Log.d("RoomData", "questionTu: " + room.getQuestionTu());
+                    Log.d("RoomData", "turn: " + room.getTurn());
+                    Log.d("RoomData", "Status: " + room.getStatus());
+                    if(GameShowRound3.isFinish2){
+                        updateDanhSachManhGhepDaMoAndTurn(room, id,dataSnapshot.getKey());
+                        GameShowRound3.isFinish2=false;
+                    }
+
+
+
+
+                } else {
+                    Log.d("RoomData", "Room data is null");
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.e("RoomData", "Failed to read room data", databaseError.toException());
+            }
+
+        });
+
+    }
+    private void updateDanhSachManhGhepDaMoAndTurn(Room room, int newItem, String roomKey) {
+        DatabaseReference roomRef = FirebaseDatabase.getInstance().getReference().child("rooms").child(roomKey);
+
+        String currentDanhSachManhGhepDaMo = room.getDanhSachManhGhepDaMo();
+        String currentTurn = room.getTurn();
+        String newTurn;
+
+        // Determine the new turn based on the current turn
+        if (currentTurn.equalsIgnoreCase(room.getPlayer1Id())) {
+            newTurn = room.getPlayer2Id();
+        } else if (currentTurn.equalsIgnoreCase(room.getPlayer2Id())) {
+            newTurn = room.getPlayer1Id();
+        } else {
+            Log.e("UpdateData", "Current turn does not match any player IDs");
+            return;
+        }
+
+        // Append the new item to the existing list
+        String updatedDanhSachManhGhepDaMo;
+        if (currentDanhSachManhGhepDaMo != null) {
+            updatedDanhSachManhGhepDaMo = currentDanhSachManhGhepDaMo + newItem + ",";
+        } else {
+            // If the current value is null, initialize with the new item
+            updatedDanhSachManhGhepDaMo = newItem + ",";
+        }
+
+        // Check if there are actual changes before updating Firebase
+        if (!currentDanhSachManhGhepDaMo.equals(updatedDanhSachManhGhepDaMo) || !currentTurn.equals(newTurn)) {
+            // Update both danhSachManhGhepDaMo and turn fields in Firebase
+            Map<String, Object> updates = new HashMap<>();
+            updates.put("danhSachManhGhepDaMo", updatedDanhSachManhGhepDaMo);
+            updates.put("turn", newTurn);
+
+            roomRef.updateChildren(updates)
+                    .addOnSuccessListener(aVoid -> Log.d("UpdateData", "Successfully updated danhSachManhGhepDaMo and turn"))
+                    .addOnFailureListener(e -> Log.e("UpdateData", "Failed to update danhSachManhGhepDaMo and turn", e));
+        } else {
+            Log.d("UpdateData", "No changes detected, skipping Firebase update");
+        }
+    }
+    private void startTimer1(long millisInFuture) {
+        GameShowRound3.countDownTimer = new CountDownTimer(millisInFuture, 1000) {
+
+            @Override
+            public void onTick(long millisUntilFinished) {
+                if (GameShowRound3.isFinish) {
+                    cancel();
+                } else {
+                    GameShowRound3.timeLeftInMillis = millisUntilFinished;
+                    int minutes = (int) (millisUntilFinished / 1000) / 60;
+                    int seconds = (int) (millisUntilFinished / 1000) % 60;
+                    String timeLeftFormatted = String.format("%02d:%02d", minutes, seconds);
+
+                    countdown.setText(timeLeftFormatted);
+                    if (millisUntilFinished == 0) {
+                        GameShowRound3.isFinish = true;
+                    }
+                }
+
+            }
+
+            @Override
+            public void onFinish() {
+                if (!GameShowRound3.isFinish) {
+                    GameShowRound3.endTurn = true;
+                    GameShowRound3.isRunning = false;
+                    GameShowRound3.timeLeftInMillis=30000;
+                    finish();
+                    switchTurn();
+                }
+            }
+        }.start();
+    }
+
+
+    private void switchTurn() {
+        DatabaseReference roomRef = FirebaseDatabase.getInstance().getReference().child("rooms").child(roomId);
+        roomRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Room room = snapshot.getValue(Room.class);
+
+
+                if (room != null) {
+                    String nextTurn = "";
+                    if(room.getPlayer1Id().equalsIgnoreCase(room.getTurn())){
+                        nextTurn=room.getPlayer2Id();
+                    }
+                    if(room.getPlayer2Id().equalsIgnoreCase(room.getTurn())){
+                        nextTurn=room.getPlayer1Id();
+                    }
+                    roomRef.child("turn").setValue(nextTurn);
+                    GameShowRound3.isRunning = true;
+                    GameShowRound3.isFinish = false;
+                    GameShowRound3.isFinish2 = false;
+                    GameShowRound3.endTurn = false;
+
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e("GameShowRound3", "Failed to switch turn", error.toException());
+            }
+        });
     }
 }

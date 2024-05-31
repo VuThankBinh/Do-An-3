@@ -28,7 +28,9 @@ import android.widget.Toast;
 
 import com.vtb.dhbc.CSDL;
 import com.vtb.dhbc.ClassDL.ThongTinNguoiChoi;
+import com.vtb.dhbc.LoginGG;
 import com.vtb.dhbc.R;
+import com.vtb.dhbc.SreachPhongOnl;
 
 import java.io.IOException;
 
@@ -38,7 +40,7 @@ public class layout_home2 extends AppCompatActivity {
     static boolean nhacback;
     static float volumn1,volumn2;
     static SharedPreferences prefs;
-    AppCompatButton choingay,choilai,bxh,thoat,shop,settings,share;
+    AppCompatButton choingay,choilai,bxh,thoat,shop,settings,share,login;
 
 
     MediaPlayer mp,mp1;
@@ -58,6 +60,7 @@ public class layout_home2 extends AppCompatActivity {
         shop=findViewById(R.id.shop);
         settings=findViewById(R.id.setting);
         share=findViewById(R.id.share);
+        login=findViewById(R.id.login);
         mp=new MediaPlayer();
         mp1=new MediaPlayer();
 
@@ -116,12 +119,30 @@ public class layout_home2 extends AppCompatActivity {
         choilai.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(nhacXB){
-                    mp=MediaPlayer.create(layout_home2.this,R.raw.win);
-                    mp1.setVolume(volumn1,volumn1);
-                    mp1.start();
+                if (nhacXB) {
+                    try {
+                        mp.stop();
+                        mp1.stop();
+                        mp1.reset();
+                        mp1.setDataSource(getResources().openRawResourceFd(R.raw.win));
+                        mp1.setVolume(volumn1,volumn1);
+                        mp1.prepare();
+
+                        mp1.start();
+
+//                    layout_home2.this.finish();
+
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
-                showDialogChoiLai();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        startActivity(new Intent(layout_home2.this, SreachPhongOnl.class));
+                    }
+                },1000);
+//                showDialogChoiLai();
 
             }
         });
@@ -135,13 +156,59 @@ public class layout_home2 extends AppCompatActivity {
         choingay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(nhacXB){
-                    mp=MediaPlayer.create(layout_home2.this,R.raw.win);
-                    mp1.setVolume(volumn1,volumn1);
-                    mp1.start();
-                }
-                startActivity(new Intent(layout_home2.this,ChonCheDoChoi.class));
+                if (nhacXB) {
+                    try {
+                        mp.stop();
+                        mp1.stop();
+                        mp1.reset();
+                        mp1.setDataSource(getResources().openRawResourceFd(R.raw.win));
+                        mp1.setVolume(volumn1,volumn1);
+                        mp1.prepare();
 
+                        mp1.start();
+
+//                    layout_home2.this.finish();
+
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        startActivity(new Intent(layout_home2.this,ChonCheDoChoi.class));
+                    }
+                },1000);
+
+
+            }
+        });
+        bxh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (nhacXB) {
+                    try {
+                        mp.stop();
+                        mp1.stop();
+                        mp1.reset();
+                        mp1.setDataSource(getResources().openRawResourceFd(R.raw.win));
+                        mp1.setVolume(volumn1,volumn1);
+                        mp1.prepare();
+
+                        mp1.start();
+
+//                    layout_home2.this.finish();
+
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        startActivity(new Intent(layout_home2.this, LeaderboardActivity.class));
+                    }
+                },1000);
             }
         });
         mp = new MediaPlayer();
@@ -170,9 +237,21 @@ public class layout_home2 extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (nhacXB){
-                        mp=MediaPlayer.create(layout_home2.this,R.raw.win);
+                    try {
+                        mp.stop();
+                        mp1.stop();
+                        mp1.reset();
+                        mp1.setDataSource(getResources().openRawResourceFd(R.raw.win));
                         mp1.setVolume(volumn1,volumn1);
+                        mp1.prepare();
+
                         mp1.start();
+
+//                    layout_home2.this.finish();
+
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
 
                 }
                 new Handler().postDelayed(new Runnable() {
@@ -188,22 +267,75 @@ public class layout_home2 extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (nhacXB) {
-                    mp=MediaPlayer.create(layout_home2.this,R.raw.win);
-                    mp1.setVolume(volumn1,volumn1);
-                    mp1.start();
+                    try {
+                        mp.stop();
+                        mp1.stop();
+                        mp1.reset();
+                        mp1.setDataSource(getResources().openRawResourceFd(R.raw.win));
+                        mp1.setVolume(volumn1,volumn1);
+                        mp1.prepare();
+
+                        mp1.start();
+
+//                    layout_home2.this.finish();
+
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
-                ShareLinkApp();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        ShareLinkApp();
+                    }
+                },1000);
+
             }
         });
         settings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (nhacXB) {
-                    mp=MediaPlayer.create(layout_home2.this,R.raw.win);
-                    mp1.setVolume(volumn1,volumn1);
-                    mp1.start();
+                    try {
+                        mp.stop();
+                        mp1.stop();
+                        mp1.reset();
+                        mp1.setDataSource(getResources().openRawResourceFd(R.raw.win));
+                        mp1.setVolume(volumn1,volumn1);
+                        mp1.prepare();
+
+                        mp1.start();
+
+//                    layout_home2.this.finish();
+
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
                 showDialogSettings();
+            }
+        });
+        login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (nhacXB) {
+                    try {
+                        mp.stop();
+                        mp1.stop();
+                        mp1.reset();
+                        mp1.setDataSource(getResources().openRawResourceFd(R.raw.win));
+                        mp1.setVolume(volumn1,volumn1);
+                        mp1.prepare();
+
+                        mp1.start();
+
+//                    layout_home2.this.finish();
+
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+                startActivity(new Intent(layout_home2.this, LoginGG.class));
             }
         });
     }

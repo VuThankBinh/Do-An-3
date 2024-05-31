@@ -503,15 +503,16 @@ public class GameShowRound2 extends AppCompatActivity implements ItemClick_dapan
         Button btnchoitiep=dialog.findViewById(R.id.choitiep);
             btnHuy.setBackgroundResource(R.drawable.btntuchoi);
             ketthuc.setImageResource(R.drawable.ketthuc);
-            diemtv.setText("Dừng cuộc chơi + 15 ruby");
+            diemtv.setText("Kết thúc + 20 ruby");
             if(tymm>0){
                 choi.setImageResource(R.drawable.bn_tiep);
+                btnchoitiep.setVisibility(View.GONE);
                 btnHuy.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         dialog.dismiss();
                         GameShowRound2.this.finish();
-                        csdl.UpdateRuby(15);
+                        csdl.UpdateRuby(20);
                     }
                 });
                 btnchoitiep.setOnClickListener(new View.OnClickListener() {

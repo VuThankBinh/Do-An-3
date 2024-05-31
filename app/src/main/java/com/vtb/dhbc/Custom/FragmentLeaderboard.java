@@ -1,4 +1,4 @@
-package com.vtb.dhbc;
+package com.vtb.dhbc.Custom;
 
 import android.graphics.Color;
 import android.os.Bundle;
@@ -22,7 +22,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.vtb.dhbc.Adapter.PlayerInfoAdapter;
+import com.vtb.dhbc.CSDL;
 import com.vtb.dhbc.ClassDL.ThongTinNguoiChoi;
+import com.vtb.dhbc.R;
 
 import java.util.ArrayList;
 import java.util.Collections;

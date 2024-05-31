@@ -43,7 +43,7 @@
             android:fontFamily="@font/sedgwickave_regular"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Thank Binh"
+            android:text="User"
             android:textColor="#FFC107">
         </TextView>
         <TextView
@@ -53,7 +53,7 @@
             android:fontFamily="@font/sedgwickave_regular"
             android:textStyle="bold"
             android:id="@+id/hightCore"
-            android:text="High score: 100"
+            android:text="High score: 0"
             android:textColor="#FFC107">
         </TextView>
 
@@ -73,7 +73,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="22000"
+            android:text="0"
             android:gravity="center"
             android:textStyle="bold"
             android:layout_marginLeft="5dp"
@@ -152,6 +152,12 @@
         android:gravity="center"
 
         android:layout_marginBottom="50dp">
+        <androidx.appcompat.widget.AppCompatButton
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:id="@+id/login"
+            android:background="@drawable/icon_shop">
+        </androidx.appcompat.widget.AppCompatButton>
         <androidx.appcompat.widget.AppCompatButton
             android:layout_width="60dp"
             android:layout_height="60dp"

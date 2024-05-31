@@ -598,7 +598,7 @@ public class GameShowRound1 extends AppCompatActivity implements ItemClick_dapan
                             public void onCompletion(MediaPlayer mp) {
 //                                mp1.reset();
 //                                mp1.setVolume(volumn2, volumn2);
-                                loadTrang();
+//                                loadTrang();
                             }
                         });
 
@@ -608,7 +608,7 @@ public class GameShowRound1 extends AppCompatActivity implements ItemClick_dapan
                 }
                 else {
                     Toast.makeText(this, "Đáp án chưa chính xac, tiếp tục", Toast.LENGTH_SHORT).show();
-                    loadTrang();
+//                    loadTrang();
                 }
 
 //                Toast.makeText(this, "lew lew gà", Toast.LENGTH_SHORT).show();

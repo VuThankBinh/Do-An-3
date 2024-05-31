@@ -485,6 +485,51 @@ public class CSDL {
     public void UpdateSanPham(String table, int id){
         db.QueryData("Update "+ table +" set tinhtrang = 1 where id="+id);
     }
+
+    //get câu hỏi chơi online
+    public CauHoi getCauHoi(int id){
+        Cursor dataCV=db.GetData("SELECT * FROM CauHoi WHERE id="+id);
+        CauHoi cauHoi=null;
+        if (dataCV != null && dataCV.moveToFirst()) {
+            int id1 = dataCV.getInt(0);
+            String hinhAnh = dataCV.getString(1);
+            String dapAn = dataCV.getString(2);
+            int tinhTrang = dataCV.getInt(3);
+            cauHoi= new CauHoi(id1, hinhAnh, dapAn, tinhTrang);
+//            Toast.makeText(context, "id: " + dataCV.getInt(0) + "dapan: " + dataCV.getString(2), Toast.LENGTH_SHORT).show();
+        }
+        else {
+            int id1 = -1;
+            String hinhAnh = "hinh123";
+            String dapAn = "dapan";
+            int tinhTrang = 0;
+            cauHoi= new CauHoi(id1, hinhAnh, dapAn, tinhTrang);
+        }
+        return cauHoi;
+    }
+        public CaDao getCaDao(int id) {
+        CaDao cauHoi = null;
+        Cursor dataCV = db.GetData("SELECT * FROM CaDaoTucNgu WHERE id=" + id);
+
+        if (dataCV != null && dataCV.moveToFirst()) {
+            int id1 = dataCV.getInt(0);
+            String hinhAnh = dataCV.getString(1);
+            String dapAn = dataCV.getString(2);
+            cauHoi = new CaDao(id1, hinhAnh, dapAn);
+        } else {
+            int id1 = -1;
+            String hinhAnh = "hinh123";
+            String dapAn = "dapan";
+            cauHoi = new CaDao(id1, hinhAnh, dapAn);
+        }
+
+        if (dataCV != null) {
+            dataCV.close();
+        }
+
+        return cauHoi;
+    }
+
 }
 class DataBase extends SQLiteOpenHelper {
     public DataBase(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version) {

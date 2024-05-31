@@ -71,7 +71,7 @@ public class PlayerInfoAdapter extends RecyclerView.Adapter<PlayerInfoAdapter.Pl
                 holder.ivImage.setImageResource(R.drawable.ruby);
                 break;
             case("level"):
-                holder.tvInfo.setText(playerInfo.getLevel() + "");
+                holder.tvInfo.setText("lv "+playerInfo.getLevel() );
                 holder.ivImage.setVisibility(View.GONE);
                 break;
         }

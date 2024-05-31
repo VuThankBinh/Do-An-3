@@ -1,31 +1,19 @@
-package com.vtb.dhbc;
+package com.vtb.dhbc.views;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.google.android.material.tabs.TabLayout;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.vtb.dhbc.Adapter.CategoryPagerAdapter;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import com.vtb.dhbc.Custom.FragmentLeaderboard;
+import com.vtb.dhbc.R;
 
 public class LeaderboardActivity extends AppCompatActivity {
     private CategoryPagerAdapter adapter;
