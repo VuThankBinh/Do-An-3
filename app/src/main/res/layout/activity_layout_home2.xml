@@ -156,7 +156,7 @@
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:id="@+id/login"
-            android:background="@drawable/icon_shop">
+            android:background="@drawable/login">
         </androidx.appcompat.widget.AppCompatButton>
         <androidx.appcompat.widget.AppCompatButton
             android:layout_width="60dp"

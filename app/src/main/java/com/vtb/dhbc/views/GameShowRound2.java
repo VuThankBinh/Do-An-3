@@ -435,22 +435,42 @@ public class GameShowRound2 extends AppCompatActivity implements ItemClick_dapan
                         mp1.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                             @Override
                             public void onCompletion(MediaPlayer mp) {
-                                showDialogEndRoud2();
+                                h1.setVisibility(View.GONE);
+                                h2.setVisibility(View.GONE);
+                                h3.setVisibility(View.GONE);
+                                h4.setVisibility(View.GONE);
+                                h5.setVisibility(View.GONE);
+                                h6.setVisibility(View.GONE);
+                                new Handler().postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
 
+                                        showDialogEndRoud2();
+
+                                    }
+                                }, 4000);
                             }
                         });
 
 
+
                 }
                 else {
+                    Toast.makeText(GameShowRound2.this, "Đáp án hoàn toàn chính xác", Toast.LENGTH_SHORT).show();
+                    h1.setVisibility(View.GONE);
+                    h2.setVisibility(View.GONE);
+                    h3.setVisibility(View.GONE);
+                    h4.setVisibility(View.GONE);
+                    h5.setVisibility(View.GONE);
+                    h6.setVisibility(View.GONE);
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(GameShowRound2.this, "Đáp án hoàn toàn chính xác", Toast.LENGTH_SHORT).show();
+
                             showDialogEndRoud2();
 
                         }
-                    }, 1000);
+                    }, 4000);
                 }
             }
             else {
@@ -505,7 +525,7 @@ public class GameShowRound2 extends AppCompatActivity implements ItemClick_dapan
             ketthuc.setImageResource(R.drawable.ketthuc);
             diemtv.setText("Kết thúc + 20 ruby");
             if(tymm>0){
-                choi.setImageResource(R.drawable.bn_tiep);
+                choi.setImageResource(R.drawable.btnxn);
                 btnchoitiep.setVisibility(View.GONE);
                 btnHuy.setOnClickListener(new View.OnClickListener() {
                     @Override

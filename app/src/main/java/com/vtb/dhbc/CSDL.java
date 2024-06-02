@@ -6,14 +6,23 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.vtb.dhbc.ClassDL.CaDao;
 import com.vtb.dhbc.ClassDL.CauHoi;
 import com.vtb.dhbc.ClassDL.SanPham;
 import com.vtb.dhbc.ClassDL.ThongTinNguoiChoi;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class CSDL {
@@ -30,15 +39,7 @@ public class CSDL {
         TaoCSDL_gameshow_round2();
         TaoNhanVat("Khach");
     }
-    public void LoginTroLai(int ruby, String name, int level, int khung, int avt){
-        SuaThongTinNhanVat(name,avt,khung);
-        UpdateRuby(ruby - HienThongTinNhanVat().getRuby());
-        if(level>0){
-            for(int i=1;i<=level;i++){
-                Update(i);
-            }
-        }
-    }
+
     public void ChoiLai(Context context){
         db.QueryData("DROP TABLE IF EXISTS CauHoi" );
         TaoCSDL();
@@ -341,15 +342,19 @@ public class CSDL {
     public void TaoNhanVat(String name){
         db.QueryData("CREATE TABLE IF NOT EXISTS ThongTinNguoiChoi1 (" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT," +
-                "name value, " +
-                "ruby integer," +
-                " level integer, " +
-                "avt_ID integer," +
-                " khung_id integer  )");
-        db.QueryData("INSERT INTO ThongTinNguoiChoi1  VALUES (null,'" + name+  "', 24,0,1,1)");
+                "name TEXT, " +
+                "ruby INTEGER," +
+                "level INTEGER, " +
+                "avt_ID INTEGER," +
+                "khung_id INTEGER," +
+                "damua_khung TEXT," +
+                "damua_avt TEXT)"); // Close the parenthesis here
+        db.QueryData("INSERT INTO ThongTinNguoiChoi1 (name, ruby, level, avt_ID, khung_id, damua_khung, damua_avt) VALUES ('" + name + "', 24, 0, 1, 1, '1', '1')");
     }
+
     public void SuaThongTinNhanVat(String name, int avt_ID,int khung_id){
         db.QueryData("Update ThongTinNguoiChoi1 set name='"+name+"', avt_ID="+avt_ID+", khung_id="+khung_id);
+        updatePlayerInfoOnFirebase();
     }
     public ThongTinNguoiChoi HienThongTinNhanVat(){
         Cursor dataCV=db.GetData("SELECT * FROM ThongTinNguoiChoi1 ");
@@ -374,7 +379,34 @@ public class CSDL {
         }
         return thongTinNguoiChoi;
     }
+    public ThongTinNguoiChoi HienThongTinNhanVat2(){
+        Cursor dataCV=db.GetData("SELECT * FROM ThongTinNguoiChoi1 ");
+        ThongTinNguoiChoi thongTinNguoiChoi=null;
+        if (dataCV != null && dataCV.moveToFirst()) {
+            int id = dataCV.getInt(0);
+            String name=dataCV.getString(1);
+            int ruby = dataCV.getInt(2);
+            int level = dataCV.getInt(3);
+            int avt_id = dataCV.getInt(4);
+            int khung_id = dataCV.getInt(5);
+            String khung_damua=dataCV.getString(6);
+            String avt_damua=dataCV.getString(7);
+            thongTinNguoiChoi= new ThongTinNguoiChoi(name,ruby,level,avt_id,khung_id,khung_damua,avt_damua);
+        }
+        else {
+            int id = -1;
+            String name="name";
+            int ruby = 0;
+            int level = 0;
+            int avt_id = -1;
+            int khung_id = -1;
+            String khung_damua="1";
+            String avt_damua="1";
+            thongTinNguoiChoi= new ThongTinNguoiChoi(name,ruby,level,avt_id,khung_id,khung_damua,avt_damua);
 
+        }
+        return thongTinNguoiChoi;
+    }
     public CauHoi HienCSDL(Context context){
         Cursor dataCV=db.GetData("SELECT * FROM CauHoi WHERE TinhTrang = 0 LIMIT 1");
         CauHoi cauHoi=null;
@@ -476,15 +508,35 @@ public class CSDL {
 
 //        db.QueryData("update Rubys set SoLuong= SoLuong+"+slg);
         db.QueryData("update ThongTinNguoiChoi1 set ruby=ruby +"+slg);
+        updatePlayerInfoOnFirebase();
     }
     public void UpdateThongTin( int level,int levelMax){
-        if(level>levelMax)
+        if(level>levelMax) {
             db.QueryData("update ThongTinNguoiChoi1 set level="+level);
+            updatePlayerInfoOnFirebase();
+        }
     }
     //update mua sản phẩm
-    public void UpdateSanPham(String table, int id){
-        db.QueryData("Update "+ table +" set tinhtrang = 1 where id="+id);
+    public void UpdateSanPham(String table, int id) {
+        // Append id to damua_khung or damua_avt using string concatenation in SQLite
+        if (table.equals("khung")) {
+            db.QueryData("UPDATE ThongTinNguoiChoi1 SET damua_khung = damua_khung || '," + id + "'");
+        } else {
+            db.QueryData("UPDATE ThongTinNguoiChoi1 SET damua_avt = damua_avt || '," + id + "'");
+        }
+
+        // Update the 'tinhtrang' field in the specified table
+        db.QueryData("UPDATE " + table + " SET tinhtrang = 1 WHERE id = " + id);
+        updatePlayerInfoOnFirebase();
     }
+    public void UpdateSanPhamLai(String table, int id) {
+        // Append id to damua_khung or damua_avt using string concatenation in SQLite
+
+        // Update the 'tinhtrang' field in the specified table
+        db.QueryData("UPDATE " + table + " SET tinhtrang = 1 WHERE id = " + id);
+    }
+
+
 
     //get câu hỏi chơi online
     public CauHoi getCauHoi(int id){
@@ -529,7 +581,81 @@ public class CSDL {
 
         return cauHoi;
     }
+    private void updatePlayerInfoOnFirebase() {
+        FirebaseAuth auth;
+        auth = FirebaseAuth.getInstance();
+        //Khởi tạo đối tượng FirebaseDatabase để thực hiện lưu trữ thông tin người dùng
+        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+        FirebaseUser user = auth.getCurrentUser();
+        if (user != null) {
+            ThongTinNguoiChoi thongTinNguoiChoi = HienThongTinNhanVat2();
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("id", user.getUid());
+            map.put("name", thongTinNguoiChoi.getName());
+            map.put("ruby", thongTinNguoiChoi.getRuby());
+            map.put("level", thongTinNguoiChoi.getLevel());
+            map.put("avt_id", thongTinNguoiChoi.getAvt_id());
+            map.put("khung_id", thongTinNguoiChoi.getKhung_id());
+            map.put("damua_khung", thongTinNguoiChoi.getDamua_khung());
+            map.put("damua_avt", thongTinNguoiChoi.getDamua_avt());
 
+            // Cập nhật thông tin người chơi lên Firebase
+            firebaseDatabase.getReference().child("users").child(user.getUid()).updateChildren(map);
+        }
+    }
+    public void getPlayerInfoFromFirebase() {  //
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        FirebaseUser user = auth.getCurrentUser();
+        if (user != null) {
+            FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+            DatabaseReference userRef = firebaseDatabase.getReference().child("users").child(user.getUid());
+
+            // Lấy thông tin người chơi từ Firebase
+            userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                    // Kiểm tra xem dataSnapshot có tồn tại không
+                    if (dataSnapshot.exists()) {
+                        ThongTinNguoiChoi thongTinNguoiChoi = dataSnapshot.getValue(ThongTinNguoiChoi.class);
+                        if (thongTinNguoiChoi != null) {
+                            LoginTroLai(thongTinNguoiChoi,HienThongTinNhanVat2());
+
+                        }
+                    } else {
+                        System.out.println("User does not exist.");
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    System.out.println("The read failed: " + databaseError.getMessage());
+                }
+            });
+        } else {
+            System.out.println("User not logged in.");
+        }
+
+    }
+    public void LoginTroLai(ThongTinNguoiChoi thongTinNguoiChoi, ThongTinNguoiChoi old){
+        SuaThongTinNhanVat(thongTinNguoiChoi.getName(),thongTinNguoiChoi.getAvt_id(),thongTinNguoiChoi.getKhung_id());
+        UpdateRuby(thongTinNguoiChoi.getRuby()-old.getRuby());
+        System.out.println("level: "+thongTinNguoiChoi.getLevel());
+        if(thongTinNguoiChoi.getLevel()>0){
+            for(int i=1;i<=thongTinNguoiChoi.getLevel();i++){
+                Update(i);
+            }
+        }
+        UpdateThongTin(thongTinNguoiChoi.getLevel(),0);
+        String[] listAvt = thongTinNguoiChoi.getDamua_avt().split(",");
+        String[] listKhung = thongTinNguoiChoi.getDamua_khung().split(",");
+        for (int i = 0; i < listAvt.length; i++) {
+            UpdateSanPhamLai("avt",Integer.parseInt(listAvt[i]));
+        }
+        for (int i = 0; i < listKhung.length; i++) {
+            UpdateSanPhamLai("khung",Integer.parseInt(listKhung[i]));
+        }
+    }
 }
 class DataBase extends SQLiteOpenHelper {
     public DataBase(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version) {

@@ -147,7 +147,10 @@ public class LoginGG extends AppCompatActivity {
                             map.put("ruby", thongTinNguoiChoi.getRuby());
                             map.put("level", thongTinNguoiChoi.getLevel());
                             map.put("avt_id", thongTinNguoiChoi.getAvt_id());
-                            map.put("khung_id", thongTinNguoiChoi.getKhung_id());
+                            map.put("khung_id", thongTinNguoiChoi.getKhung_id());map.put("avt_id", thongTinNguoiChoi.getAvt_id());
+                            map.put("damua_khung", thongTinNguoiChoi.getDamua_khung());
+                            map.put("damua_avt", thongTinNguoiChoi.getDamua_avt());
+
 
                             // Kiểm tra xem thông tin người dùng đã tồn tại chưa
                             firebaseDatabase.getReference().child("users").child(user.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -216,6 +219,8 @@ public class LoginGG extends AppCompatActivity {
             map.put("level", thongTinNguoiChoi.getLevel());
             map.put("avt_id", thongTinNguoiChoi.getAvt_id());
             map.put("khung_id", thongTinNguoiChoi.getKhung_id());
+            map.put("damua_khung", thongTinNguoiChoi.getDamua_khung());
+            map.put("damua_avt", thongTinNguoiChoi.getDamua_avt());
 
             // Kiểm tra xem thông tin người dùng đã tồn tại chưa
             firebaseDatabase.getReference().child("users").child(user.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {

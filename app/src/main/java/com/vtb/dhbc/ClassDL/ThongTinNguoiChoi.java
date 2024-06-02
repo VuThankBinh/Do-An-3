@@ -6,6 +6,8 @@ public class ThongTinNguoiChoi {
     private int level;
     private int avt_id;
     private int khung_id;
+    private  String damua_avt;
+    private String damua_khung;
 
     public ThongTinNguoiChoi() {
     }
@@ -16,6 +18,32 @@ public class ThongTinNguoiChoi {
         this.level = level;
         this.avt_id = avt_id;
         this.khung_id = khung_id;
+    }
+
+    public ThongTinNguoiChoi(String name, int ruby, int level, int avt_id, int khung_id, String damua_avt, String damua_khung) {
+        this.name = name;
+        this.ruby = ruby;
+        this.level = level;
+        this.avt_id = avt_id;
+        this.khung_id = khung_id;
+        this.damua_avt = damua_avt;
+        this.damua_khung = damua_khung;
+    }
+
+    public String getDamua_avt() {
+        return damua_avt;
+    }
+
+    public void setDamua_avt(String damua_avt) {
+        this.damua_avt = damua_avt;
+    }
+
+    public String getDamua_khung() {
+        return damua_khung;
+    }
+
+    public void setDamua_khung(String damua_khung) {
+        this.damua_khung = damua_khung;
     }
 
     public String getName() {

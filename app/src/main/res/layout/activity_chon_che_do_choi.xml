@@ -41,12 +41,13 @@
         android:gravity="center"
 
         android:layout_marginBottom="50dp">
+
         <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnback"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:id="@+id/btnback"
-            android:background="@drawable/btnback">
-        </androidx.appcompat.widget.AppCompatButton>
+            android:background="@drawable/btnback"/>
+
         <androidx.appcompat.widget.AppCompatButton
             android:layout_width="60dp"
             android:layout_height="60dp"

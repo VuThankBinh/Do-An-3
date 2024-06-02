@@ -148,7 +148,12 @@ public class GameShowRound3 extends AppCompatActivity implements ItemClick_dapan
             }
         });
 
-
+        backr2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                EndGame();
+            }
+        });
 
         // Lấy giá trị từ extra
         if (intent != null) {
@@ -159,6 +164,47 @@ public class GameShowRound3 extends AppCompatActivity implements ItemClick_dapan
 //
 
     }
+
+    private void EndGame() {
+        DatabaseReference roomRef = FirebaseDatabase.getInstance().getReference().child("rooms").child(roomId);
+
+        // Lấy dữ liệu của phòng và cập nhật trạng thái
+        roomRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    Room room = dataSnapshot.getValue(Room.class);
+                    if (room != null) {
+                        // Cập nhật trạng thái trò chơi thành "gameOver"
+                        roomRef.child("status").setValue("gameOver");
+
+                        // Xóa ID của người chơi
+                        if (userId.equals(room.getPlayer1Id())) {
+                            roomRef.child("player1Id").removeValue();
+                            roomRef.child("idWin").setValue(room.getPlayer2Id());
+                        } else if (userId.equals(room.getPlayer2Id())) {
+                            roomRef.child("player2Id").removeValue();
+                            roomRef.child("idWin").setValue(room.getPlayer1Id());
+
+                        }
+                    } else {
+                        // Xử lý khi dữ liệu phòng không hợp lệ
+                        Log.e("UpdateGameStatus", "Room data is invalid");
+                    }
+                } else {
+                    // Xử lý khi phòng không tồn tại
+                    Log.e("UpdateGameStatus", "Room not found");
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // Xử lý lỗi nếu cần
+                Log.e("UpdateGameStatus", "Database error: " + databaseError.getMessage());
+            }
+        });
+    }
+
     String turnn="";
     private void showDialogCauCaDao(CaDao cd, int id) {
         onlineManhghepSTT.caDao=cd;
@@ -217,11 +263,79 @@ public class GameShowRound3 extends AppCompatActivity implements ItemClick_dapan
                     }
                     turnn=room.getTurn().trim();
                     if(!room.getIdWin().trim().equalsIgnoreCase("")){
+                        listcauhoi.setVisibility(View.VISIBLE);
                         if(room.getIdWin().trim().equalsIgnoreCase(userId.trim())){
-                            EndGamePvP();
+                            ArrayList<String> cauuu = new ArrayList<String>();
+                            for (int i = 0; i < cauHoi.getHinhAnh().length(); i++) {
+                                // Convert each character to a string and add it to the ArrayList
+
+                                // nếu ký tự cách
+                                if(cauHoi.getHinhAnh().charAt(i)==' ') {
+                                    cauuu.add(String.valueOf(""));
+
+                                }
+                                else {
+                                    cauuu.add(String.valueOf(cauHoi.getHinhAnh().charAt(i)));
+                                }
+
+                            }
+
+                            dapan.setVisibility(View.GONE);
+                            adapter = new CauHoiAdapter(GameShowRound3.this, cauuu,GameShowRound3.this);
+
+                            listcauhoi.setAdapter(adapter);
+                            h1.setVisibility(View.GONE);
+                            h2.setVisibility(View.GONE);
+                            h3.setVisibility(View.GONE);
+                            h4.setVisibility(View.GONE);
+                            h5.setVisibility(View.GONE);
+                            h6.setVisibility(View.GONE);
+                            h7.setVisibility(View.GONE);
+                            h8.setVisibility(View.GONE);
+                            h9.setVisibility(View.GONE);
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    EndGamePvP();
+                                }
+                            }, 5000);
                         }
                         else {
-                            ShowGameOver();
+                            listcauhoi.setVisibility(View.VISIBLE);
+                            ArrayList<String> cauuu = new ArrayList<String>();
+                            for (int i = 0; i < dapAn.length(); i++) {
+                                // Convert each character to a string and add it to the ArrayList
+
+                                // nếu ký tự cách
+                                if(dapAn.charAt(i)==' ') {
+                                    cauuu.add(String.valueOf(""));
+
+                                }
+                                else {
+                                    cauuu.add(String.valueOf(dapAn.charAt(i)));
+                                }
+
+                            }
+
+                            dapan.setVisibility(View.GONE);
+                            adapter = new CauHoiAdapter(GameShowRound3.this, cauuu,GameShowRound3.this);
+
+                            listcauhoi.setAdapter(adapter);
+                            h1.setVisibility(View.GONE);
+                            h2.setVisibility(View.GONE);
+                            h3.setVisibility(View.GONE);
+                            h4.setVisibility(View.GONE);
+                            h5.setVisibility(View.GONE);
+                            h6.setVisibility(View.GONE);
+                            h7.setVisibility(View.GONE);
+                            h8.setVisibility(View.GONE);
+                            h9.setVisibility(View.GONE);
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    ShowGameOver();
+                                }
+                            }, 5000);
                         }
                     }
                     else {
@@ -658,6 +772,7 @@ public class GameShowRound3 extends AppCompatActivity implements ItemClick_dapan
 
     private void EndGamePvP() {
         EndStatus(roomId,userId);
+
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setCancelable(false); // Ngăn dialog đóng khi chạm ra ngoài
 
@@ -736,6 +851,7 @@ public class GameShowRound3 extends AppCompatActivity implements ItemClick_dapan
                 } else {
                     System.out.println("Cập nhật trạng thái phòng thành công!");
                 }
+                countDownTimer.cancel();
             }
         });
 

@@ -10,7 +10,10 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,15 +26,18 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.vtb.dhbc.ClassDL.CaDao;
+import com.vtb.dhbc.ClassDL.KeyGenerator;
 import com.vtb.dhbc.ClassDL.Room;
+import com.vtb.dhbc.Interface.RoomIdCallback;
 
 import java.util.List;
-import java.util.Random;
 
 public class SreachPhongOnl extends AppCompatActivity {
     private String userId;
     private String roomId;
-    private Button btnFindMatch, btnCreateRoom;
+    private Button btnFindMatch, btnCreateRoom,btnFindRoom;
+    String idRoom="";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +46,7 @@ public class SreachPhongOnl extends AppCompatActivity {
         //Ánh xạ các thành phần trong layout
         btnFindMatch = findViewById(R.id.btn_challenge_find_match);
         btnCreateRoom = findViewById(R.id.btn_challenge_create_room);
+        btnFindRoom=findViewById(R.id.btn_challenge_find_room);
 
         //Lấy userId của người đang đăng nhập
         userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -54,9 +61,15 @@ public class SreachPhongOnl extends AppCompatActivity {
             btnCreateRoom.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    createRoom(userId);
                     //Chuyển đến giao diện phòng chơi của chế độ thách đấu
-//                Intent intent = new Intent(ChallengeActivity.this, ChallengeActivity.class);
-//                startActivity(intent);
+
+                }
+            });
+            btnFindRoom.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    ShowDialogFindRoom();
                 }
             });
         }
@@ -104,19 +117,36 @@ public class SreachPhongOnl extends AppCompatActivity {
     }
     public void joinRoom(String roomId, String userId) {
         DatabaseReference roomRef = FirebaseDatabase.getInstance().getReference().child("rooms").child(roomId);
-        roomRef.child("player2Id").setValue(userId);
-        roomRef.child("status").setValue("ongoing");
-//        Toast.makeText(SreachPhongOnl.this, "Bắt đầu chơi", Toast.LENGTH_LONG).show();
-        //Chuyển đến Activity thách đấu
-        if(!isStartActivity){
-            Intent intent = new Intent(SreachPhongOnl.this,GameShowRound3.class);
-            intent.putExtra("roomId", roomId);
-            intent.putExtra("userId", userId);
-            startActivity(intent);
-            finish();
 
-        }
+        roomRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    // Nếu room tồn tại, thực hiện thêm player2 và cập nhật trạng thái
+                    roomRef.child("player2Id").setValue(userId);
+                    roomRef.child("status").setValue("ongoing");
+
+                    //Chuyển đến Activity thách đấu
+                    if (!isStartActivity) {
+                        Intent intent = new Intent(SreachPhongOnl.this, batcap.class);
+                        intent.putExtra("roomId", roomId);
+                        intent.putExtra("userId", userId);
+                        finish();
+                        startActivity(intent);
+                    }
+                } else {
+                    // Nếu roomId không tồn tại, hiển thị thông báo
+                    Toast.makeText(SreachPhongOnl.this, "Phòng không tồn tại", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // Xử lý lỗi nếu cần
+            }
+        });
     }
+
     CSDL csdl;
     public String getDSCauCaDao(){
         String DScauCD="";
@@ -133,10 +163,15 @@ public class SreachPhongOnl extends AppCompatActivity {
         generateUniqueRoomId(roomsRef, new RoomIdCallback() {
             @Override
             public void onRoomIdGenerated(String roomId) {
-                Room room = new Room(userId, null, getDSCauCaDao(), "", csdl.getCauHoiRound1(1).get(0).getId(), userId, "waiting","");
+                Room room = new Room(userId, null, getDSCauCaDao(), "", csdl.getCauHoiRound1(1).get(0).getId(), userId, "waiting","","waiting","waiting");
                 roomsRef.child(roomId).setValue(room);
                 listenToRoomUpdates(roomId);
-                showWaiting("Đang tìm đối thủ...");
+//                idRoom=roomId;
+//                showWaiting("Đang tìm đối thủ...");
+                Intent intent = new Intent(SreachPhongOnl.this, batcap.class);
+                intent.putExtra("roomId", roomId);
+                intent.putExtra("userId", userId);
+                startActivity(intent);
             }
         });
     }
@@ -162,41 +197,6 @@ public class SreachPhongOnl extends AppCompatActivity {
         });
     }
     boolean isStartActivity=false;
-//    public void listenToRoomUpdates(String roomId) {
-//        if(!isStartActivity) {
-//            DatabaseReference roomRef = FirebaseDatabase.getInstance().getReference().child("rooms").child(roomId);
-//
-//            roomRef.addValueEventListener(new ValueEventListener() {
-//                @Override
-//                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                    Room room = dataSnapshot.getValue(Room.class);
-//                    if (room != null) {
-//// Nếu phòng đã chuyển sang trạng thái 'on going' thì chuyển đến Activity chơi game
-//                        if (room.status.equals("ongoing")) {
-//                            isStartActivity=true;
-//
-//                            Intent intent = new Intent(SreachPhongOnl.this, GameShowRound3.class);
-//                            intent.putExtra("roomId", roomId);
-//                            intent.putExtra("userId", userId);
-//                            startActivity(intent);
-//                            finish();
-//
-////                        Toast.makeText(SreachPhongOnl.this, "Bắt đầu chơi", Toast.LENGTH_LONG).show();
-//
-//
-//                        }
-//                    } else {
-//                        Toast.makeText(SreachPhongOnl.this, "Room is NULL", Toast.LENGTH_SHORT).show();
-//                    }
-//                }
-//
-//                @Override
-//                public void onCancelled(@NonNull DatabaseError databaseError) {
-//                    // Xử lý lỗi nếu có
-//                }
-//            });
-//        }
-//    }
 public void listenToRoomUpdates(String roomId) {
     if (isStartActivity) {
         return;
@@ -212,17 +212,17 @@ public void listenToRoomUpdates(String roomId) {
                     if (room.status.equals("ongoing")) {
                         isStartActivity = true;
 
-                        Intent intent = new Intent(SreachPhongOnl.this, GameShowRound3.class);
-                        intent.putExtra("roomId", roomId);
-                        intent.putExtra("userId", userId);
-                        startActivity(intent);
+//                        Intent intent = new Intent(SreachPhongOnl.this, batcap.class);
+//                        intent.putExtra("roomId", roomId);
+//                        intent.putExtra("userId", userId);
+//                        startActivity(intent);
                         finish();
 
                         // Remove the listener after the condition is met
                         roomRef.removeEventListener(this);
                     }
                 } else {
-                    Toast.makeText(SreachPhongOnl.this, "Room is NULL", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(SreachPhongOnl.this, "Room is NULL", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -256,21 +256,31 @@ public void listenToRoomUpdates(String roomId) {
 
         waitingDialog.show();
     }
+    private  void ShowDialogFindRoom(){
+        Dialog waitingDialog = new Dialog(SreachPhongOnl.this, android.R.style.Theme_Dialog);
+        waitingDialog.getWindow().getDecorView().setSystemUiVisibility( View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+        waitingDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        waitingDialog.setContentView(R.layout.dialog_timphong);
+        EditText tvMessage = waitingDialog.findViewById(R.id.tvname);
+        waitingDialog.setCancelable(false);
+        Button xn=waitingDialog.findViewById(R.id.btnname);
+        TextView cham=waitingDialog.findViewById(R.id.cham);
+        Animation blinkk= AnimationUtils.loadAnimation(this,R.anim.blink2);
+        cham.setAnimation(blinkk);
+        cham.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                waitingDialog.dismiss();
+            }
+        });
+        xn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                joinRoom(tvMessage.getText().toString().trim(),userId);
+            }
+        });
+        waitingDialog.show();
 
-}
-class KeyGenerator {
-    private static final String CHAR_POOL = "0123456789";
-    private static final int KEY_LENGTH = 6;
-    private static Random random = new Random();
-
-    public static String generateKey() {
-        StringBuilder key = new StringBuilder(KEY_LENGTH);
-        for (int i = 0; i < KEY_LENGTH; i++) {
-            key.append(CHAR_POOL.charAt(random.nextInt(CHAR_POOL.length())));
-        }
-        return key.toString();
     }
-}
-interface RoomIdCallback {
-    void onRoomIdGenerated(String roomId);
+
 }

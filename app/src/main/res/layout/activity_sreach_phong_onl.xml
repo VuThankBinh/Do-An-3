@@ -1,29 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".SreachPhongOnl"
-    android:gravity="center">
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Chọn chế độ"/>
+    android:background="@drawable/background_duo"
+    android:padding="20dp">
+    <ImageView
+        android:id="@+id/title"
+        android:layout_width="400dp"
+        android:layout_height="300dp"
+        android:layout_marginTop="60dp"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/chedoonl"/>
     <Button
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/title"
         android:id="@+id/btn_challenge_find_match"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Tìm đối thủ"/>
+        android:layout_width="250dp"
+        android:layout_height="80dp"
+        android:background="@drawable/joinngay"/>
     <Button
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/btn_challenge_find_match"
         android:id="@+id/btn_challenge_create_room"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Tạo phòng"/>
+        android:layout_width="250dp"
+        android:background="@drawable/taophong"
+        android:layout_height="80dp"/>
     <Button
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/btn_challenge_create_room"
         android:id="@+id/btn_challenge_find_room"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Tìm phòng"/>
-</LinearLayout>
+        android:layout_width="250dp"
+        android:layout_height="80dp"
+        android:background="@drawable/timphong"/>
+</RelativeLayout>

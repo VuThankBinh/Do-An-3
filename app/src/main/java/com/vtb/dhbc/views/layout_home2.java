@@ -1,6 +1,8 @@
 package com.vtb.dhbc.views;
 
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
@@ -13,6 +15,7 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -26,6 +29,23 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.vtb.dhbc.CSDL;
 import com.vtb.dhbc.ClassDL.ThongTinNguoiChoi;
 import com.vtb.dhbc.LoginGG;
@@ -33,6 +53,7 @@ import com.vtb.dhbc.R;
 import com.vtb.dhbc.SreachPhongOnl;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 public class layout_home2 extends AppCompatActivity {
 
@@ -41,6 +62,11 @@ public class layout_home2 extends AppCompatActivity {
     static float volumn1,volumn2;
     static SharedPreferences prefs;
     AppCompatButton choingay,choilai,bxh,thoat,shop,settings,share,login;
+    public static int RC_DEFAULT_SIGN_IN = 100;
+    FirebaseAuth auth;
+    FirebaseDatabase firebaseDatabase;
+    GoogleSignInClient gsc;
+    GoogleSignInOptions gso;
 
 
     MediaPlayer mp,mp1;
@@ -116,36 +142,7 @@ public class layout_home2 extends AppCompatActivity {
 
         mp1=new MediaPlayer();
 
-        choilai.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (nhacXB) {
-                    try {
-                        mp.stop();
-                        mp1.stop();
-                        mp1.reset();
-                        mp1.setDataSource(getResources().openRawResourceFd(R.raw.win));
-                        mp1.setVolume(volumn1,volumn1);
-                        mp1.prepare();
 
-                        mp1.start();
-
-//                    layout_home2.this.finish();
-
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        startActivity(new Intent(layout_home2.this, SreachPhongOnl.class));
-                    }
-                },1000);
-//                showDialogChoiLai();
-
-            }
-        });
         thoat.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -315,6 +312,67 @@ public class layout_home2 extends AppCompatActivity {
                 showDialogSettings();
             }
         });
+        gso= new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail().build();
+        gsc= GoogleSignIn.getClient(this,gso);
+
+        // Khởi tạo đối tượng Firebase Auth để thực hiện việc xác thực người dùng
+        auth = FirebaseAuth.getInstance();
+        // Khởi tạo đối tượng FirebaseDatabase để thực hiện lưu trữ thông tin người dùng
+        firebaseDatabase = FirebaseDatabase.getInstance();
+
+        // Khởi tạo đối tượng GoogleSignInOptions để yêu cầu việc xác thực bằng tài khoản Google
+        gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+        gsc = GoogleSignIn.getClient(this, gso);
+
+        // Kiểm tra trạng thái đăng nhập của người dùng
+        FirebaseUser currentUser = auth.getCurrentUser();
+        if (auth.getCurrentUser() != null) {
+            login.setBackgroundResource(R.drawable.logout);
+            // Người dùng đã đăng nhập
+//            Toast.makeText(this, "UserId: " + currentUser.getUid(), Toast.LENGTH_SHORT).show();
+
+        } else {
+            // Người dùng chưa đăng nhập
+            login.setBackgroundResource(R.drawable.login);
+        }
+        choilai.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (nhacXB) {
+                    try {
+                        mp.stop();
+                        mp1.stop();
+                        mp1.reset();
+                        mp1.setDataSource(getResources().openRawResourceFd(R.raw.win));
+                        mp1.setVolume(volumn1,volumn1);
+                        mp1.prepare();
+
+                        mp1.start();
+
+//                    layout_home2.this.finish();
+
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+                if (currentUser != null) {
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            startActivity(new Intent(layout_home2.this, SreachPhongOnl.class));
+                        }
+                    },1000);
+                } else {
+                    Toast.makeText(layout_home2.this, "bạn chưa đăng nhập", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -335,7 +393,11 @@ public class layout_home2 extends AppCompatActivity {
                         throw new RuntimeException(e);
                     }
                 }
-                startActivity(new Intent(layout_home2.this, LoginGG.class));
+                if (auth.getCurrentUser() != null) {
+                    signOut();
+                } else {
+                    signIn1();
+                }
             }
         });
     }
@@ -616,5 +678,156 @@ public class layout_home2 extends AppCompatActivity {
             // Tạm dừng audio
             mp1.pause();
         }
+    }
+    private void signOut() {
+        auth.signOut();
+        gsc.signOut().addOnCompleteListener(this, task -> {
+            Toast.makeText(layout_home2.this, "Đăng xuất thành công", Toast.LENGTH_SHORT).show();
+
+        });
+        // Xóa dữ liệu của csdl và tạo lại
+        csdl.recreateDatabase();
+        login.setBackgroundResource(R.drawable.login);
+        updatedl();
+    }
+    private void signIn1() {
+
+        Intent intent=gsc.getSignInIntent();
+        startActivityForResult(intent, RC_DEFAULT_SIGN_IN);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==RC_DEFAULT_SIGN_IN){
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            try{
+                GoogleSignInAccount account=task.getResult(ApiException.class);
+                firebaseAuth1(account.getIdToken());
+
+                login.setBackgroundResource(R.drawable.logout);
+//                updatedl();
+
+            }
+            catch (Exception e){
+                Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+    private void updatedl(){
+        tt=csdl.HienThongTinNhanVat2();
+        hightcore.setText("High score: "+ tt.getLevel());
+        name.setText(tt.getName());
+        ruby3.setText(String.valueOf(csdl.HienThongTinNhanVat().getRuby()));
+        String fileAvt = "avt"+String.valueOf(tt.getAvt_id()); // Lấy tên tệp ảnh từ đối tượng baiHat
+        int resId = getResources().getIdentifier(fileAvt, "drawable", getPackageName()); // Tìm ID tài nguyên dựa trên tên tệp ảnh
+        String fileKhung = "khung"+String.valueOf(tt.getKhung_id()); // Lấy tên tệp ảnh từ đối tượng baiHat
+        int resId2 = getResources().getIdentifier(fileKhung, "drawable", getPackageName()); // Tìm ID tài nguyên dựa trên tên tệp ảnh
+
+        if (resId != 0) {
+            avt.setImageResource(resId); // Thiết lập hình ảnh cho ImageView
+        } else {
+            // Xử lý trường hợp không tìm thấy tệp ảnh
+        }
+        if (resId2 != 0) {
+            avt.setBackgroundResource(resId2); // Thiết lập hình ảnh cho ImageView
+        } else {
+            // Xử lý trường hợp không tìm thấy tệp ảnh
+        }
+    }
+
+    private void firebaseAuth1(String idToken) {
+        AuthCredential credential= GoogleAuthProvider.getCredential(idToken,null);
+        auth.signInWithCredential(credential)
+                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if(task.isSuccessful()){
+                            FirebaseUser user =auth.getCurrentUser();
+                            ThongTinNguoiChoi thongTinNguoiChoi = csdl.HienThongTinNhanVat2();
+                            HashMap<String, Object> map = new HashMap<>();
+                            map.put("id", user.getUid());
+                            map.put("name", thongTinNguoiChoi.getName());
+                            map.put("ruby", thongTinNguoiChoi.getRuby());
+                            map.put("level", thongTinNguoiChoi.getLevel());
+                            map.put("avt_id", thongTinNguoiChoi.getAvt_id());
+                            map.put("khung_id", thongTinNguoiChoi.getKhung_id());map.put("avt_id", thongTinNguoiChoi.getAvt_id());
+                            map.put("damua_khung", thongTinNguoiChoi.getDamua_khung());
+                            map.put("damua_avt", thongTinNguoiChoi.getDamua_avt());
+
+
+                            // Kiểm tra xem thông tin người dùng đã tồn tại chưa
+                            firebaseDatabase.getReference().child("users").child(user.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    if (snapshot.exists()) {
+                                        csdl.getPlayerInfoFromFirebase();
+                                        FirebaseAuth auth = FirebaseAuth.getInstance();
+                                        FirebaseUser user = auth.getCurrentUser();
+                                        if (user != null) {
+                                            FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+                                            DatabaseReference userRef = firebaseDatabase.getReference().child("users").child(user.getUid());
+
+                                            // Lấy thông tin người chơi từ Firebase
+                                            userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                                @Override
+                                                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                                                    // Kiểm tra xem dataSnapshot có tồn tại không
+                                                    if (dataSnapshot.exists()) {
+                                                        ThongTinNguoiChoi thongTinNguoiChoi = dataSnapshot.getValue(ThongTinNguoiChoi.class);
+                                                        if (thongTinNguoiChoi != null) {
+
+                                                            hightcore.setText("High score: "+ thongTinNguoiChoi.getLevel());
+                                                            name.setText(thongTinNguoiChoi.getName());
+                                                            ruby3.setText(String.valueOf(thongTinNguoiChoi.getRuby()));
+                                                            String fileAvt = "avt"+String.valueOf(thongTinNguoiChoi.getAvt_id()); // Lấy tên tệp ảnh từ đối tượng baiHat
+                                                            int resId = getResources().getIdentifier(fileAvt, "drawable", getPackageName()); // Tìm ID tài nguyên dựa trên tên tệp ảnh
+                                                            String fileKhung = "khung"+String.valueOf(tt.getKhung_id()); // Lấy tên tệp ảnh từ đối tượng baiHat
+                                                            int resId2 = getResources().getIdentifier(fileKhung, "drawable", getPackageName()); // Tìm ID tài nguyên dựa trên tên tệp ảnh
+
+                                                            if (resId != 0) {
+                                                                avt.setImageResource(resId); // Thiết lập hình ảnh cho ImageView
+                                                            } else {
+                                                                // Xử lý trường hợp không tìm thấy tệp ảnh
+                                                            }
+                                                            if (resId2 != 0) {
+                                                                avt.setBackgroundResource(resId2); // Thiết lập hình ảnh cho ImageView
+                                                            } else {
+                                                                // Xử lý trường hợp không tìm thấy tệp ảnh
+                                                            }
+                                                        }
+                                                    } else {
+                                                        System.out.println("User does not exist.");
+                                                    }
+                                                }
+
+                                                @Override
+                                                public void onCancelled(DatabaseError databaseError) {
+                                                    System.out.println("The read failed: " + databaseError.getMessage());
+                                                }
+                                            });
+                                        } else {
+                                            System.out.println("User not logged in.");
+                                        }
+                                        Toast.makeText(layout_home2.this, "Old player", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        Toast.makeText(layout_home2.this, "New player", Toast.LENGTH_SHORT).show();
+                                        // Lưu thông tin người dùng vào Realtime Database
+                                        firebaseDatabase.getReference().child("users").child(user.getUid())
+                                                .setValue(map);
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
+                                    Log.w("TAG", "loadPost:onCancelled", error.toException());
+                                }
+                            });
+
+                        }
+                    }
+                });
+        updatedl();
     }
 }

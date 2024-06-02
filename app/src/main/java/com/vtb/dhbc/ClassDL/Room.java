@@ -9,12 +9,14 @@ public class Room {
     public String turn;
     public String status;
     public String idWin;
+    public  String statusP1;
+    public  String statusP2;
 
     public Room() {
         // Default constructor
     }
 
-    public Room(String player1Id, String player2Id, String danhSachCauCaDao, String danhSachManhGhepDaMo, int currentQuestionIndex, String turn, String status,String idwin) {
+    public Room(String player1Id, String player2Id, String danhSachCauCaDao, String danhSachManhGhepDaMo, int currentQuestionIndex, String turn, String status,String idwin,String statusp1,String statusp2) {
         this.player1Id = player1Id;
         this.player2Id = player2Id;
         this.danhSachManhGhepDaMo = danhSachManhGhepDaMo;
@@ -23,10 +25,28 @@ public class Room {
         this.turn = turn;
         this.status = status;
         this.idWin=idwin;
+        this.statusP1=statusp1;
+        this.statusP2=statusp2;
     }
 
     public String getIdWin() {
         return idWin;
+    }
+
+    public String getStatusP1() {
+        return statusP1;
+    }
+
+    public void setStatusP1(String statusP1) {
+        this.statusP1 = statusP1;
+    }
+
+    public String getStatusP2() {
+        return statusP2;
+    }
+
+    public void setStatusP2(String statusP2) {
+        this.statusP2 = statusP2;
     }
 
     public void setIdWin(String idWin) {
