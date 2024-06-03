@@ -11,8 +11,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -47,6 +49,8 @@ public class batcap extends AppCompatActivity {
 
     String player1, player2;
     String status1, status2;
+    DatabaseReference roomRef;
+    ValueEventListener roomListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,66 +126,64 @@ public class batcap extends AppCompatActivity {
     private void SanSangPlay(String playerID) {
         DatabaseReference roomRef = FirebaseDatabase.getInstance().getReference().child("rooms").child(idRoom);
 
-        roomRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        roomRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    Room room = dataSnapshot.getValue(Room.class);
-                    if (room != null) {
-                        String statusP1 = room.getStatusP1();
-                        if (userID.equalsIgnoreCase(player1)) {
-                            if (statusP1.equals("waiting")) {
-                                roomRef.child("statusP1").setValue("start")
-                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                            @Override
-                                            public void onSuccess(Void aVoid) {
-                                                ss1.setVisibility(View.VISIBLE);
-                                            }
-                                        })
-                                        .addOnFailureListener(new OnFailureListener() {
-                                            @Override
-                                            public void onFailure(@NonNull Exception e) {
-                                                // Xảy ra lỗi khi cập nhật trạng thái
-                                            }
-                                        });
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if(task.isSuccessful()) {
+                    DataSnapshot dataSnapshot = task.getResult();
+                    if (dataSnapshot.exists()) {
+                        Room room = dataSnapshot.getValue(Room.class);
+                        if (room != null) {
+                            String statusP1 = room.getStatusP1();
+                            if (userID.equalsIgnoreCase(player1)) {
+                                if (statusP1.equals("waiting")) {
+                                    roomRef.child("statusP1").setValue("start")
+                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void aVoid) {
+                                                    ss1.setVisibility(View.VISIBLE);
+                                                }
+                                            })
+                                            .addOnFailureListener(new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull Exception e) {
+                                                    // Xảy ra lỗi khi cập nhật trạng thái
+                                                }
+                                            });
+                                }
                             }
-                        }
 
-                        String statusP2 = room.getStatusP2();
-                        if (userID.equalsIgnoreCase(player2)) {
-                            if (statusP2.equals("waiting")) {
-                                roomRef.child("statusP2").setValue("start")
-                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                            @Override
-                                            public void onSuccess(Void aVoid) {
-                                                ss2.setVisibility(View.VISIBLE);
-                                                sansang.setVisibility(View.GONE);
-                                            }
-                                        })
-                                        .addOnFailureListener(new OnFailureListener() {
-                                            @Override
-                                            public void onFailure(@NonNull Exception e) {
-                                                // Xảy ra lỗi khi cập nhật trạng thái
-                                            }
-                                        });
+                            String statusP2 = room.getStatusP2();
+                            if (userID.equalsIgnoreCase(player2)) {
+                                if (statusP2.equals("waiting")) {
+                                    roomRef.child("statusP2").setValue("start")
+                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void aVoid) {
+                                                    ss2.setVisibility(View.VISIBLE);
+                                                    sansang.setVisibility(View.GONE);
+                                                }
+                                            })
+                                            .addOnFailureListener(new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull Exception e) {
+                                                    // Xảy ra lỗi khi cập nhật trạng thái
+                                                }
+                                            });
+                                }
                             }
-                        }
 
+                        }
                     }
                 }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                // Xử lý lỗi nếu có
             }
         });
     }
 
     public void listenToRoomUpdates(String roomId) {
-        DatabaseReference roomRef = FirebaseDatabase.getInstance().getReference().child("rooms").child(roomId);
+        roomRef = FirebaseDatabase.getInstance().getReference().child("rooms").child(roomId);
 
-        ValueEventListener roomListener = new ValueEventListener() {
+        roomListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Room room = dataSnapshot.getValue(Room.class);
@@ -275,38 +277,36 @@ public class batcap extends AppCompatActivity {
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         DatabaseReference userRef = firebaseDatabase.getReference().child("users").child(userID);
 
-        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        userRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    ThongTinNguoiChoi thongTinNguoiChoi = dataSnapshot.getValue(ThongTinNguoiChoi.class);
-                    if (thongTinNguoiChoi != null) {
-                        avt2.setVisibility(View.VISIBLE);
-                        namePlayer2.setVisibility(View.VISIBLE);
-                        namePlayer2.setText(thongTinNguoiChoi.getName());
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if(task.isSuccessful()) {
+                    DataSnapshot dataSnapshot = task.getResult();
+                    if (dataSnapshot.exists()) {
+                        ThongTinNguoiChoi thongTinNguoiChoi = dataSnapshot.getValue(ThongTinNguoiChoi.class);
+                        if (thongTinNguoiChoi != null) {
+                            avt2.setVisibility(View.VISIBLE);
+                            namePlayer2.setVisibility(View.VISIBLE);
+                            namePlayer2.setText(thongTinNguoiChoi.getName());
 
-                        String fileAvt = "avt" + thongTinNguoiChoi.getAvt_id();
-                        int resId = getResources().getIdentifier(fileAvt, "drawable", getPackageName());
-                        String fileKhung = "khung" + thongTinNguoiChoi.getKhung_id();
-                        int resId2 = getResources().getIdentifier(fileKhung, "drawable", getPackageName());
+                            String fileAvt = "avt" + thongTinNguoiChoi.getAvt_id();
+                            int resId = getResources().getIdentifier(fileAvt, "drawable", getPackageName());
+                            String fileKhung = "khung" + thongTinNguoiChoi.getKhung_id();
+                            int resId2 = getResources().getIdentifier(fileKhung, "drawable", getPackageName());
 
-                        if (resId != 0) {
-                            avt2.setImageResource(resId);
+                            if (resId != 0) {
+                                avt2.setImageResource(resId);
+                            }
+                            if (resId2 != 0) {
+                                avt2.setBackgroundResource(resId2);
+                            }
                         }
-                        if (resId2 != 0) {
-                            avt2.setBackgroundResource(resId2);
+                        else {
+                            avt2.setVisibility(View.GONE);
+                            namePlayer2.setVisibility(View.GONE);
                         }
-                    }
-                    else {
-                        avt2.setVisibility(View.GONE);
-                        namePlayer2.setVisibility(View.GONE);
                     }
                 }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                System.out.println("The read failed: " + databaseError.getMessage());
             }
         });
     }
@@ -319,6 +319,9 @@ public class batcap extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if(roomRef != null) {
+            roomRef.removeEventListener(roomListener);
+        }
     }
 
     private boolean player2ExitHandled = false;
@@ -327,33 +330,30 @@ public class batcap extends AppCompatActivity {
         if (!player2ExitHandled) {
             DatabaseReference roomRef = FirebaseDatabase.getInstance().getReference().child("rooms").child(idRoom);
 
-            roomRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            roomRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                 @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    if (dataSnapshot.exists()) {
-                        Room room = dataSnapshot.getValue(Room.class);
-                        if (room != null && room.getPlayer2Id() != null) {
-                            roomRef.child("player2Id").setValue(null);
-                            roomRef.child("statusP2").setValue("waiting");
-                            roomRef.child("statusP1").setValue("waiting");
-                            roomRef.child("status").setValue("waiting");
-                            player2 = "";
-                            avt2.setVisibility(View.GONE);
-                            namePlayer2.setVisibility(View.GONE);
-                            listenToRoomUpdates(idRoom);
+                public void onComplete(@NonNull Task<DataSnapshot> task) {
+                    if(task.isSuccessful()) {
+                        DataSnapshot dataSnapshot = task.getResult();
+                        if (dataSnapshot.exists()) {
+                            Room room = dataSnapshot.getValue(Room.class);
+                            if (room != null && room.getPlayer2Id() != null) {
+                                roomRef.child("player2Id").setValue(null);
+                                roomRef.child("statusP2").setValue("waiting");
+                                roomRef.child("statusP1").setValue("waiting");
+                                roomRef.child("status").setValue("waiting");
+                                player2 = "";
+                                avt2.setVisibility(View.GONE);
+                                namePlayer2.setVisibility(View.GONE);
 
-                            if (userID.equalsIgnoreCase(player2)) {
-                                finish();
+                                if (userID.equalsIgnoreCase(player2)) {
+                                    finish();
+                                }
+
+                                player2ExitHandled = true;
                             }
-
-                            player2ExitHandled = true;
                         }
                     }
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-                    // Xử lý lỗi nếu cần
                 }
             });
         }
@@ -365,9 +365,10 @@ public class batcap extends AppCompatActivity {
         if (!player1ExitHandled) {
             DatabaseReference roomRef = FirebaseDatabase.getInstance().getReference().child("rooms").child(idRoom);
 
-            roomRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            roomRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                 @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                public void onComplete(@NonNull Task<DataSnapshot> task) {
+                    DataSnapshot dataSnapshot = task.getResult();
                     if (dataSnapshot.exists()) {
                         Room room = dataSnapshot.getValue(Room.class);
                         if (room != null && room.getPlayer2Id() != null) {
@@ -376,18 +377,12 @@ public class batcap extends AppCompatActivity {
                             roomRef.child("statusP1").setValue("waiting");
                             roomRef.child("status").setValue("waiting");
                             roomRef.child("player2Id").setValue(null);
-                            listenToRoomUpdates(idRoom);
                             player1ExitHandled = true;
                         } else if (room != null && room.getPlayer2Id() == null) {
                             roomRef.removeValue();
                         }
                         finish();
                     }
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-                    // Xử lý lỗi nếu cần
                 }
             });
         }
