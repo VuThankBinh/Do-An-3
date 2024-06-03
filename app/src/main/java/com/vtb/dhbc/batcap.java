@@ -240,25 +240,27 @@ public class batcap extends AppCompatActivity {
             if (status2.equalsIgnoreCase("start")) {
                 ss2.setVisibility(View.VISIBLE);
             }
-        } else {
+        } else if (room.getPlayer2Id().equalsIgnoreCase(userID)) {
             ThongTinNguoiChoi tt2 = csdl.HienThongTinNhanVat();
-            namePlayer1.setText(tt2.getName());
+            namePlayer2.setText(tt2.getName());
             String fileAvt = "avt" + tt2.getAvt_id();
             int resId = getResources().getIdentifier(fileAvt, "drawable", getPackageName());
             String fileKhung = "khung" + tt2.getKhung_id();
             int resId2 = getResources().getIdentifier(fileKhung, "drawable", getPackageName());
 
             if (resId != 0) {
-                avt1.setImageResource(resId);
+                avt2.setImageResource(resId);
             }
             if (resId2 != 0) {
-                avt1.setBackgroundResource(resId2);
+                avt2.setBackgroundResource(resId2);
             }
 
             if (player2 == null) {
                 finish();
             } else {
-                getPlayer2(room.getPlayer1Id());
+                getPlayer1(room.getPlayer1Id());
+                avt2.setVisibility(View.VISIBLE);
+                namePlayer2.setVisibility(View.VISIBLE);
             }
             if (status1.equalsIgnoreCase("start")) {
                 ss1.setVisibility(View.VISIBLE);
@@ -271,7 +273,44 @@ public class batcap extends AppCompatActivity {
             sansang.setBackgroundResource(R.drawable.btnss);
         }
     }
+    public void getPlayer1(String userID) {
 
+        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference userRef = firebaseDatabase.getReference().child("users").child(userID);
+
+        userRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if(task.isSuccessful()) {
+                    DataSnapshot dataSnapshot = task.getResult();
+                    if (dataSnapshot.exists()) {
+                        ThongTinNguoiChoi thongTinNguoiChoi = dataSnapshot.getValue(ThongTinNguoiChoi.class);
+                        if (thongTinNguoiChoi != null) {
+                            avt1.setVisibility(View.VISIBLE);
+                            namePlayer1.setVisibility(View.VISIBLE);
+                            namePlayer1.setText(thongTinNguoiChoi.getName());
+
+                            String fileAvt = "avt" + thongTinNguoiChoi.getAvt_id();
+                            int resId = getResources().getIdentifier(fileAvt, "drawable", getPackageName());
+                            String fileKhung = "khung" + thongTinNguoiChoi.getKhung_id();
+                            int resId2 = getResources().getIdentifier(fileKhung, "drawable", getPackageName());
+
+                            if (resId != 0) {
+                                avt1.setImageResource(resId);
+                            }
+                            if (resId2 != 0) {
+                                avt1.setBackgroundResource(resId2);
+                            }
+                        }
+                        else {
+                            avt1.setVisibility(View.GONE);
+                            namePlayer1.setVisibility(View.GONE);
+                        }
+                    }
+                }
+            }
+        });
+    }
     public void getPlayer2(String userID) {
 
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
@@ -288,6 +327,7 @@ public class batcap extends AppCompatActivity {
                             avt2.setVisibility(View.VISIBLE);
                             namePlayer2.setVisibility(View.VISIBLE);
                             namePlayer2.setText(thongTinNguoiChoi.getName());
+                            Toast.makeText(batcap.this, thongTinNguoiChoi.getName(), Toast.LENGTH_SHORT).show();
 
                             String fileAvt = "avt" + thongTinNguoiChoi.getAvt_id();
                             int resId = getResources().getIdentifier(fileAvt, "drawable", getPackageName());
