@@ -214,7 +214,14 @@ public class batcap extends AppCompatActivity {
     }
 
     private void updateUI(Room room) {
-        if (room.getPlayer1Id().equalsIgnoreCase(userID)) {
+        avt1.setVisibility(View.GONE);
+        namePlayer1.setVisibility(View.GONE);
+        avt2.setVisibility(View.GONE);
+        namePlayer2.setVisibility(View.GONE);
+        if (room.getPlayer1Id() != null && room.getPlayer1Id().equalsIgnoreCase(userID)) {
+            Toast.makeText(this, "Player 1", Toast.LENGTH_SHORT).show();
+            avt1.setVisibility(View.VISIBLE);
+            namePlayer1.setVisibility(View.VISIBLE);
             ThongTinNguoiChoi tt2 = csdl.HienThongTinNhanVat();
             namePlayer1.setText(tt2.getName());
 
@@ -230,7 +237,8 @@ public class batcap extends AppCompatActivity {
                 avt1.setBackgroundResource(resId2);
             }
 
-            if (room.getPlayer2Id() != null) {
+            if (room.getPlayer2Id() != null && !room.getPlayer2Id().equals(room.getPlayer1Id())) {
+                Toast.makeText(this, "Player 2", Toast.LENGTH_SHORT).show();
                 getPlayer2(room.getPlayer2Id());
                 kick.setVisibility(View.VISIBLE);
             } else {
@@ -240,7 +248,7 @@ public class batcap extends AppCompatActivity {
             if (status2.equalsIgnoreCase("start")) {
                 ss2.setVisibility(View.VISIBLE);
             }
-        } else if (room.getPlayer2Id().equalsIgnoreCase(userID)) {
+        } else if (room.getPlayer2Id() != null && room.getPlayer2Id().equalsIgnoreCase(userID)) {
             ThongTinNguoiChoi tt2 = csdl.HienThongTinNhanVat();
             namePlayer2.setText(tt2.getName());
             String fileAvt = "avt" + tt2.getAvt_id();
@@ -378,7 +386,7 @@ public class batcap extends AppCompatActivity {
                         if (dataSnapshot.exists()) {
                             Room room = dataSnapshot.getValue(Room.class);
                             if (room != null && room.getPlayer2Id() != null) {
-                                roomRef.child("player2Id").setValue(null);
+                                roomRef.child("player2Id").removeValue();
                                 roomRef.child("statusP2").setValue("waiting");
                                 roomRef.child("statusP1").setValue("waiting");
                                 roomRef.child("status").setValue("waiting");
@@ -416,13 +424,13 @@ public class batcap extends AppCompatActivity {
                             roomRef.child("statusP2").setValue("waiting");
                             roomRef.child("statusP1").setValue("waiting");
                             roomRef.child("status").setValue("waiting");
-                            roomRef.child("player2Id").setValue(null);
+                            roomRef.child("player2Id").removeValue(null);
                             player1ExitHandled = true;
                         } else if (room != null && room.getPlayer2Id() == null) {
                             roomRef.removeValue();
                         }
-                        finish();
                     }
+                    finish();
                 }
             });
         }
