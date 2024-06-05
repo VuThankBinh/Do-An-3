@@ -141,6 +141,7 @@
                 android:text="Sẵn sàng"
                 android:id="@+id/ss2"
                 android:textSize="18dp"
+                android:visibility="gone"
                 android:fontFamily="@font/sedgwickave_regular"
                 android:textColor="@color/black">
             </TextView>
@@ -149,6 +150,7 @@
                 android:layout_height="50dp"
                 android:layout_below="@+id/ss2"
                 android:id="@+id/kick"
+                android:visibility="gone"
                 android:layout_centerHorizontal="true"
                 android:background="@drawable/btnback">
             </Button>

@@ -525,8 +525,8 @@ public class GameShowRound2 extends AppCompatActivity implements ItemClick_dapan
             ketthuc.setImageResource(R.drawable.ketthuc);
             diemtv.setText("Kết thúc + 20 ruby");
             if(tymm>0){
-                choi.setImageResource(R.drawable.btnxn);
-                btnchoitiep.setVisibility(View.GONE);
+                btnchoitiep.setBackgroundResource(R.drawable.btnxn);
+                choi.setVisibility(View.GONE);
                 btnHuy.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
