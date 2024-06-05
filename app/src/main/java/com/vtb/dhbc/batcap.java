@@ -219,7 +219,6 @@ public class batcap extends AppCompatActivity {
         avt2.setVisibility(View.GONE);
         namePlayer2.setVisibility(View.GONE);
         if (room.getPlayer1Id() != null && room.getPlayer1Id().equalsIgnoreCase(userID)) {
-            Toast.makeText(this, "Player 1", Toast.LENGTH_SHORT).show();
             avt1.setVisibility(View.VISIBLE);
             namePlayer1.setVisibility(View.VISIBLE);
             ThongTinNguoiChoi tt2 = csdl.HienThongTinNhanVat();
@@ -238,7 +237,6 @@ public class batcap extends AppCompatActivity {
             }
 
             if (room.getPlayer2Id() != null && !room.getPlayer2Id().equals(room.getPlayer1Id())) {
-                Toast.makeText(this, "Player 2", Toast.LENGTH_SHORT).show();
                 getPlayer2(room.getPlayer2Id());
                 kick.setVisibility(View.VISIBLE);
             } else {
@@ -335,7 +333,7 @@ public class batcap extends AppCompatActivity {
                             avt2.setVisibility(View.VISIBLE);
                             namePlayer2.setVisibility(View.VISIBLE);
                             namePlayer2.setText(thongTinNguoiChoi.getName());
-                            Toast.makeText(batcap.this, thongTinNguoiChoi.getName(), Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(batcap.this, thongTinNguoiChoi.getName(), Toast.LENGTH_SHORT).show();
 
                             String fileAvt = "avt" + thongTinNguoiChoi.getAvt_id();
                             int resId = getResources().getIdentifier(fileAvt, "drawable", getPackageName());

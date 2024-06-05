@@ -519,10 +519,12 @@ public class CSDL {
     //update mua sản phẩm
     public void UpdateSanPham(String table, int id) {
         // Append id to damua_khung or damua_avt using string concatenation in SQLite
-        if (table.equals("khung")) {
-            db.QueryData("UPDATE ThongTinNguoiChoi1 SET damua_khung = damua_khung || '," + id + "'");
-        } else {
-            db.QueryData("UPDATE ThongTinNguoiChoi1 SET damua_avt = damua_avt || '," + id + "'");
+        if(id != 1) {
+            if (!table.equalsIgnoreCase("khung")) {
+                db.QueryData("UPDATE ThongTinNguoiChoi1 SET damua_khung = damua_khung || '," + id + "'");
+            } else {
+                db.QueryData("UPDATE ThongTinNguoiChoi1 SET damua_avt = damua_avt || '," + id + "'");
+            }
         }
 
         // Update the 'tinhtrang' field in the specified table
@@ -530,9 +532,6 @@ public class CSDL {
         updatePlayerInfoOnFirebase();
     }
     public void UpdateSanPhamLai(String table, int id) {
-        // Append id to damua_khung or damua_avt using string concatenation in SQLite
-
-        // Update the 'tinhtrang' field in the specified table
         db.QueryData("UPDATE " + table + " SET tinhtrang = 1 WHERE id = " + id);
     }
 
@@ -620,8 +619,9 @@ public class CSDL {
                         ThongTinNguoiChoi thongTinNguoiChoi = dataSnapshot.getValue(ThongTinNguoiChoi.class);
                         if (thongTinNguoiChoi != null) {
                             LoginTroLai(thongTinNguoiChoi,HienThongTinNhanVat2());
-
                         }
+                        System.out.println("Id khung:"+thongTinNguoiChoi.getDamua_khung());
+                        System.out.println("Id avt:"+thongTinNguoiChoi.getDamua_avt());
                     } else {
                         System.out.println("User does not exist.");
                     }
@@ -650,10 +650,10 @@ public class CSDL {
         String[] listAvt = thongTinNguoiChoi.getDamua_avt().split(",");
         String[] listKhung = thongTinNguoiChoi.getDamua_khung().split(",");
         for (int i = 0; i < listAvt.length; i++) {
-            UpdateSanPhamLai("avt",Integer.parseInt(listAvt[i]));
+            UpdateSanPham("avt",Integer.parseInt(listAvt[i]));
         }
         for (int i = 0; i < listKhung.length; i++) {
-            UpdateSanPhamLai("khung",Integer.parseInt(listKhung[i]));
+            UpdateSanPham("khung",Integer.parseInt(listKhung[i]));
         }
     }
 }

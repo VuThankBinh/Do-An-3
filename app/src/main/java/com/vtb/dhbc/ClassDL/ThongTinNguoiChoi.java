@@ -6,7 +6,7 @@ public class ThongTinNguoiChoi {
     private int level;
     private int avt_id;
     private int khung_id;
-    private  String damua_avt;
+    private String damua_avt;
     private String damua_khung;
 
     public ThongTinNguoiChoi() {

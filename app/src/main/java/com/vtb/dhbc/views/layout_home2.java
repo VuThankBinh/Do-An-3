@@ -769,10 +769,10 @@ public class layout_home2 extends AppCompatActivity {
                                             DatabaseReference userRef = firebaseDatabase.getReference().child("users").child(user.getUid());
 
                                             // Lấy thông tin người chơi từ Firebase
-                                            userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                            userRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                                                 @Override
-                                                public void onDataChange(DataSnapshot dataSnapshot) {
-
+                                                public void onComplete(@NonNull Task<DataSnapshot> task) {
+                                                    DataSnapshot dataSnapshot = task.getResult();
                                                     // Kiểm tra xem dataSnapshot có tồn tại không
                                                     if (dataSnapshot.exists()) {
                                                         ThongTinNguoiChoi thongTinNguoiChoi = dataSnapshot.getValue(ThongTinNguoiChoi.class);
@@ -801,11 +801,6 @@ public class layout_home2 extends AppCompatActivity {
                                                         System.out.println("User does not exist.");
                                                     }
                                                 }
-
-                                                @Override
-                                                public void onCancelled(DatabaseError databaseError) {
-                                                    System.out.println("The read failed: " + databaseError.getMessage());
-                                                }
                                             });
                                         } else {
                                             System.out.println("User not logged in.");
@@ -830,4 +825,5 @@ public class layout_home2 extends AppCompatActivity {
                 });
         updatedl();
     }
+
 }
