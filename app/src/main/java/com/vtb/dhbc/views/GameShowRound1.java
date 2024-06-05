@@ -295,7 +295,7 @@ public class GameShowRound1 extends AppCompatActivity implements ItemClick_dapan
         if(isRunning){
             ketthuc.setImageResource(R.drawable.ketthuc);
             diemtv.setText("Điểm số: "+ diem +"/10");
-            if(diem>=5){
+            if(diem>=2){
                 choi.setImageResource(R.drawable.bn_tiep);
                 btnHuy.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -345,7 +345,7 @@ public class GameShowRound1 extends AppCompatActivity implements ItemClick_dapan
         else {
             ketthuc.setImageResource(R.drawable.hetgio);
             diemtv.setText("Điểm của bạn: "+ diem +"/10");
-            if(diem>=5){
+            if(diem>=2){
                 choi.setImageResource(R.drawable.bn_tiep);
                 btnHuy.setOnClickListener(new View.OnClickListener() {
                     @Override
