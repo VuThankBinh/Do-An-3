@@ -1,11 +1,11 @@
 package com.vtb.dhbc;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -17,6 +17,10 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,17 +42,12 @@ import com.vtb.dhbc.ClassDL.CauHoi;
 import com.vtb.dhbc.ClassDL.Room;
 import com.vtb.dhbc.Interface.ItemClick_cauhoi;
 import com.vtb.dhbc.Interface.ItemClick_dapan;
-import com.vtb.dhbc.views.GameShowRound1;
-import com.vtb.dhbc.views.GameShowRound2;
-import com.vtb.dhbc.views.cauCaDao_round2;
 
 import java.io.IOException;
 import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 import java.util.regex.Pattern;
 
@@ -58,9 +57,8 @@ public class GameShowRound3 extends AppCompatActivity implements ItemClick_dapan
     ImageView layout_2;
     AppCompatButton h1,h2,h3,h4,h5,h6,h7,h8,h9;
     RecyclerView listcauhoi,dapan;
-    MediaPlayer mp, mp1;
+    MediaPlayer  mp1;
     static boolean nhacXB ;
-    static boolean nhacback;
     static float volumn1,volumn2;
     static SharedPreferences prefs;
     Round2_dapanAdapter dapanAdapter;
@@ -151,7 +149,8 @@ public class GameShowRound3 extends AppCompatActivity implements ItemClick_dapan
         backr2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                EndGame();
+                showDialogXacNhan();
+
             }
         });
 
@@ -164,7 +163,31 @@ public class GameShowRound3 extends AppCompatActivity implements ItemClick_dapan
 //
 
     }
+    private void showDialogXacNhan() {
+        Dialog dialog = new Dialog(GameShowRound3.this,android.R.style.Theme_Dialog );
 
+        dialog.setContentView(R.layout.dialog_dunggame);
+        Button btnXN=dialog.findViewById(R.id.chapnhan);
+        Button btnHyt=dialog.findViewById(R.id.tuchoi);
+        dialog.setCancelable(false);
+
+//        cham.setVisibility(View.GONE);
+        btnXN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                EndGame();
+            }
+        });
+        btnHyt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        dialog.getWindow().getDecorView().setSystemUiVisibility( View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+        dialog.show();
+    }
     private void EndGame() {
         DatabaseReference roomRef = FirebaseDatabase.getInstance().getReference().child("rooms").child(roomId);
 
@@ -703,10 +726,13 @@ public class GameShowRound3 extends AppCompatActivity implements ItemClick_dapan
                         mp1.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                             @Override
                             public void onCompletion(MediaPlayer mp) {
-                                EndGamePvP();
-//                                showDialogChucMung();
-//                                mp1.reset();
-//                                mp1.setVolume(volumn2, volumn2);
+                                new Handler().postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(GameShowRound3.this, "Đáp án hoàn toàn chính xác", Toast.LENGTH_SHORT).show();
+                                        EndGamePvP();
+                                    }
+                                }, 5000);
                             }
                         });
 
@@ -722,7 +748,7 @@ public class GameShowRound3 extends AppCompatActivity implements ItemClick_dapan
                             Toast.makeText(GameShowRound3.this, "Đáp án hoàn toàn chính xác", Toast.LENGTH_SHORT).show();
                             EndGamePvP();
                         }
-                    }, 1000);
+                    }, 5000);
 
 
                 }
@@ -772,22 +798,36 @@ public class GameShowRound3 extends AppCompatActivity implements ItemClick_dapan
 
     private void EndGamePvP() {
         EndStatus(roomId,userId);
+        Dialog dialog = new Dialog(GameShowRound3.this, android.R.style.Theme_Black_NoTitleBar_Fullscreen);
+        dialog.setContentView(R.layout.dialog_gameend);
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setCancelable(false); // Ngăn dialog đóng khi chạm ra ngoài
+        dialog.getWindow().getDecorView().setSystemUiVisibility( View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        dialog.setCancelable(false);
 
-        // Thiết lập nội dung cho dialog
-        builder.setMessage("Bạn đã chiến thắng")
-                .setPositiveButton("Xác nhận", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        // Xử lý khi bấm nút Thoát
-                        csdl.UpdateRuby(25);
-                        dialog.dismiss();
-                        GameShowRound3.this.finish();
-                    }
-                });
+        ImageView ketthuc=dialog.findViewById(R.id.chucmung);
+        ImageView img=dialog.findViewById(R.id.asdang);
+        ImageView ruby=dialog.findViewById(R.id.ruby);
+        TextView bnrb=dialog.findViewById(R.id.cong);
+        AppCompatButton tieptuc=dialog.findViewById(R.id.tieptuc);
 
-        AlertDialog dialog = builder.create();
+        Animation xoayxoay= AnimationUtils.loadAnimation(this, R.anim.laclubtn);
+        Animation blink= AnimationUtils.loadAnimation(this, R.anim.blink2);
+        AnimationSet animSet = new AnimationSet(true);
+
+        animSet.addAnimation(xoayxoay);
+        animSet.addAnimation(blink);
+        img.setAnimation(animSet);
+        ruby.setAnimation(blink);
+        bnrb.setAnimation(blink);
+        tieptuc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                csdl.UpdateRuby(25);
+                dialog.dismiss();
+                GameShowRound3.this.finish();
+            }
+        });
 
         // Thiết lập hành vi khi bấm nút back
         dialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
@@ -806,21 +846,39 @@ public class GameShowRound3 extends AppCompatActivity implements ItemClick_dapan
         dialog.show();
     }
     private void ShowGameOver() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setCancelable(false); // Ngăn dialog đóng khi chạm ra ngoài
+        Dialog dialog = new Dialog(GameShowRound3.this, android.R.style.Theme_Black_NoTitleBar_Fullscreen);
+        dialog.setContentView(R.layout.dialog_gameend);
 
-        // Thiết lập nội dung cho dialog
-        builder.setMessage("GameOver")
-                .setPositiveButton("Xác nhận", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        // Xử lý khi bấm nút Thoát
-                        csdl.UpdateRuby(5);
-                        dialog.dismiss();
-                        GameShowRound3.this.finish();
-                    }
-                });
+        dialog.getWindow().getDecorView().setSystemUiVisibility( View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        dialog.setCancelable(false);
 
-        AlertDialog dialog = builder.create();
+        ImageView ketthuc=dialog.findViewById(R.id.chucmung);
+        ImageView img=dialog.findViewById(R.id.asdang);
+        ImageView ruby=dialog.findViewById(R.id.ruby);
+        TextView bnrb=dialog.findViewById(R.id.cong);
+        AppCompatButton tieptuc=dialog.findViewById(R.id.tieptuc);
+
+        Animation xoayxoay= AnimationUtils.loadAnimation(this, R.anim.laclubtn);
+        Animation blink= AnimationUtils.loadAnimation(this, R.anim.blink2);
+        AnimationSet animSet = new AnimationSet(true);
+
+        animSet.addAnimation(xoayxoay);
+        animSet.addAnimation(blink);
+        img.setAnimation(animSet);
+        ruby.setAnimation(blink);
+        bnrb.setAnimation(blink);
+
+        bnrb.setText("Bạn được + 5 ruby");
+        ketthuc.setImageResource(R.drawable.lose);
+        tieptuc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                csdl.UpdateRuby(5);
+                dialog.dismiss();
+                GameShowRound3.this.finish();
+            }
+        });
 
         // Thiết lập hành vi khi bấm nút back
         dialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
